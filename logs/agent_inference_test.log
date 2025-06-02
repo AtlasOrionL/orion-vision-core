@@ -1,0 +1,2 @@
+2025-06-01 18:51:58,527 - orion.agent.inference_test - INFO - {"timestamp": "2025-06-01T18:51:58.527224", "level": "INFO", "agent_id": "inference_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 18:51:58,527 - orion.agent.inference_test - INFO - {"timestamp": "2025-06-01T18:51:58.527335", "level": "INFO", "agent_id": "inference_test", "message": "Inference Engine initialized", "context": {}}

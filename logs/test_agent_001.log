@@ -1,0 +1,4 @@
+2025-06-02 16:08:42,499 - Agent.test_agent_001 - INFO - info:123 - Agent initialized: test_agent_001 (dynamic_agent)
+2025-06-02 16:08:42,499 - Agent.test_agent_001 - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:42,499 - Agent.test_agent_001 - INFO - info:123 - Stopping agent: test_agent_001
+2025-06-02 16:08:42,499 - Agent.test_agent_001 - INFO - info:123 - Agent stopped successfully: test_agent_001

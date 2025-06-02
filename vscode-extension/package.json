@@ -1,0 +1,416 @@
+{
+  "name": "orion-vision-core",
+  "displayName": "Orion Vision Core",
+  "description": "🚀 AI-powered development assistant with advanced capabilities",
+  "version": "1.0.0",
+  "publisher": "orion-tech",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "AI",
+    "Machine Learning",
+    "Programming Languages",
+    "Snippets",
+    "Debuggers",
+    "Testing",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "artificial intelligence",
+    "code completion",
+    "smart search",
+    "mobile preview",
+    "network debugging",
+    "performance",
+    "deployment",
+    "assistant",
+    "productivity"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension-fixed.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "orion.activateAI",
+        "title": "Activate Orion AI Assistant",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.codeCompletion",
+        "title": "Smart Code Completion",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.smartSearch",
+        "title": "Smart Code Search",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.mobilePreview",
+        "title": "Mobile App Preview",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.networkDebug",
+        "title": "Network Debugging",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.performanceInsights",
+        "title": "Performance Insights",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.deployApp",
+        "title": "Deploy Application",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.openDashboard",
+        "title": "Open Orion Dashboard",
+        "category": "Orion"
+      },
+      {
+        "command": "orion.openChat",
+        "title": "Open AI Chat",
+        "category": "Orion",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "orion.openTerminal",
+        "title": "Open Terminal Manager",
+        "category": "Orion",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "orion.openFileSystem",
+        "title": "Open File System Manager",
+        "category": "Orion",
+        "icon": "$(file-directory)"
+      },
+      {
+        "command": "orion.openAPIManager",
+        "title": "Open API Provider Manager",
+        "category": "Orion",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "orion.configureAPIs",
+        "title": "Configure API Keys",
+        "category": "Orion",
+        "icon": "$(key)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "orion.activateAI",
+          "when": "true"
+        },
+        {
+          "command": "orion.codeCompletion",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "orion.smartSearch",
+          "when": "true"
+        },
+        {
+          "command": "orion.mobilePreview",
+          "when": "true"
+        },
+        {
+          "command": "orion.networkDebug",
+          "when": "true"
+        },
+        {
+          "command": "orion.performanceInsights",
+          "when": "true"
+        },
+        {
+          "command": "orion.deployApp",
+          "when": "true"
+        },
+        {
+          "command": "orion.openDashboard",
+          "when": "true"
+        },
+        {
+          "command": "orion.openChat",
+          "when": "true"
+        },
+        {
+          "command": "orion.openTerminal",
+          "when": "true"
+        },
+        {
+          "command": "orion.openFileSystem",
+          "when": "true"
+        },
+        {
+          "command": "orion.openAPIManager",
+          "when": "true"
+        },
+        {
+          "command": "orion.configureAPIs",
+          "when": "true"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "orion.codeCompletion",
+          "when": "editorTextFocus",
+          "group": "orion@1"
+        },
+        {
+          "command": "orion.smartSearch",
+          "when": "editorHasSelection",
+          "group": "orion@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "orion.mobilePreview",
+          "when": "resourceExtname == .html || resourceExtname == .js || resourceExtname == .ts",
+          "group": "orion@1"
+        },
+        {
+          "command": "orion.deployApp",
+          "when": "explorerResourceIsFolder",
+          "group": "orion@2"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "orion.activateAI",
+        "key": "ctrl+shift+o",
+        "mac": "cmd+shift+o",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "orion.codeCompletion",
+        "key": "ctrl+space",
+        "mac": "cmd+space",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "orion.smartSearch",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "orion.openChat",
+        "key": "ctrl+shift+c",
+        "mac": "cmd+shift+c",
+        "when": "true"
+      },
+      {
+        "command": "orion.openTerminal",
+        "key": "ctrl+shift+t",
+        "mac": "cmd+shift+t",
+        "when": "true"
+      },
+      {
+        "command": "orion.openAPIManager",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "true"
+      }
+    ],
+    "views": {
+      "orion": [
+        {
+          "id": "orionAIAssistant",
+          "name": "AI Assistant",
+          "when": "true"
+        },
+        {
+          "id": "orionChat",
+          "name": "AI Chat",
+          "type": "webview",
+          "when": "true"
+        },
+        {
+          "id": "orionTerminal",
+          "name": "Terminal Manager",
+          "type": "webview",
+          "when": "true"
+        },
+        {
+          "id": "orionFileSystem",
+          "name": "File System",
+          "type": "webview",
+          "when": "true"
+        },
+        {
+          "id": "orionAPIProvider",
+          "name": "API Manager",
+          "type": "webview",
+          "when": "true"
+        },
+        {
+          "id": "orionPerformance",
+          "name": "Performance Insights",
+          "when": "true"
+        },
+        {
+          "id": "orionNetworking",
+          "name": "Network Monitor",
+          "when": "true"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "orion",
+          "title": "Orion Vision Core",
+          "icon": "$(robot)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Orion Vision Core",
+      "properties": {
+        "orion.ai.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Orion AI Assistant"
+        },
+        "orion.ai.model": {
+          "type": "string",
+          "default": "llama3.2:3b",
+          "enum": ["llama3.2:3b", "llama3.2:1b", "gpt-4", "gpt-3.5-turbo", "claude-3-opus"],
+          "description": "AI model to use for code completion"
+        },
+        "orion.codeCompletion.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable smart code completion"
+        },
+        "orion.mobile.previewEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable mobile app preview"
+        },
+        "orion.networking.debugEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable network debugging tools"
+        },
+        "orion.performance.monitoringEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable performance monitoring"
+        },
+        "orion.server.host": {
+          "type": "string",
+          "default": "localhost",
+          "description": "Orion Vision Core server host"
+        },
+        "orion.server.port": {
+          "type": "number",
+          "default": 8000,
+          "description": "Orion Vision Core server port"
+        },
+        "orion.ai.retryAttempts": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Number of retry attempts for AI Provider connection"
+        },
+        "orion.ai.connectionTimeout": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 1000,
+          "maximum": 30000,
+          "description": "Connection timeout in milliseconds"
+        },
+        "orion.ai.autoReconnect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically attempt to reconnect when connection is lost"
+        },
+        "orion.logging.level": {
+          "type": "string",
+          "enum": ["debug", "info", "warn", "error"],
+          "default": "info",
+          "description": "Logging level for Orion extension"
+        },
+        "orion.apiProviders": {
+          "type": "object",
+          "default": {},
+          "description": "API provider configurations and settings"
+        },
+        "orion.chat.maxHistory": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 1000,
+          "description": "Maximum number of chat messages to keep in history"
+        },
+        "orion.terminal.maxSessions": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum number of terminal sessions to maintain"
+        },
+        "orion.fileSystem.defaultPermissions": {
+          "type": "object",
+          "default": {
+            "read": true,
+            "write": false,
+            "execute": false,
+            "delete": false
+          },
+          "description": "Default file system permissions for new sessions"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.4",
+    "@vscode/test-electron": "^2.2.0",
+    "@vscode/vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "ws": "^8.14.0",
+    "node-fetch": "^3.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krozenking/Orion.git"
+  },
+  "bugs": {
+    "url": "https://github.com/krozenking/Orion/issues"
+  },
+  "homepage": "https://github.com/krozenking/Orion#readme",
+  "license": "MIT",
+  "icon": "images/orion-icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  }
+}

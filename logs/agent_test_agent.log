@@ -1,0 +1,1 @@
+2025-06-01 15:33:21,917 - orion.agent.test_agent - INFO - {"timestamp": "2025-06-01T15:33:21.917517", "level": "INFO", "agent_id": "test_agent", "message": "Test log message", "context": {"status": "testing", "module": "validation"}}

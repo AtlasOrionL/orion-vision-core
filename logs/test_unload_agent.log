@@ -1,0 +1,6 @@
+2025-06-02 16:08:45,329 - Agent.test_unload_agent - INFO - info:123 - Agent initialized: test_unload_agent (dynamic_agent)
+2025-06-02 16:08:45,329 - Agent.test_unload_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:45,329 - Agent.test_unload_agent - INFO - info:123 - Starting agent: test_unload_agent
+2025-06-02 16:08:45,329 - Agent.test_unload_agent - INFO - info:123 - Agent started successfully: test_unload_agent
+2025-06-02 16:08:45,330 - Agent.test_unload_agent - INFO - info:123 - Stopping agent: test_unload_agent
+2025-06-02 16:08:45,430 - Agent.test_unload_agent - INFO - info:123 - Agent stopped successfully: test_unload_agent

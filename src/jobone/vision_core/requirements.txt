@@ -9,3 +9,8 @@ ollama
 openrouter
 bark
 openai-whisper
+pika
+fastapi
+uvicorn[standard]
+httpx
+psutil

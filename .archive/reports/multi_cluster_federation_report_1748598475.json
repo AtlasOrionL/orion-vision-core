@@ -1,0 +1,314 @@
+{
+  "report_info": {
+    "generated_at": "2025-05-30T11:47:55.131023",
+    "demo_duration": 31.13,
+    "clusters": 2,
+    "networks": 2,
+    "regions": 2
+  },
+  "federation_setup": {
+    "timestamp": "2025-05-30T11:47:24.000130",
+    "clusters": {
+      "primary": {
+        "status": "ready",
+        "istiod": "active",
+        "eastwest_gateway": "deployed",
+        "services": 3
+      },
+      "remote": {
+        "status": "ready",
+        "istiod": "remote",
+        "eastwest_gateway": "deployed",
+        "services": 2
+      }
+    },
+    "networks": {
+      "gateways": {
+        "primary_gateway": "10.0.1.100:15443",
+        "remote_gateway": "10.0.2.100:15443",
+        "protocol": "mTLS"
+      }
+    },
+    "services": {
+      "discovery": {
+        "total_services": 5,
+        "cross_cluster_enabled": true,
+        "dns_resolution": "active"
+      }
+    },
+    "security": {
+      "secrets": {
+        "primary_to_remote": "configured",
+        "remote_to_primary": "configured",
+        "trust_domain": "cluster.local"
+      },
+      "mtls": {
+        "mode": "STRICT",
+        "certificate_authority": "Istio CA",
+        "cross_cluster_enabled": true
+      }
+    }
+  },
+  "cross_cluster_communication": {
+    "timestamp": "2025-05-30T11:47:31.427470",
+    "scenarios": {
+      "primary_to_remote_service_call": {
+        "service": "orion-core",
+        "source_cluster": "orion-primary",
+        "target_cluster": "orion-remote",
+        "latency_ms": 18.3,
+        "success_rate": 96.9,
+        "protocol": "HTTP/2 over mTLS"
+      },
+      "remote_to_primary_service_call": {
+        "service": "orion-discovery",
+        "source_cluster": "orion-remote",
+        "target_cluster": "orion-primary",
+        "latency_ms": 17.9,
+        "success_rate": 99.6,
+        "protocol": "HTTP/2 over mTLS"
+      },
+      "load_balancing": {
+        "service": "orion-core",
+        "primary_weight": 70,
+        "remote_weight": 30,
+        "algorithm": "locality-aware",
+        "requests_distributed": 1000
+      },
+      "failover": {
+        "service": "orion-orchestration",
+        "failed_cluster": "orion-primary",
+        "failover_cluster": "orion-remote",
+        "failover_time_seconds": 3.6,
+        "recovery_time_seconds": 7.1
+      },
+      "health_checks": {
+        "primary": "healthy",
+        "remote": "healthy",
+        "cross_cluster_connectivity": "active"
+      },
+      "metrics": {
+        "cross_cluster_requests": 757,
+        "average_latency": 33.709352526538254,
+        "error_rate": 1.6741401444363135
+      }
+    },
+    "latencies": {},
+    "success_rates": {},
+    "failovers": 1
+  },
+  "service_discovery": {
+    "timestamp": "2025-05-30T11:47:36.654221",
+    "operations": {
+      "dns_resolution": {
+        "resolved_services": 5,
+        "global_services": [
+          {
+            "service": "orion-core.orion-system.global",
+            "cluster": "orion-primary",
+            "ip": "240.0.0.1",
+            "port": 8000
+          },
+          {
+            "service": "orion-discovery.orion-system.global",
+            "cluster": "orion-primary",
+            "ip": "240.0.0.2",
+            "port": 8001
+          },
+          {
+            "service": "orion-orchestration.orion-system.global",
+            "cluster": "orion-primary",
+            "ip": "240.0.0.3",
+            "port": 8002
+          }
+        ]
+      },
+      "endpoint_discovery": {
+        "total_endpoints": 5,
+        "primary_cluster": 3,
+        "remote_cluster": 2
+      },
+      "health_check": {
+        "healthy_endpoints": 5,
+        "total_endpoints": 5,
+        "health_percentage": 100.0
+      },
+      "load_balancer": {
+        "primary_cluster_weight": 70,
+        "remote_cluster_weight": 30,
+        "locality_preference": "enabled",
+        "failover_configured": true
+      },
+      "registry_sync": {
+        "services_synced": 3,
+        "clusters_synced": 2,
+        "sync_latency_ms": 7.476770298289531
+      },
+      "locality_awareness": {
+        "primary_locality": "us-west-1/us-west-1a",
+        "remote_locality": "us-east-1/us-east-1a",
+        "preference_enabled": true,
+        "failover_regions": [
+          "us-west-1",
+          "us-east-1"
+        ]
+      }
+    },
+    "services_discovered": 3,
+    "endpoints_total": 5,
+    "healthy_endpoints": 5
+  },
+  "traffic_management": {
+    "timestamp": "2025-05-30T11:47:41.277374",
+    "scenarios": {
+      "locality_routing": {
+        "enabled": true,
+        "primary_preference": 80,
+        "remote_preference": 20,
+        "failover_enabled": true
+      },
+      "traffic_mirroring": {
+        "enabled": true,
+        "mirror_percentage": 10.0,
+        "mirror_cluster": "orion-remote",
+        "primary_cluster": "orion-primary"
+      }
+    },
+    "routing_rules": 6,
+    "load_balancing": {
+      "algorithm": "ROUND_ROBIN",
+      "session_affinity": "None",
+      "health_check_enabled": true,
+      "clusters": {
+        "orion-primary": {
+          "weight": 70,
+          "healthy": true
+        },
+        "orion-remote": {
+          "weight": 30,
+          "healthy": true
+        }
+      }
+    },
+    "resilience": {
+      "circuit_breaker": {
+        "consecutive_errors": 5,
+        "interval": "30s",
+        "base_ejection_time": "30s",
+        "max_ejection_percent": 50,
+        "min_health_percent": 30
+      },
+      "retry_policies": {
+        "attempts": 3,
+        "per_try_timeout": "10s",
+        "retry_on": [
+          "gateway-error",
+          "connect-failure",
+          "refused-stream"
+        ],
+        "retry_remote_localities": true
+      },
+      "timeouts": {
+        "request_timeout": "30s",
+        "idle_timeout": "60s",
+        "cross_cluster_timeout": "45s",
+        "health_check_timeout": "5s"
+      }
+    }
+  },
+  "security": {
+    "timestamp": "2025-05-30T11:47:45.900200",
+    "components": {
+      "authorization": {
+        "cross_cluster_policies": 4,
+        "service_to_service": true,
+        "namespace_isolation": true,
+        "jwt_validation": true
+      },
+      "trust_domain": {
+        "trust_domain": "cluster.local",
+        "clusters_in_domain": 2,
+        "cross_cluster_trust": true,
+        "spiffe_enabled": true
+      },
+      "network_policies": {
+        "default_deny": true,
+        "cross_cluster_allowed": true,
+        "service_isolation": true,
+        "policies_count": 6
+      },
+      "scanning": {
+        "clusters_scanned": 2,
+        "vulnerabilities_found": 3,
+        "compliance_checks": 15,
+        "passed_checks": 14
+      }
+    },
+    "mtls_status": {
+      "mode": "STRICT",
+      "clusters_secured": 2,
+      "certificate_authority": "Istio CA",
+      "trust_domain": "cluster.local",
+      "cross_cluster_enabled": true
+    },
+    "policies_active": 10,
+    "certificates": {
+      "auto_rotation": true,
+      "rotation_period": "90 days",
+      "renewal_threshold": "15 days",
+      "cross_cluster_ca": "shared",
+      "certificates_issued": 6
+    },
+    "compliance_score": 93.3
+  },
+  "observability": {
+    "timestamp": "2025-05-30T11:47:50.513645",
+    "components": {
+      "topology": {
+        "services_mapped": 5,
+        "cross_cluster_connections": 11,
+        "health_visualization": true,
+        "traffic_flow_visible": true
+      },
+      "performance": {
+        "average_latency_ms": 39.064774178700105,
+        "cross_cluster_latency_ms": 46.85282845639737,
+        "success_rate_percent": 98.68947187656609,
+        "throughput_rps": 1230
+      }
+    },
+    "metrics": {
+      "prometheus_instances": 2,
+      "metrics_collected": 220,
+      "cross_cluster_metrics": true,
+      "federation_enabled": true
+    },
+    "traces": {
+      "jaeger_instances": 2,
+      "traces_collected": 1593,
+      "cross_cluster_traces": 538,
+      "average_trace_duration": 94.49110706233685
+    },
+    "logs": {
+      "log_sources": 6,
+      "logs_per_minute": 13375,
+      "cross_cluster_correlation": true,
+      "retention_days": 30
+    },
+    "alerts": {
+      "alert_rules": 22,
+      "active_alerts": 2,
+      "cross_cluster_alerts": true,
+      "notification_channels": 3
+    }
+  },
+  "performance": {
+    "average_latency": 18.1,
+    "success_rate": 98.2,
+    "failover_count": 1,
+    "overall_health": "healthy"
+  },
+  "recommendations": [
+    "Address security compliance issues"
+  ]
+}

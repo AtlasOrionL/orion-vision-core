@@ -1,0 +1,266 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-05-29T15:30:00Z",
+  "description": "Orion Vision Core Agent Endpoints Configuration",
+  
+  "core_agents": {
+    "orion_brain": {
+      "id": "orion_brain",
+      "name": "Orion Brain AI",
+      "description": "Core AI decision making agent",
+      "queue": "orion.agent.orion_brain",
+      "priority": "critical",
+      "capabilities": [
+        "decision_making",
+        "task_coordination",
+        "strategic_planning",
+        "llm_routing"
+      ],
+      "endpoints": {
+        "decision": "orion.agent.orion_brain.decision",
+        "planning": "orion.agent.orion_brain.planning",
+        "coordination": "orion.agent.orion_brain.coordination"
+      },
+      "status": "active",
+      "auto_start": true
+    },
+    
+    "communication_agent": {
+      "id": "communication_agent",
+      "name": "Communication Agent",
+      "description": "Inter-agent communication coordinator",
+      "queue": "orion.agent.communication_agent",
+      "priority": "high",
+      "capabilities": [
+        "message_routing",
+        "agent_discovery",
+        "communication_monitoring",
+        "protocol_management"
+      ],
+      "endpoints": {
+        "routing": "orion.agent.communication_agent.routing",
+        "discovery": "orion.agent.communication_agent.discovery",
+        "monitoring": "orion.agent.communication_agent.monitoring"
+      },
+      "status": "active",
+      "auto_start": true
+    },
+    
+    "memory_agent": {
+      "id": "memory_agent",
+      "name": "Memory Management Agent",
+      "description": "Memory and data persistence agent",
+      "queue": "orion.agent.memory_agent",
+      "priority": "high",
+      "capabilities": [
+        "data_storage",
+        "memory_retrieval",
+        "context_management",
+        "history_tracking"
+      ],
+      "endpoints": {
+        "store": "orion.agent.memory_agent.store",
+        "retrieve": "orion.agent.memory_agent.retrieve",
+        "search": "orion.agent.memory_agent.search"
+      },
+      "status": "active",
+      "auto_start": true
+    },
+    
+    "screen_agent": {
+      "id": "screen_agent",
+      "name": "Screen Analysis Agent",
+      "description": "Screen capture and OCR processing agent",
+      "queue": "orion.agent.screen_agent",
+      "priority": "normal",
+      "capabilities": [
+        "screen_capture",
+        "ocr_processing",
+        "visual_analysis",
+        "ui_detection"
+      ],
+      "endpoints": {
+        "capture": "orion.agent.screen_agent.capture",
+        "ocr": "orion.agent.screen_agent.ocr",
+        "analyze": "orion.agent.screen_agent.analyze"
+      },
+      "status": "active",
+      "auto_start": false
+    },
+    
+    "speech_agent": {
+      "id": "speech_agent",
+      "name": "Speech Recognition Agent",
+      "description": "Audio input and speech-to-text agent",
+      "queue": "orion.agent.speech_agent",
+      "priority": "normal",
+      "capabilities": [
+        "audio_capture",
+        "speech_recognition",
+        "voice_commands",
+        "audio_processing"
+      ],
+      "endpoints": {
+        "listen": "orion.agent.speech_agent.listen",
+        "transcribe": "orion.agent.speech_agent.transcribe",
+        "process": "orion.agent.speech_agent.process"
+      },
+      "status": "active",
+      "auto_start": false
+    },
+    
+    "voice_agent": {
+      "id": "voice_agent",
+      "name": "Voice Synthesis Agent",
+      "description": "Text-to-speech and voice output agent",
+      "queue": "orion.agent.voice_agent",
+      "priority": "normal",
+      "capabilities": [
+        "text_to_speech",
+        "voice_synthesis",
+        "audio_output",
+        "speech_generation"
+      ],
+      "endpoints": {
+        "speak": "orion.agent.voice_agent.speak",
+        "synthesize": "orion.agent.voice_agent.synthesize",
+        "output": "orion.agent.voice_agent.output"
+      },
+      "status": "active",
+      "auto_start": false
+    },
+    
+    "mouse_control_agent": {
+      "id": "mouse_control_agent",
+      "name": "Mouse Control Agent",
+      "description": "Mouse and keyboard automation agent",
+      "queue": "orion.agent.mouse_control_agent",
+      "priority": "normal",
+      "capabilities": [
+        "mouse_control",
+        "keyboard_input",
+        "ui_automation",
+        "click_actions"
+      ],
+      "endpoints": {
+        "click": "orion.agent.mouse_control_agent.click",
+        "type": "orion.agent.mouse_control_agent.type",
+        "move": "orion.agent.mouse_control_agent.move"
+      },
+      "status": "active",
+      "auto_start": false
+    }
+  },
+  
+  "system_agents": {
+    "core_ai_manager": {
+      "id": "core_ai_manager",
+      "name": "Core AI Manager",
+      "description": "AI model and task management agent",
+      "queue": "orion.agent.core_ai_manager",
+      "priority": "critical",
+      "capabilities": [
+        "ai_model_management",
+        "task_scheduling",
+        "resource_allocation",
+        "performance_monitoring"
+      ],
+      "endpoints": {
+        "manage": "orion.agent.core_ai_manager.manage",
+        "schedule": "orion.agent.core_ai_manager.schedule",
+        "monitor": "orion.agent.core_ai_manager.monitor"
+      },
+      "status": "planned",
+      "auto_start": true
+    },
+    
+    "runner_service": {
+      "id": "runner_service",
+      "name": "Runner Service",
+      "description": "Main orchestration and runner service",
+      "queue": "orion.agent.runner_service",
+      "priority": "critical",
+      "capabilities": [
+        "service_orchestration",
+        "agent_lifecycle",
+        "system_coordination",
+        "health_monitoring"
+      ],
+      "endpoints": {
+        "orchestrate": "orion.agent.runner_service.orchestrate",
+        "lifecycle": "orion.agent.runner_service.lifecycle",
+        "health": "orion.agent.runner_service.health"
+      },
+      "status": "active",
+      "auto_start": true
+    }
+  },
+  
+  "system_queues": {
+    "heartbeat": {
+      "name": "orion.system.heartbeat",
+      "description": "Agent heartbeat monitoring",
+      "durable": true,
+      "auto_delete": false
+    },
+    "discovery": {
+      "name": "orion.system.discovery",
+      "description": "Agent discovery and registration",
+      "durable": true,
+      "auto_delete": false
+    },
+    "errors": {
+      "name": "orion.system.errors",
+      "description": "System error reporting",
+      "durable": true,
+      "auto_delete": false
+    },
+    "logs": {
+      "name": "orion.system.logs",
+      "description": "System logging",
+      "durable": true,
+      "auto_delete": false
+    },
+    "metrics": {
+      "name": "orion.system.metrics",
+      "description": "Performance metrics",
+      "durable": true,
+      "auto_delete": false
+    },
+    "broadcast": {
+      "name": "orion.broadcast",
+      "description": "System-wide broadcasts",
+      "durable": true,
+      "auto_delete": false
+    }
+  },
+  
+  "routing_rules": {
+    "default_routing": {
+      "pattern": "orion.agent.{agent_id}",
+      "description": "Default agent routing pattern"
+    },
+    "task_routing": {
+      "pattern": "orion.task.{task_type}",
+      "description": "Task-based routing pattern"
+    },
+    "system_routing": {
+      "pattern": "orion.system.{service}",
+      "description": "System service routing pattern"
+    }
+  },
+  
+  "load_balancing": {
+    "enabled": false,
+    "strategy": "round_robin",
+    "health_check_interval": 30,
+    "failover_enabled": true
+  },
+  
+  "monitoring": {
+    "health_check_interval": 60,
+    "response_timeout": 30,
+    "max_failures": 3,
+    "recovery_time": 300
+  }
+}

@@ -1,0 +1,434 @@
+# Orion Vision Core - Remote Cluster Configuration
+# Sprint 5.2.1 - Multi-Cluster Federation Remote Cluster Setup
+
+# Remote Cluster Istio Configuration
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: orion-remote-cluster
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: istio-remote
+    app.kubernetes.io/component: control-plane
+spec:
+  values:
+    global:
+      meshID: orion-mesh
+      network: network2
+      cluster: orion-remote
+      # Point to primary cluster's istiod
+      remotePilotAddress: "10.0.1.100"  # Primary cluster istiod external IP
+    pilot:
+      env:
+        # Enable cross-cluster workload discovery
+        PILOT_ENABLE_CROSS_CLUSTER_WORKLOAD_ENTRY: true
+        # Enable workload entry auto registration
+        PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
+        # Remote cluster configuration
+        EXTERNAL_ISTIOD: false
+    istiodRemote:
+      enabled: true
+  components:
+    pilot:
+      enabled: false  # Use remote istiod from primary cluster
+    istiodRemote:
+      enabled: true
+      k8s:
+        env:
+        - name: DISCOVERY_ADDRESS
+          value: "10.0.1.100:15012"  # Primary cluster istiod
+        - name: PILOT_ENABLE_CROSS_CLUSTER_WORKLOAD_ENTRY
+          value: "true"
+        - name: PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION
+          value: "true"
+        service:
+          type: ClusterIP
+          ports:
+          - port: 15012
+            targetPort: 15012
+            name: discovery
+
+---
+# Remote Cluster Network Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: remote-cluster-network
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-network
+    app.kubernetes.io/component: configuration
+data:
+  network.yaml: |
+    # Remote cluster network configuration
+    cluster_name: "orion-remote"
+    network_name: "network2"
+    region: "us-east-1"
+    zone: "us-east-1a"
+    
+    # Primary cluster connection
+    primary_cluster:
+      name: "orion-primary"
+      istiod_address: "10.0.1.100:15012"
+      discovery_address: "10.0.1.100:15010"
+    
+    # Network endpoints
+    endpoints:
+      - name: "orion-core-remote"
+        namespace: "orion-system"
+        service: "orion-core-service"
+        ports:
+          - name: "http"
+            port: 8000
+            protocol: "HTTP"
+      - name: "orion-discovery-remote"
+        namespace: "orion-system"
+        service: "orion-discovery-service"
+        ports:
+          - name: "http"
+            port: 8001
+            protocol: "HTTP"
+    
+    # Cross-cluster gateways
+    gateways:
+      - name: "istio-eastwestgateway"
+        namespace: "istio-system"
+        external_ip: "10.0.2.100"
+        ports:
+          - name: "tls"
+            port: 15443
+            protocol: "TLS"
+
+---
+# Remote Cluster Service Exports
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: remote-cluster-exports
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-exports
+    app.kubernetes.io/component: service-discovery
+spec:
+  hosts:
+  - orion-core.orion-system.local
+  - orion-discovery.orion-system.local
+  location: MESH_EXTERNAL
+  ports:
+  - number: 8000
+    name: http-orion-core
+    protocol: HTTP
+  - number: 8001
+    name: http-orion-discovery
+    protocol: HTTP
+  resolution: DNS
+  endpoints:
+  - address: orion-core.orion-system.svc.cluster.local
+    ports:
+      http-orion-core: 8000
+  - address: orion-discovery.orion-system.svc.cluster.local
+    ports:
+      http-orion-discovery: 8001
+
+---
+# Remote Cluster Workload Entry for Primary Services
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: primary-orion-core
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: primary-orion-core
+    app.kubernetes.io/component: workload-entry
+spec:
+  address: 10.0.1.100  # Primary cluster service IP
+  ports:
+    http: 8000
+  labels:
+    app: orion-core
+    version: v1
+    cluster: orion-primary
+  serviceAccount: orion-core
+  network: network1
+
+---
+# Remote Cluster Cross-Network Gateway
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: remote-cross-network-gateway
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: remote-cross-network-gateway
+    app.kubernetes.io/component: networking
+spec:
+  selector:
+    istio: eastwestgateway
+  servers:
+  - port:
+      number: 15443
+      name: tls
+      protocol: TLS
+    tls:
+      mode: ISTIO_MUTUAL
+    hosts:
+    - "*.local"
+    - "*.orion-system.local"
+    - "*.istio-system.local"
+
+---
+# Remote Cluster Destination Rule for Cross-Cluster Services
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: remote-cross-cluster-dr
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cross-cluster-dr
+    app.kubernetes.io/component: traffic-management
+spec:
+  host: "*.orion-system.local"
+  trafficPolicy:
+    loadBalancer:
+      localityLbSetting:
+        enabled: true
+        distribute:
+        - from: "us-east-1/us-east-1a/*"
+          to:
+            "us-east-1/us-east-1a/*": 80
+            "us-west-1/us-west-1a/*": 20
+        failover:
+        - from: us-east-1
+          to: us-west-1
+    connectionPool:
+      tcp:
+        maxConnections: 50
+        connectTimeout: 30s
+      http:
+        http1MaxPendingRequests: 25
+        maxRequestsPerConnection: 5
+        maxRetries: 3
+        consecutiveGatewayErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+    circuitBreaker:
+      consecutiveErrors: 3
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 30
+  subsets:
+  - name: primary
+    labels:
+      cluster: orion-primary
+  - name: remote
+    labels:
+      cluster: orion-remote
+
+---
+# Remote Cluster Virtual Service for Load Balancing
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: remote-cluster-load-balancing
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-load-balancing
+    app.kubernetes.io/component: traffic-management
+spec:
+  hosts:
+  - orion-core.orion-system.local
+  gateways:
+  - mesh
+  http:
+  - match:
+    - headers:
+        x-cluster-preference:
+          exact: "remote"
+    route:
+    - destination:
+        host: orion-core.orion-system.local
+        subset: remote
+      weight: 100
+  - match:
+    - headers:
+        x-cluster-preference:
+          exact: "primary"
+    route:
+    - destination:
+        host: orion-core.orion-system.local
+        subset: primary
+      weight: 100
+  - route:
+    - destination:
+        host: orion-core.orion-system.local
+        subset: remote
+      weight: 70
+    - destination:
+        host: orion-core.orion-system.local
+        subset: primary
+      weight: 30
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+      retryOn: gateway-error,connect-failure,refused-stream
+
+---
+# Remote Cluster Peer Authentication for Cross-Cluster mTLS
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: remote-cluster-mtls
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-mtls
+    app.kubernetes.io/component: security
+spec:
+  mtls:
+    mode: STRICT
+
+---
+# Remote Cluster Authorization Policy for Cross-Cluster Access
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: remote-cluster-authz
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-authz
+    app.kubernetes.io/component: security
+spec:
+  rules:
+  - from:
+    - source:
+        principals: 
+        - "cluster.local/ns/orion-system/sa/orion-core"
+        - "cluster.local/ns/orion-system/sa/orion-discovery"
+    - source:
+        namespaces: ["istio-system"]
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/istio-system/sa/istio-eastwestgateway-service-account"
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/api/*", "/health", "/ready", "/metrics"]
+
+---
+# Remote Cluster Telemetry Configuration
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: remote-cluster-telemetry
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-telemetry
+    app.kubernetes.io/component: observability
+spec:
+  metrics:
+  - providers:
+    - name: prometheus
+  - overrides:
+    - match:
+        metric: ALL_METRICS
+      tagOverrides:
+        source_cluster:
+          value: "orion-remote"
+        destination_cluster:
+          value: "%{CLUSTER_NAME}"
+  tracing:
+  - providers:
+    - name: jaeger
+  accessLogging:
+  - providers:
+    - name: otel
+
+---
+# Remote Cluster Service Monitor for Cross-Cluster Metrics
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: remote-cluster-cross-cluster-metrics
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-metrics
+    app.kubernetes.io/component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: istiod-remote
+  endpoints:
+  - port: http-monitoring
+    interval: 15s
+    path: /stats/prometheus
+  - port: http-monitoring
+    interval: 15s
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+    - istio-system
+
+---
+# Remote Cluster Network Endpoint
+apiVersion: networking.istio.io/v1alpha3
+kind: WorkloadGroup
+metadata:
+  name: remote-cluster-workloads
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-workloads
+    app.kubernetes.io/component: workload-group
+spec:
+  metadata:
+    labels:
+      app: orion-services
+      version: v1
+      cluster: orion-remote
+  template:
+    ports:
+      http: 8000
+    serviceAccount: orion-core
+    network: network2
+
+---
+# Remote Cluster Secret for Primary Cluster Access
+apiVersion: v1
+kind: Secret
+metadata:
+  name: istio-remote-secret-orion-primary
+  namespace: istio-system
+  labels:
+    istio/cluster: orion-primary
+    app.kubernetes.io/name: istio-multi-cluster
+    app.kubernetes.io/component: secret
+  annotations:
+    networking.istio.io/cluster: orion-primary
+type: Opaque
+data:
+  # This will be populated with the primary cluster's kubeconfig
+  # Use: kubectl create secret generic istio-remote-secret-orion-primary \
+  #      --from-file=orion-primary=/path/to/primary/kubeconfig \
+  #      -n istio-system
+  orion-primary: ""
+
+---
+# Remote Cluster Cross-Cluster Service Discovery
+apiVersion: v1
+kind: Service
+metadata:
+  name: remote-cluster-discovery
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-discovery
+    app.kubernetes.io/component: service-discovery
+spec:
+  type: ClusterIP
+  ports:
+  - port: 15012
+    targetPort: 15012
+    name: discovery
+    protocol: TCP
+  selector:
+    app: istiod-remote

@@ -1,0 +1,4 @@
+2025-06-01 18:48:59,962 - orion.agent.ai_test - INFO - {"timestamp": "2025-06-01T18:48:59.962460", "level": "INFO", "agent_id": "ai_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 18:48:59,962 - orion.agent.ai_test - INFO - {"timestamp": "2025-06-01T18:48:59.962565", "level": "INFO", "agent_id": "ai_test", "message": "AI Manager initialized", "context": {}}
+2025-06-01 18:48:59,962 - orion.agent.ai_test - INFO - {"timestamp": "2025-06-01T18:48:59.962629", "level": "INFO", "agent_id": "ai_test", "message": "AI model registered", "context": {"model_id": "test_model_1", "model_name": "Test Language Model", "model_type": "language_model", "provider": "ollama"}}
+2025-06-01 18:48:59,962 - orion.agent.ai_test - INFO - {"timestamp": "2025-06-01T18:48:59.962711", "level": "INFO", "agent_id": "ai_test", "message": "AI model loaded", "context": {"model_id": "test_model_1", "loading_time_ms": "0.02", "memory_usage_mb": 100.0}}

@@ -1,0 +1,196 @@
+2025-05-29 16:39:38,397 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,398 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,398 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,498 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,499 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,499 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,499 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,499 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,499 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent
+2025-05-29 16:39:38,499 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,500 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,500 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,500 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,500 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,500 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,501 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,501 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,501 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,501 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,501 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-05-29 16:39:38,501 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,501 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,502 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,502 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,502 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,502 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,502 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,502 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,503 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,503 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,503 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_2
+2025-05-29 16:39:38,503 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,503 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,504 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,504 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,504 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,504 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,504 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,504 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,504 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,505 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,505 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-05-29 16:39:38,505 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,505 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 16:39:38,506 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 16:39:38,506 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 16:39:38,506 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-05-29 16:39:38,607 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-05-29 16:39:38,607 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-05-29 16:39:38,608 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-05-29 23:24:17,262 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 23:24:17,262 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 23:25:08,229 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 23:25:08,230 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 23:25:43,036 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-05-29 23:25:43,037 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 23:25:43,043 - Agent.AgentRegistry - INFO - info:123 - Agent registered: calculator_agent_dynamic_001
+2025-05-29 23:25:43,044 - Agent.AgentRegistry - INFO - info:123 - Agent registered: file_monitor_agent_dynamic_001
+2025-05-29 23:25:58,057 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: calculator_agent_dynamic_001
+2025-05-29 23:25:58,059 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: file_monitor_agent_dynamic_001
+2025-05-29 23:39:13,124 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-05-29 23:39:13,125 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 23:39:13,126 - Agent.AgentRegistry - INFO - info:123 - Agent registered: simple_test_agent_1748554753
+2025-05-29 23:39:15,130 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: simple_test_agent_1748554753
+2025-05-29 23:39:27,191 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-05-29 23:39:27,191 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-05-29 23:39:27,193 - Agent.AgentRegistry - INFO - info:123 - Agent registered: simple_test_agent_1748554767
+2025-05-29 23:39:29,196 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: simple_test_agent_1748554767
+2025-06-02 16:08:33,785 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,786 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,786 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:08:33,887 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,887 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,899 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,900 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,900 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:08:33,900 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent
+2025-06-02 16:08:33,900 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,900 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,908 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,908 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,909 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:08:33,909 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,913 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,921 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,921 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,921 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:08:33,921 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-06-02 16:08:33,921 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,927 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,927 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,927 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,928 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:08:33,928 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,928 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,928 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,928 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,929 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:08:33,929 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_2
+2025-06-02 16:08:33,929 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,938 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,949 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,949 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,949 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:08:33,950 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,950 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,958 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,958 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,958 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,958 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:33,959 - Agent.AgentRegistry - INFO - info:123 - No existing registry file found, starting fresh
+2025-06-02 16:08:33,959 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:08:33,959 - Agent.AgentRegistry - INFO - info:123 - Shutting down Agent Registry...
+2025-06-02 16:08:33,960 - Agent.AgentRegistry - INFO - info:123 - Agent Registry shutdown completed
+2025-06-02 16:08:42,498 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 16:08:42,498 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:18:40,964 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 16:18:40,964 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:18:40,964 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:18:41,294 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-06-02 16:18:41,295 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:18:41,295 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent
+2025-06-02 16:18:41,296 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent
+2025-06-02 16:18:41,296 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent
+2025-06-02 16:18:41,470 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-06-02 16:18:41,499 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:18:41,499 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent
+2025-06-02 16:18:41,774 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-06-02 16:18:42,776 - Agent.AgentRegistry - WARNING - warning:127 - Agent not found for status update: test_agent
+2025-06-02 16:18:42,876 - Agent.AgentRegistry - WARNING - warning:127 - Agent not found for status update: test_agent
+2025-06-02 16:18:42,876 - Agent.AgentRegistry - WARNING - warning:127 - Agent not found in registry: test_agent
+2025-06-02 16:18:42,877 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:18:43,465 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-06-02 16:18:43,673 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:18:43,790 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-06-02 16:18:43,868 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:43,899 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_1
+2025-06-02 16:18:43,910 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_2
+2025-06-02 16:18:44,000 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_0
+2025-06-02 16:18:44,020 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:44,020 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent_1
+2025-06-02 16:18:44,020 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent_2
+2025-06-02 16:18:44,031 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_0
+2025-06-02 16:18:44,032 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:44,032 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent_1
+2025-06-02 16:18:44,032 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent_2
+2025-06-02 16:18:44,032 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent_0
+2025-06-02 16:18:44,032 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent_1
+2025-06-02 16:18:44,033 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent_2
+2025-06-02 16:18:44,134 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_0
+2025-06-02 16:18:44,135 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_1
+2025-06-02 16:18:44,135 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_2
+2025-06-02 16:18:44,136 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:44,137 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_1
+2025-06-02 16:18:44,137 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent_2
+2025-06-02 16:18:44,247 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_0
+2025-06-02 16:20:45,549 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 2 agents
+2025-06-02 16:20:45,549 - Agent.AgentRegistry - WARNING - warning:127 - Agent heartbeat timeout: test_agent_1
+2025-06-02 16:20:45,549 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:20:45,549 - Agent.AgentRegistry - WARNING - warning:127 - Agent heartbeat timeout: test_agent_2
+2025-06-02 16:20:45,549 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_1
+2025-06-02 16:20:45,557 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent_2
+2025-06-02 16:20:45,568 - Agent.AgentRegistry - INFO - info:123 - Agent registered: test_agent
+2025-06-02 16:21:32,370 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 1 agents
+2025-06-02 16:21:32,370 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 16:21:32,370 - Agent.AgentRegistry - WARNING - warning:127 - Agent already registered: test_agent
+2025-06-02 21:45:55,802 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 1 agents
+2025-06-02 21:45:55,802 - Agent.AgentRegistry - WARNING - warning:127 - Agent heartbeat timeout: test_agent
+2025-06-02 21:45:55,802 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 21:45:55,803 - Agent.AgentRegistry - INFO - info:123 - Agent unregistered: test_agent
+2025-06-02 21:46:19,743 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 21:46:19,743 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 21:46:49,460 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 21:46:49,460 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 21:47:09,588 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 21:47:09,588 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 21:47:41,874 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 21:47:41,874 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 22:23:10,307 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 22:23:10,307 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 22:25:08,990 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 22:25:08,990 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-02 22:26:34,339 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-02 22:26:34,339 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-03 00:19:58,334 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-03 00:19:58,334 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-03 00:20:49,328 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-03 00:20:49,328 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-03 00:22:00,050 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-03 00:22:00,050 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-03 00:23:32,777 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-03 00:23:32,778 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-03 00:24:16,580 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-03 00:24:16,580 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully
+2025-06-03 01:35:38,713 - Agent.AgentRegistry - INFO - info:123 - Registry loaded: 0 agents
+2025-06-03 01:35:38,713 - Agent.AgentRegistry - INFO - info:123 - Agent Registry initialized successfully

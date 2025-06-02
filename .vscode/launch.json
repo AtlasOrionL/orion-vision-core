@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src:${workspaceFolder}/src/jobone:${workspaceFolder}/src/jobone/vision_core:${workspaceFolder}/tests:${workspaceFolder}/local-deployment/python-core/src:${workspaceFolder}/vscode-extension"
+            }
+        },
+        {
+            "name": "Python: Agent Core Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_agent_core.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src:${workspaceFolder}/src/jobone:${workspaceFolder}/src/jobone/vision_core:${workspaceFolder}/tests"
+            }
+        },
+        {
+            "name": "Python: Orion Server",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/vscode-extension/server.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/vscode-extension"
+            }
+        }
+    ]
+}

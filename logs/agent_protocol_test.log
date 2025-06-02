@@ -1,0 +1,4 @@
+2025-06-01 18:33:19,032 - orion.agent.protocol_test - INFO - {"timestamp": "2025-06-01T18:33:19.032194", "level": "INFO", "agent_id": "protocol_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 18:33:19,032 - orion.agent.protocol_test - INFO - {"timestamp": "2025-06-01T18:33:19.032307", "level": "INFO", "agent_id": "protocol_test", "message": "Protocol Manager initialized", "context": {}}
+2025-06-01 18:33:19,032 - orion.agent.protocol_test - INFO - {"timestamp": "2025-06-01T18:33:19.032379", "level": "INFO", "agent_id": "protocol_test", "message": "Protocol handler registered", "context": {"protocol": "http"}}
+2025-06-01 18:33:19,032 - orion.agent.protocol_test - INFO - {"timestamp": "2025-06-01T18:33:19.032433", "level": "INFO", "agent_id": "protocol_test", "message": "Protocol handler registered", "context": {"protocol": "websocket"}}

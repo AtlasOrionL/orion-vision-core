@@ -1,0 +1,539 @@
+# Orion Vision Core - Security Scanning Automation
+# Sprint 5.1 - Service Mesh & Advanced Security
+
+# Trivy Operator for Vulnerability Scanning
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trivy-system
+  labels:
+    name: trivy-system
+
+---
+# Trivy Operator Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trivy-operator-config
+  namespace: trivy-system
+data:
+  trivy-operator.yaml: |
+    # Trivy Operator Configuration
+    vulnerabilityReports:
+      scanner: Trivy
+      scanJobTimeout: 5m
+      scanJobsConcurrentLimit: 10
+      scanJobsRetryDelay: 30s
+    
+    configAuditReports:
+      scanner: Trivy
+      scanJobTimeout: 5m
+    
+    exposedSecretReports:
+      scanner: Trivy
+      scanJobTimeout: 5m
+    
+    rbacAssessmentReports:
+      scanner: Trivy
+      scanJobTimeout: 5m
+    
+    infraAssessmentReports:
+      scanner: Trivy
+      scanJobTimeout: 5m
+    
+    clusterComplianceReports:
+      scanner: Trivy
+      scanJobTimeout: 5m
+    
+    # Trivy configuration
+    trivy:
+      # Image scanning
+      ignoreUnfixed: true
+      severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+      slow: true
+      
+      # Database
+      dbRepository: ghcr.io/aquasecurity/trivy-db
+      javaDbRepository: ghcr.io/aquasecurity/trivy-java-db
+      
+      # Resources
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100M
+        limits:
+          cpu: 500m
+          memory: 500M
+      
+      # Security context
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 10001
+    
+    # Compliance
+    compliance:
+      # CIS Kubernetes Benchmark
+      cron: "0 1 * * *"
+      reportType: summary
+    
+    # Metrics
+    metrics:
+      resourceLabelsPrefix: trivy.security.devopstales.io
+    
+    # Webhook
+    webhook:
+      broadcaster:
+        url: http://webhook-broadcaster:8080/webhook
+
+---
+# Trivy Operator Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trivy-operator
+  namespace: trivy-system
+  labels:
+    app.kubernetes.io/name: trivy-operator
+    app.kubernetes.io/component: security-scanner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: trivy-operator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: trivy-operator
+        app.kubernetes.io/component: security-scanner
+    spec:
+      serviceAccountName: trivy-operator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+      - name: trivy-operator
+        image: aquasec/trivy-operator:0.16.4
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: OPERATOR_NAMESPACE
+          value: trivy-system
+        - name: OPERATOR_TARGET_NAMESPACES
+          value: "orion-system"
+        - name: OPERATOR_LOG_DEV_MODE
+          value: "false"
+        - name: OPERATOR_SCAN_JOB_TIMEOUT
+          value: "5m"
+        - name: OPERATOR_CONCURRENT_SCAN_JOBS_LIMIT
+          value: "10"
+        - name: OPERATOR_SCAN_JOB_RETRY_DELAY
+          value: "30s"
+        - name: OPERATOR_BATCH_DELETE_LIMIT
+          value: "10"
+        - name: OPERATOR_BATCH_DELETE_DELAY
+          value: "10s"
+        - name: OPERATOR_METRICS_BIND_ADDRESS
+          value: ":8080"
+        - name: OPERATOR_HEALTH_PROBE_BIND_ADDRESS
+          value: ":9090"
+        - name: OPERATOR_CIS_KUBERNETES_BENCHMARK_ENABLED
+          value: "true"
+        - name: OPERATOR_VULNERABILITY_SCANNER_ENABLED
+          value: "true"
+        - name: OPERATOR_CONFIG_AUDIT_SCANNER_ENABLED
+          value: "true"
+        - name: OPERATOR_RBAC_ASSESSMENT_SCANNER_ENABLED
+          value: "true"
+        - name: OPERATOR_INFRA_ASSESSMENT_SCANNER_ENABLED
+          value: "true"
+        - name: OPERATOR_CLUSTER_COMPLIANCE_ENABLED
+          value: "true"
+        ports:
+        - containerPort: 8080
+          name: metrics
+          protocol: TCP
+        - containerPort: 9090
+          name: health
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: health
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: health
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 10001
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: config
+          mountPath: /etc/trivy-operator
+          readOnly: true
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: config
+        configMap:
+          name: trivy-operator-config
+
+---
+# Trivy Operator ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: trivy-operator
+  namespace: trivy-system
+
+---
+# Trivy Operator ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: trivy-operator
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "replicationcontrollers", "services", "resourcequotas", "limitranges"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["configmaps", "secrets", "serviceaccounts"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "daemonsets", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies", "ingresses"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["policy"]
+  resources: ["podsecuritypolicies"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["aquasecurity.github.io"]
+  resources: ["*"]
+  verbs: ["*"]
+
+---
+# Trivy Operator ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: trivy-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: trivy-operator
+subjects:
+- kind: ServiceAccount
+  name: trivy-operator
+  namespace: trivy-system
+
+---
+# Kube-bench CronJob for CIS Kubernetes Benchmark
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kube-bench-scan
+  namespace: trivy-system
+  labels:
+    app.kubernetes.io/name: kube-bench
+    app.kubernetes.io/component: compliance-scanner
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: kube-bench
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: kube-bench
+          hostPID: true
+          containers:
+          - name: kube-bench
+            image: aquasec/kube-bench:v0.6.15
+            command: ["kube-bench"]
+            args: ["--json", "--outputfile", "/tmp/results.json"]
+            volumeMounts:
+            - name: var-lib-etcd
+              mountPath: /var/lib/etcd
+              readOnly: true
+            - name: var-lib-kubelet
+              mountPath: /var/lib/kubelet
+              readOnly: true
+            - name: var-lib-kube-scheduler
+              mountPath: /var/lib/kube-scheduler
+              readOnly: true
+            - name: var-lib-kube-controller-manager
+              mountPath: /var/lib/kube-controller-manager
+              readOnly: true
+            - name: etc-systemd
+              mountPath: /etc/systemd
+              readOnly: true
+            - name: lib-systemd
+              mountPath: /lib/systemd/
+              readOnly: true
+            - name: srv-kubernetes
+              mountPath: /srv/kubernetes/
+              readOnly: true
+            - name: etc-kubernetes
+              mountPath: /etc/kubernetes
+              readOnly: true
+            - name: usr-bin
+              mountPath: /usr/local/mount-from-host/bin
+              readOnly: true
+            - name: etc-cni-netd
+              mountPath: /etc/cni/net.d/
+              readOnly: true
+            - name: opt-cni-bin
+              mountPath: /opt/cni/bin/
+              readOnly: true
+            - name: results
+              mountPath: /tmp
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
+          - name: results-processor
+            image: curlimages/curl:latest
+            command: ["/bin/sh"]
+            args:
+            - -c
+            - |
+              sleep 60
+              if [ -f /tmp/results.json ]; then
+                curl -X POST -H "Content-Type: application/json" \
+                     -d @/tmp/results.json \
+                     http://webhook-broadcaster:8080/kube-bench
+              fi
+            volumeMounts:
+            - name: results
+              mountPath: /tmp
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 100m
+                memory: 128Mi
+          volumes:
+          - name: var-lib-etcd
+            hostPath:
+              path: "/var/lib/etcd"
+          - name: var-lib-kubelet
+            hostPath:
+              path: "/var/lib/kubelet"
+          - name: var-lib-kube-scheduler
+            hostPath:
+              path: "/var/lib/kube-scheduler"
+          - name: var-lib-kube-controller-manager
+            hostPath:
+              path: "/var/lib/kube-controller-manager"
+          - name: etc-systemd
+            hostPath:
+              path: "/etc/systemd"
+          - name: lib-systemd
+            hostPath:
+              path: "/lib/systemd"
+          - name: srv-kubernetes
+            hostPath:
+              path: "/srv/kubernetes"
+          - name: etc-kubernetes
+            hostPath:
+              path: "/etc/kubernetes"
+          - name: usr-bin
+            hostPath:
+              path: "/usr/bin"
+          - name: etc-cni-netd
+            hostPath:
+              path: "/etc/cni/net.d/"
+          - name: opt-cni-bin
+            hostPath:
+              path: "/opt/cni/bin/"
+          - name: results
+            emptyDir: {}
+
+---
+# Kube-bench ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-bench
+  namespace: trivy-system
+
+---
+# Kube-bench ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-bench
+rules:
+- apiGroups: [""]
+  resources: ["pods", "nodes", "services", "configmaps"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "daemonsets"]
+  verbs: ["get", "list"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterrolebindings", "clusterroles"]
+  verbs: ["get", "list"]
+
+---
+# Kube-bench ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-bench
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-bench
+subjects:
+- kind: ServiceAccount
+  name: kube-bench
+  namespace: trivy-system
+
+---
+# Webhook Broadcaster for Security Events
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-broadcaster
+  namespace: trivy-system
+  labels:
+    app.kubernetes.io/name: webhook-broadcaster
+    app.kubernetes.io/component: security-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: webhook-broadcaster
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: webhook-broadcaster
+    spec:
+      containers:
+      - name: webhook-broadcaster
+        image: nginx:alpine
+        ports:
+        - containerPort: 8080
+          name: webhook
+        volumeMounts:
+        - name: webhook-config
+          mountPath: /etc/nginx/conf.d
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      volumes:
+      - name: webhook-config
+        configMap:
+          name: webhook-broadcaster-config
+
+---
+# Webhook Broadcaster Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webhook-broadcaster-config
+  namespace: trivy-system
+data:
+  default.conf: |
+    server {
+        listen 8080;
+        server_name localhost;
+        
+        location /webhook {
+            return 200 '{"status": "received"}';
+            add_header Content-Type application/json;
+        }
+        
+        location /kube-bench {
+            return 200 '{"status": "kube-bench received"}';
+            add_header Content-Type application/json;
+        }
+        
+        location /health {
+            return 200 '{"status": "healthy"}';
+            add_header Content-Type application/json;
+        }
+    }
+
+---
+# Webhook Broadcaster Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-broadcaster
+  namespace: trivy-system
+  labels:
+    app.kubernetes.io/name: webhook-broadcaster
+spec:
+  ports:
+  - name: webhook
+    port: 8080
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: webhook-broadcaster
+
+---
+# Security Scanning Metrics Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: trivy-operator-metrics
+  namespace: trivy-system
+  labels:
+    app.kubernetes.io/name: trivy-operator
+    app.kubernetes.io/component: metrics
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/metrics"
+spec:
+  ports:
+  - name: metrics
+    port: 8080
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: trivy-operator

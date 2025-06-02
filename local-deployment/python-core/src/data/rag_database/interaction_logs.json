@@ -1,0 +1,218 @@
+{
+  "version": "1.0",
+  "created": "2025-05-29T15:30:00Z",
+  "description": "Interaction logs for RAG-enhanced learning and optimization",
+  
+  "log_metadata": {
+    "retention_policy": {
+      "max_entries": 10000,
+      "retention_days": 30,
+      "compression": "gzip",
+      "archival": "monthly"
+    },
+    "privacy_settings": {
+      "anonymization": true,
+      "sensitive_data_filtering": true,
+      "user_consent_required": false,
+      "data_encryption": false
+    },
+    "indexing": {
+      "by_agent": true,
+      "by_timestamp": true,
+      "by_message_type": true,
+      "by_success_status": true
+    }
+  },
+  
+  "interaction_logs": [
+    {
+      "log_id": "log_001",
+      "timestamp": "2025-05-29T15:25:09.564843Z",
+      "interaction_type": "test_message",
+      "participants": {
+        "sender": "orion_publisher_test",
+        "receiver": "orion_consumer_test",
+        "intermediary": "communication_agent"
+      },
+      "message_details": {
+        "message_type": "test",
+        "content_summary": "Test message for RabbitMQ integration",
+        "priority": "normal",
+        "size_bytes": 245,
+        "format": "json"
+      },
+      "performance_metrics": {
+        "send_time": "2025-05-29T15:25:09.564843Z",
+        "receive_time": "2025-05-29T15:25:09.565123Z",
+        "processing_time_ms": 2.8,
+        "queue_time_ms": 0.5,
+        "total_latency_ms": 3.3
+      },
+      "outcome": {
+        "status": "success",
+        "error_code": null,
+        "error_message": null,
+        "retry_count": 0
+      },
+      "context": {
+        "system_load": "low",
+        "queue_depth": 0,
+        "active_agents": 2,
+        "network_latency_ms": 0.1
+      }
+    },
+    
+    {
+      "log_id": "log_002",
+      "timestamp": "2025-05-29T15:25:09.565073Z",
+      "interaction_type": "agent_communication",
+      "participants": {
+        "sender": "communication_agent",
+        "receiver": "brain_agent",
+        "intermediary": null
+      },
+      "message_details": {
+        "message_type": "agent_communication",
+        "content_summary": "Inter-agent communication test",
+        "priority": "high",
+        "size_bytes": 312,
+        "format": "json"
+      },
+      "performance_metrics": {
+        "send_time": "2025-05-29T15:25:09.565073Z",
+        "receive_time": "2025-05-29T15:25:09.565234Z",
+        "processing_time_ms": 1.6,
+        "queue_time_ms": 0.2,
+        "total_latency_ms": 1.8
+      },
+      "outcome": {
+        "status": "success",
+        "error_code": null,
+        "error_message": null,
+        "retry_count": 0
+      },
+      "context": {
+        "system_load": "low",
+        "queue_depth": 1,
+        "active_agents": 2,
+        "network_latency_ms": 0.1
+      }
+    },
+    
+    {
+      "log_id": "log_003",
+      "timestamp": "2025-05-29T15:25:09.565232Z",
+      "interaction_type": "system_status",
+      "participants": {
+        "sender": "system_monitor",
+        "receiver": "orion_brain",
+        "intermediary": "communication_agent"
+      },
+      "message_details": {
+        "message_type": "system_status",
+        "content_summary": "System status report with metrics",
+        "priority": "low",
+        "size_bytes": 456,
+        "format": "json"
+      },
+      "performance_metrics": {
+        "send_time": "2025-05-29T15:25:09.565232Z",
+        "receive_time": "2025-05-29T15:25:09.565445Z",
+        "processing_time_ms": 2.1,
+        "queue_time_ms": 0.3,
+        "total_latency_ms": 2.4
+      },
+      "outcome": {
+        "status": "success",
+        "error_code": null,
+        "error_message": null,
+        "retry_count": 0
+      },
+      "context": {
+        "system_load": "low",
+        "queue_depth": 0,
+        "active_agents": 3,
+        "network_latency_ms": 0.1
+      }
+    }
+  ],
+  
+  "aggregated_statistics": {
+    "total_interactions": 3,
+    "success_rate": 1.0,
+    "average_latency_ms": 2.5,
+    "peak_latency_ms": 3.3,
+    "min_latency_ms": 1.8,
+    "message_types": {
+      "test": 1,
+      "agent_communication": 1,
+      "system_status": 1
+    },
+    "priority_distribution": {
+      "low": 1,
+      "normal": 1,
+      "high": 1,
+      "critical": 0
+    },
+    "error_statistics": {
+      "total_errors": 0,
+      "error_rate": 0.0,
+      "common_errors": [],
+      "retry_statistics": {
+        "total_retries": 0,
+        "average_retries": 0.0
+      }
+    }
+  },
+  
+  "learning_insights": {
+    "performance_patterns": {
+      "optimal_message_size": "200-400 bytes",
+      "best_performing_priority": "high",
+      "peak_performance_time": "low_system_load",
+      "bottleneck_indicators": []
+    },
+    
+    "communication_patterns": {
+      "most_active_agents": [
+        "communication_agent",
+        "orion_brain"
+      ],
+      "common_message_flows": [
+        "test -> communication_agent -> consumer",
+        "system_monitor -> communication_agent -> orion_brain"
+      ],
+      "interaction_frequency": "test_phase"
+    },
+    
+    "optimization_opportunities": {
+      "latency_reduction": [
+        "queue_pre_allocation",
+        "connection_pooling",
+        "message_batching"
+      ],
+      "throughput_improvement": [
+        "parallel_processing",
+        "load_balancing",
+        "caching_strategies"
+      ],
+      "reliability_enhancement": [
+        "redundant_paths",
+        "health_monitoring",
+        "automatic_recovery"
+      ]
+    }
+  },
+  
+  "quality_metrics": {
+    "data_completeness": 1.0,
+    "timestamp_accuracy": 1.0,
+    "message_integrity": 1.0,
+    "context_richness": 0.8,
+    "actionable_insights": 0.7
+  },
+  
+  "next_analysis_scheduled": "2025-05-29T16:30:00Z",
+  "last_optimization_applied": null,
+  "recommendations_pending": []
+}

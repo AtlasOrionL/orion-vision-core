@@ -1,0 +1,668 @@
+# Orion Vision Core - Threat Intelligence Integration
+# Sprint 5.2.2 - Advanced Threat Detection
+
+# Threat Intelligence Aggregator
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: threat-intelligence-aggregator
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-intelligence-aggregator
+    app.kubernetes.io/component: threat-intelligence
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: threat-intelligence-aggregator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: threat-intelligence-aggregator
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: threat-intel-aggregator
+        image: orion-registry.company.com/threat-intel-aggregator:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: FEED_UPDATE_INTERVAL
+          value: "1h"
+        - name: IOC_RETENTION_PERIOD
+          value: "30d"
+        - name: THREAT_SCORE_THRESHOLD
+          value: "0.7"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: REDIS_URL
+          value: "redis://redis.threat-detection.svc.cluster.local:6379"
+        volumeMounts:
+        - name: threat-intel-config
+          mountPath: /etc/threat-intel
+        - name: threat-feeds-data
+          mountPath: /data/feeds
+        - name: ioc-database
+          mountPath: /data/iocs
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: threat-intel-config
+        configMap:
+          name: threat-intelligence-config
+      - name: threat-feeds-data
+        persistentVolumeClaim:
+          claimName: threat-feeds-pvc
+      - name: ioc-database
+        persistentVolumeClaim:
+          claimName: ioc-database-pvc
+
+---
+# IOC Detection Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ioc-detection-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: ioc-detection-engine
+    app.kubernetes.io/component: ioc-detection
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ioc-detection-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ioc-detection-engine
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: ioc-detector
+        image: orion-registry.company.com/ioc-detector:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: DETECTION_MODE
+          value: "real_time"
+        - name: BATCH_SIZE
+          value: "1000"
+        - name: DETECTION_INTERVAL
+          value: "30s"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch.logging.svc.cluster.local:9200"
+        volumeMounts:
+        - name: ioc-config
+          mountPath: /etc/ioc-detection
+        - name: ioc-database
+          mountPath: /data/iocs
+          readOnly: true
+        - name: detection-rules
+          mountPath: /rules
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: ioc-config
+        configMap:
+          name: ioc-detection-config
+      - name: ioc-database
+        persistentVolumeClaim:
+          claimName: ioc-database-pvc
+      - name: detection-rules
+        configMap:
+          name: ioc-detection-rules
+
+---
+# Threat Correlation Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: threat-correlation-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-correlation-engine
+    app.kubernetes.io/component: threat-correlation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: threat-correlation-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: threat-correlation-engine
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: threat-correlator
+        image: orion-registry.company.com/threat-correlator:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: CORRELATION_WINDOW
+          value: "1h"
+        - name: MIN_CORRELATION_SCORE
+          value: "0.6"
+        - name: MAX_EVENTS_PER_CORRELATION
+          value: "100"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: NEO4J_URL
+          value: "bolt://neo4j.threat-detection.svc.cluster.local:7687"
+        volumeMounts:
+        - name: correlation-config
+          mountPath: /etc/correlation
+        - name: correlation-rules
+          mountPath: /rules
+        - name: threat-graph-data
+          mountPath: /data/graph
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: correlation-config
+        configMap:
+          name: threat-correlation-config
+      - name: correlation-rules
+        configMap:
+          name: threat-correlation-rules
+      - name: threat-graph-data
+        persistentVolumeClaim:
+          claimName: threat-graph-pvc
+
+---
+# Threat Intelligence Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: threat-intelligence-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-intelligence-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # Threat Intelligence Configuration
+    feeds:
+      - name: "misp"
+        type: "misp"
+        url: "https://misp.company.com"
+        api_key: "${MISP_API_KEY}"
+        update_interval: "1h"
+        enabled: true
+        categories: ["malware", "network", "payload"]
+      
+      - name: "otx_alienvault"
+        type: "otx"
+        url: "https://otx.alienvault.com/api/v1"
+        api_key: "${OTX_API_KEY}"
+        update_interval: "2h"
+        enabled: true
+        pulse_types: ["malware", "apt", "botnet"]
+      
+      - name: "virustotal"
+        type: "virustotal"
+        url: "https://www.virustotal.com/vtapi/v2"
+        api_key: "${VT_API_KEY}"
+        update_interval: "4h"
+        enabled: true
+        file_types: ["hash", "url", "domain"]
+      
+      - name: "threatcrowd"
+        type: "threatcrowd"
+        url: "https://www.threatcrowd.org/searchApi/v2"
+        update_interval: "6h"
+        enabled: true
+        resource_types: ["ip", "domain", "email"]
+      
+      - name: "abuse_ch"
+        type: "abuse_ch"
+        feeds:
+          - name: "malware_bazaar"
+            url: "https://bazaar.abuse.ch/export/csv/recent/"
+          - name: "feodo_tracker"
+            url: "https://feodotracker.abuse.ch/downloads/ipblocklist.csv"
+          - name: "ssl_blacklist"
+            url: "https://sslbl.abuse.ch/blacklist/sslblacklist.csv"
+        update_interval: "1h"
+        enabled: true
+    
+    processing:
+      deduplication: true
+      enrichment: true
+      scoring: true
+      false_positive_filtering: true
+      
+      scoring_weights:
+        source_reputation: 0.3
+        age: 0.2
+        confidence: 0.3
+        severity: 0.2
+      
+      retention:
+        high_confidence: "90d"
+        medium_confidence: "30d"
+        low_confidence: "7d"
+    
+    output:
+      kafka_topic: "threat-intelligence"
+      elasticsearch_index: "threat-intel"
+      redis_prefix: "ti:"
+      webhook_url: "http://soar-engine.threat-detection.svc.cluster.local:8080/webhook/threat-intel"
+
+---
+# IOC Detection Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ioc-detection-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: ioc-detection-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # IOC Detection Configuration
+    detection:
+      mode: "real_time"
+      batch_size: 1000
+      detection_interval: "30s"
+      parallel_workers: 4
+    
+    ioc_types:
+      - name: "ip_addresses"
+        enabled: true
+        sources: ["network_logs", "dns_logs", "proxy_logs"]
+        detection_methods: ["exact_match", "subnet_match"]
+      
+      - name: "domains"
+        enabled: true
+        sources: ["dns_logs", "proxy_logs", "ssl_logs"]
+        detection_methods: ["exact_match", "subdomain_match", "dga_detection"]
+      
+      - name: "file_hashes"
+        enabled: true
+        sources: ["file_logs", "process_logs"]
+        detection_methods: ["md5", "sha1", "sha256", "fuzzy_hash"]
+      
+      - name: "urls"
+        enabled: true
+        sources: ["proxy_logs", "web_logs"]
+        detection_methods: ["exact_match", "pattern_match"]
+      
+      - name: "email_addresses"
+        enabled: true
+        sources: ["email_logs", "authentication_logs"]
+        detection_methods: ["exact_match", "domain_match"]
+      
+      - name: "user_agents"
+        enabled: true
+        sources: ["web_logs", "proxy_logs"]
+        detection_methods: ["exact_match", "pattern_match"]
+    
+    alerting:
+      severity_mapping:
+        critical: ["apt", "malware", "c2"]
+        high: ["phishing", "exploit", "botnet"]
+        medium: ["suspicious", "reconnaissance"]
+        low: ["informational"]
+      
+      notification_channels:
+        - type: "kafka"
+          topic: "ioc-detections"
+        - type: "webhook"
+          url: "http://soar-engine.threat-detection.svc.cluster.local:8080/webhook/ioc-detection"
+        - type: "elasticsearch"
+          index: "ioc-detections"
+
+---
+# IOC Detection Rules
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ioc-detection-rules
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: ioc-detection-rules
+    app.kubernetes.io/component: configuration
+data:
+  malware_detection.yaml: |
+    # Malware IOC Detection Rules
+    rules:
+      - name: "known_malware_hash"
+        description: "Detect known malware file hashes"
+        ioc_type: "file_hash"
+        severity: "critical"
+        action: "alert_and_block"
+        sources: ["file_logs", "process_logs"]
+        
+      - name: "c2_communication"
+        description: "Detect C2 server communication"
+        ioc_type: "ip_address"
+        severity: "critical"
+        action: "alert_and_block"
+        sources: ["network_logs", "dns_logs"]
+        
+      - name: "malicious_domain"
+        description: "Detect malicious domain access"
+        ioc_type: "domain"
+        severity: "high"
+        action: "alert_and_investigate"
+        sources: ["dns_logs", "proxy_logs"]
+
+  phishing_detection.yaml: |
+    # Phishing IOC Detection Rules
+    rules:
+      - name: "phishing_url"
+        description: "Detect phishing URLs"
+        ioc_type: "url"
+        severity: "high"
+        action: "alert_and_block"
+        sources: ["proxy_logs", "email_logs"]
+        
+      - name: "suspicious_email_sender"
+        description: "Detect suspicious email senders"
+        ioc_type: "email_address"
+        severity: "medium"
+        action: "alert_and_investigate"
+        sources: ["email_logs"]
+
+---
+# Threat Correlation Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: threat-correlation-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-correlation-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # Threat Correlation Configuration
+    correlation:
+      window: "1h"
+      min_score: 0.6
+      max_events: 100
+      algorithms: ["temporal", "spatial", "behavioral"]
+    
+    entity_types:
+      - name: "user"
+        attributes: ["username", "ip_address", "user_agent"]
+        correlation_fields: ["username", "ip_address"]
+      
+      - name: "host"
+        attributes: ["hostname", "ip_address", "mac_address"]
+        correlation_fields: ["hostname", "ip_address"]
+      
+      - name: "process"
+        attributes: ["process_name", "pid", "command_line", "parent_process"]
+        correlation_fields: ["process_name", "command_line"]
+      
+      - name: "network_connection"
+        attributes: ["source_ip", "destination_ip", "port", "protocol"]
+        correlation_fields: ["source_ip", "destination_ip", "port"]
+    
+    correlation_rules:
+      - name: "lateral_movement"
+        description: "Detect lateral movement patterns"
+        entities: ["user", "host"]
+        time_window: "30m"
+        min_events: 3
+        pattern: "user_login_multiple_hosts"
+      
+      - name: "privilege_escalation"
+        description: "Detect privilege escalation"
+        entities: ["user", "process"]
+        time_window: "15m"
+        min_events: 2
+        pattern: "user_elevated_process"
+      
+      - name: "data_exfiltration"
+        description: "Detect data exfiltration"
+        entities: ["user", "network_connection"]
+        time_window: "1h"
+        min_events: 5
+        pattern: "large_data_transfer"
+
+---
+# Storage for Threat Intelligence Data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: threat-feeds-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-feeds-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ioc-database-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: ioc-database-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: threat-graph-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-graph-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: fast-ssd
+
+---
+# Services for Threat Intelligence Components
+apiVersion: v1
+kind: Service
+metadata:
+  name: threat-intelligence-aggregator
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-intelligence-aggregator
+    app.kubernetes.io/component: threat-intel-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: threat-intelligence-aggregator
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ioc-detection-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: ioc-detection-engine
+    app.kubernetes.io/component: ioc-detection-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: ioc-detection-engine
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: threat-correlation-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-correlation-engine
+    app.kubernetes.io/component: threat-correlation-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: threat-correlation-engine
+
+---
+# Threat Intelligence HPA
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: threat-intelligence-hpa
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-intelligence-hpa
+    app.kubernetes.io/component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ioc-detection-engine
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

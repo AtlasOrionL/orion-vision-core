@@ -1,0 +1,403 @@
+# Orion Vision Core - Traffic Management Rules
+# Sprint 5.1 - Service Mesh & Advanced Security
+
+# Destination Rule for Orion Core Service
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: orion-core-dr
+  namespace: orion-system
+spec:
+  host: orion-core-service
+  trafficPolicy:
+    # Load balancing
+    loadBalancer:
+      simple: LEAST_CONN
+    
+    # Connection pool settings
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30s
+        keepAlive:
+          time: 7200s
+          interval: 75s
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+        consecutiveGatewayErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+        maxEjectionPercent: 50
+        minHealthPercent: 50
+    
+    # Circuit breaker
+    outlierDetection:
+      consecutiveGatewayErrors: 5
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 50
+      splitExternalLocalOriginErrors: false
+    
+    # mTLS
+    tls:
+      mode: ISTIO_MUTUAL
+  
+  # Subsets for different versions
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+  - name: v2
+    labels:
+      version: v2
+    trafficPolicy:
+      loadBalancer:
+        simple: LEAST_CONN
+  - name: canary
+    labels:
+      version: canary
+    trafficPolicy:
+      loadBalancer:
+        simple: RANDOM
+
+---
+# Destination Rule for Redis
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: redis-dr
+  namespace: orion-system
+spec:
+  host: orion-redis
+  trafficPolicy:
+    # Connection pool for Redis
+    connectionPool:
+      tcp:
+        maxConnections: 50
+        connectTimeout: 10s
+        keepAlive:
+          time: 3600s
+          interval: 60s
+    
+    # mTLS
+    tls:
+      mode: ISTIO_MUTUAL
+
+---
+# Virtual Service for Canary Deployment
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: orion-core-canary-vs
+  namespace: orion-system
+spec:
+  hosts:
+  - orion-core-service
+  http:
+  # Canary routing based on headers
+  - match:
+    - headers:
+        canary:
+          exact: "true"
+    route:
+    - destination:
+        host: orion-core-service
+        subset: canary
+      weight: 100
+    fault:
+      delay:
+        percentage:
+          value: 0.1
+        fixedDelay: 5s
+  
+  # A/B testing based on user agent
+  - match:
+    - headers:
+        user-agent:
+          regex: ".*Chrome.*"
+    route:
+    - destination:
+        host: orion-core-service
+        subset: v2
+      weight: 50
+    - destination:
+        host: orion-core-service
+        subset: v1
+      weight: 50
+  
+  # Default routing with traffic splitting
+  - route:
+    - destination:
+        host: orion-core-service
+        subset: v1
+      weight: 90
+    - destination:
+        host: orion-core-service
+        subset: v2
+      weight: 10
+    
+    # Retry policy
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+      retryOn: gateway-error,connect-failure,refused-stream
+      retryRemoteLocalities: true
+    
+    # Timeout
+    timeout: 30s
+    
+    # Fault injection for testing
+    fault:
+      abort:
+        percentage:
+          value: 0.01
+        httpStatus: 500
+      delay:
+        percentage:
+          value: 0.1
+        fixedDelay: 2s
+
+---
+# Virtual Service for Rate Limiting
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: orion-rate-limit-vs
+  namespace: orion-system
+spec:
+  hosts:
+  - orion-api.company.com
+  gateways:
+  - orion-gateway
+  http:
+  # Rate limiting for API endpoints
+  - match:
+    - uri:
+        prefix: "/api/v1/"
+    route:
+    - destination:
+        host: orion-core-service
+        port:
+          number: 8000
+    headers:
+      request:
+        add:
+          x-rate-limit: "100"
+          x-rate-limit-window: "60s"
+  
+  # No rate limiting for health checks
+  - match:
+    - uri:
+        exact: "/health"
+    route:
+    - destination:
+        host: orion-core-service
+        port:
+          number: 8000
+
+---
+# Service Entry for External Dependencies
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-auth-service
+  namespace: orion-system
+spec:
+  hosts:
+  - auth.orion-platform.com
+  ports:
+  - number: 443
+    name: https
+    protocol: HTTPS
+  location: MESH_EXTERNAL
+  resolution: DNS
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-monitoring-service
+  namespace: orion-system
+spec:
+  hosts:
+  - monitoring.orion-platform.com
+  ports:
+  - number: 443
+    name: https
+    protocol: HTTPS
+  location: MESH_EXTERNAL
+  resolution: DNS
+
+---
+# Virtual Service for External Services
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: external-auth-vs
+  namespace: orion-system
+spec:
+  hosts:
+  - auth.orion-platform.com
+  http:
+  - match:
+    - uri:
+        prefix: "/.well-known/jwks.json"
+    route:
+    - destination:
+        host: auth.orion-platform.com
+    timeout: 10s
+    retries:
+      attempts: 3
+      perTryTimeout: 3s
+
+---
+# Destination Rule for External Services
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: external-auth-dr
+  namespace: orion-system
+spec:
+  host: auth.orion-platform.com
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
+      sni: auth.orion-platform.com
+    connectionPool:
+      tcp:
+        maxConnections: 10
+        connectTimeout: 10s
+      http:
+        http1MaxPendingRequests: 10
+        maxRequestsPerConnection: 2
+
+---
+# Envoy Filter for Custom Headers
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: orion-custom-headers
+  namespace: orion-system
+spec:
+  workloadSelector:
+    labels:
+      app.kubernetes.io/name: orion-vision-core
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.filters.http.lua
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+          inline_code: |
+            function envoy_on_request(request_handle)
+              -- Add custom security headers
+              request_handle:headers():add("x-orion-request-id", request_handle:headers():get(":path") .. "-" .. os.time())
+              request_handle:headers():add("x-orion-timestamp", os.time())
+              
+              -- Log request
+              request_handle:logInfo("Orion request: " .. request_handle:headers():get(":method") .. " " .. request_handle:headers():get(":path"))
+            end
+            
+            function envoy_on_response(response_handle)
+              -- Add security headers
+              response_handle:headers():add("x-content-type-options", "nosniff")
+              response_handle:headers():add("x-frame-options", "DENY")
+              response_handle:headers():add("x-xss-protection", "1; mode=block")
+              response_handle:headers():add("strict-transport-security", "max-age=31536000; includeSubDomains")
+              response_handle:headers():add("x-orion-version", "1.0.0")
+              
+              -- Log response
+              response_handle:logInfo("Orion response: " .. response_handle:headers():get(":status"))
+            end
+
+---
+# Envoy Filter for Rate Limiting
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: orion-rate-limit
+  namespace: orion-system
+spec:
+  workloadSelector:
+    labels:
+      app.kubernetes.io/name: orion-vision-core
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.filters.http.local_ratelimit
+        typed_config:
+          "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+          type_url: type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit
+          value:
+            stat_prefix: local_rate_limiter
+            token_bucket:
+              max_tokens: 100
+              tokens_per_fill: 100
+              fill_interval: 60s
+            filter_enabled:
+              runtime_key: local_rate_limit_enabled
+              default_value:
+                numerator: 100
+                denominator: HUNDRED
+            filter_enforced:
+              runtime_key: local_rate_limit_enforced
+              default_value:
+                numerator: 100
+                denominator: HUNDRED
+            response_headers_to_add:
+            - append: false
+              header:
+                key: x-local-rate-limit
+                value: 'true'
+
+---
+# Telemetry Configuration
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: orion-telemetry
+  namespace: orion-system
+spec:
+  metrics:
+  - providers:
+    - name: prometheus
+  - overrides:
+    - match:
+        metric: ALL_METRICS
+      tagOverrides:
+        request_protocol:
+          operation: UPSERT
+          value: "http"
+        orion_service:
+          operation: UPSERT
+          value: "orion-core"
+  accessLogging:
+  - providers:
+    - name: otel
+  tracing:
+  - providers:
+    - name: jaeger

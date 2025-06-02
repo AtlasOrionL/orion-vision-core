@@ -1,0 +1,478 @@
+# Orion Vision Core - Network Endpoints Configuration
+# Sprint 5.2.1 - Multi-Cluster Network Endpoints
+
+# Network Endpoints ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: network-endpoints-config
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: network-endpoints
+    app.kubernetes.io/component: configuration
+data:
+  endpoints.yaml: |
+    # Multi-cluster network endpoints configuration
+    clusters:
+      primary:
+        name: "orion-primary"
+        region: "us-west-1"
+        zone: "us-west-1a"
+        network: "network1"
+        endpoints:
+          istiod: "10.0.1.100:15012"
+          eastwest_gateway: "10.0.1.100:15443"
+          orion_core: "10.0.1.101:8000"
+          orion_discovery: "10.0.1.102:8001"
+          orion_orchestration: "10.0.1.103:8002"
+          prometheus: "10.0.1.104:9090"
+          grafana: "10.0.1.105:3000"
+      remote:
+        name: "orion-remote"
+        region: "us-east-1"
+        zone: "us-east-1a"
+        network: "network2"
+        endpoints:
+          istiod: "10.0.2.100:15012"
+          eastwest_gateway: "10.0.2.100:15443"
+          orion_core: "10.0.2.101:8000"
+          orion_discovery: "10.0.2.102:8001"
+          prometheus: "10.0.2.104:9090"
+          grafana: "10.0.2.105:3000"
+    
+    # Cross-cluster service mappings
+    services:
+      orion-core:
+        primary: "orion-core.orion-system.svc.cluster.local"
+        remote: "orion-core.orion-system.svc.cluster.local"
+        global: "orion-core.orion-system.global"
+      orion-discovery:
+        primary: "orion-discovery.orion-system.svc.cluster.local"
+        remote: "orion-discovery.orion-system.svc.cluster.local"
+        global: "orion-discovery.orion-system.global"
+      orion-orchestration:
+        primary: "orion-orchestration.orion-system.svc.cluster.local"
+        remote: "orion-orchestration.orion-system.svc.cluster.local"
+        global: "orion-orchestration.orion-system.global"
+
+---
+# Primary Cluster Network Endpoints
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: primary-cluster-orion-core
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: primary-cluster-orion-core
+    app.kubernetes.io/component: workload-entry
+    cluster: orion-primary
+spec:
+  address: 10.0.1.101
+  ports:
+    http: 8000
+    grpc: 9000
+    metrics: 8080
+  labels:
+    app: orion-core
+    version: v1
+    cluster: orion-primary
+    region: us-west-1
+    zone: us-west-1a
+  serviceAccount: orion-core
+  network: network1
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: primary-cluster-orion-discovery
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: primary-cluster-orion-discovery
+    app.kubernetes.io/component: workload-entry
+    cluster: orion-primary
+spec:
+  address: 10.0.1.102
+  ports:
+    http: 8001
+    grpc: 9001
+    metrics: 8081
+  labels:
+    app: orion-discovery
+    version: v1
+    cluster: orion-primary
+    region: us-west-1
+    zone: us-west-1a
+  serviceAccount: orion-discovery
+  network: network1
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: primary-cluster-orion-orchestration
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: primary-cluster-orion-orchestration
+    app.kubernetes.io/component: workload-entry
+    cluster: orion-primary
+spec:
+  address: 10.0.1.103
+  ports:
+    http: 8002
+    grpc: 9002
+    metrics: 8082
+  labels:
+    app: orion-orchestration
+    version: v1
+    cluster: orion-primary
+    region: us-west-1
+    zone: us-west-1a
+  serviceAccount: orion-orchestration
+  network: network1
+
+---
+# Remote Cluster Network Endpoints
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: remote-cluster-orion-core
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-orion-core
+    app.kubernetes.io/component: workload-entry
+    cluster: orion-remote
+spec:
+  address: 10.0.2.101
+  ports:
+    http: 8000
+    grpc: 9000
+    metrics: 8080
+  labels:
+    app: orion-core
+    version: v1
+    cluster: orion-remote
+    region: us-east-1
+    zone: us-east-1a
+  serviceAccount: orion-core
+  network: network2
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: remote-cluster-orion-discovery
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: remote-cluster-orion-discovery
+    app.kubernetes.io/component: workload-entry
+    cluster: orion-remote
+spec:
+  address: 10.0.2.102
+  ports:
+    http: 8001
+    grpc: 9001
+    metrics: 8081
+  labels:
+    app: orion-discovery
+    version: v1
+    cluster: orion-remote
+    region: us-east-1
+    zone: us-east-1a
+  serviceAccount: orion-discovery
+  network: network2
+
+---
+# Cross-Cluster Service Entries for Global Services
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: global-orion-core-service
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: global-orion-core-service
+    app.kubernetes.io/component: service-discovery
+spec:
+  hosts:
+  - orion-core.orion-system.global
+  location: MESH_EXTERNAL
+  ports:
+  - number: 8000
+    name: http
+    protocol: HTTP
+  - number: 9000
+    name: grpc
+    protocol: GRPC
+  - number: 8080
+    name: metrics
+    protocol: HTTP
+  resolution: DNS
+  addresses:
+  - 240.0.0.1  # Virtual IP for global service
+  endpoints:
+  - address: 10.0.1.101  # Primary cluster
+    network: network1
+    locality: us-west-1/us-west-1a
+    ports:
+      http: 8000
+      grpc: 9000
+      metrics: 8080
+  - address: 10.0.2.101  # Remote cluster
+    network: network2
+    locality: us-east-1/us-east-1a
+    ports:
+      http: 8000
+      grpc: 9000
+      metrics: 8080
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: global-orion-discovery-service
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: global-orion-discovery-service
+    app.kubernetes.io/component: service-discovery
+spec:
+  hosts:
+  - orion-discovery.orion-system.global
+  location: MESH_EXTERNAL
+  ports:
+  - number: 8001
+    name: http
+    protocol: HTTP
+  - number: 9001
+    name: grpc
+    protocol: GRPC
+  - number: 8081
+    name: metrics
+    protocol: HTTP
+  resolution: DNS
+  addresses:
+  - 240.0.0.2  # Virtual IP for global service
+  endpoints:
+  - address: 10.0.1.102  # Primary cluster
+    network: network1
+    locality: us-west-1/us-west-1a
+    ports:
+      http: 8001
+      grpc: 9001
+      metrics: 8081
+  - address: 10.0.2.102  # Remote cluster
+    network: network2
+    locality: us-east-1/us-east-1a
+    ports:
+      http: 8001
+      grpc: 9001
+      metrics: 8081
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: global-orion-orchestration-service
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: global-orion-orchestration-service
+    app.kubernetes.io/component: service-discovery
+spec:
+  hosts:
+  - orion-orchestration.orion-system.global
+  location: MESH_EXTERNAL
+  ports:
+  - number: 8002
+    name: http
+    protocol: HTTP
+  - number: 9002
+    name: grpc
+    protocol: GRPC
+  - number: 8082
+    name: metrics
+    protocol: HTTP
+  resolution: DNS
+  addresses:
+  - 240.0.0.3  # Virtual IP for global service
+  endpoints:
+  - address: 10.0.1.103  # Primary cluster
+    network: network1
+    locality: us-west-1/us-west-1a
+    ports:
+      http: 8002
+      grpc: 9002
+      metrics: 8082
+
+---
+# Cross-Cluster Load Balancer Configuration
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: cross-cluster-load-balancer
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: cross-cluster-load-balancer
+    app.kubernetes.io/component: traffic-management
+spec:
+  host: "*.orion-system.global"
+  trafficPolicy:
+    loadBalancer:
+      localityLbSetting:
+        enabled: true
+        distribute:
+        # Distribute traffic based on locality
+        - from: "us-west-1/us-west-1a/*"
+          to:
+            "us-west-1/us-west-1a/*": 80
+            "us-east-1/us-east-1a/*": 20
+        - from: "us-east-1/us-east-1a/*"
+          to:
+            "us-east-1/us-east-1a/*": 80
+            "us-west-1/us-west-1a/*": 20
+        failover:
+        # Failover configuration
+        - from: us-west-1
+          to: us-east-1
+        - from: us-east-1
+          to: us-west-1
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30s
+        tcpKeepalive:
+          time: 7200s
+          interval: 75s
+          probes: 9
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+        consecutiveGatewayErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+        h2UpgradePolicy: UPGRADE
+    circuitBreaker:
+      consecutiveErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 30
+    outlierDetection:
+      consecutiveGatewayErrors: 5
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 30
+      splitExternalLocalOriginErrors: true
+
+---
+# Network Endpoint Health Checks
+apiVersion: v1
+kind: Service
+metadata:
+  name: cross-cluster-health-check
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: cross-cluster-health-check
+    app.kubernetes.io/component: health-check
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: health
+    protocol: TCP
+  selector:
+    app: cross-cluster-health-check
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cross-cluster-health-check
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: cross-cluster-health-check
+    app.kubernetes.io/component: health-check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cross-cluster-health-check
+  template:
+    metadata:
+      labels:
+        app: cross-cluster-health-check
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: health-check
+        image: nginx:alpine
+        ports:
+        - containerPort: 8080
+          name: health
+        env:
+        - name: CLUSTER_NAME
+          value: "orion-primary"  # This should be set per cluster
+        - name: NETWORK_NAME
+          value: "network1"       # This should be set per cluster
+        volumeMounts:
+        - name: health-config
+          mountPath: /etc/nginx/conf.d
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: health-config
+        configMap:
+          name: health-check-config
+
+---
+# Health Check Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: health-check-config
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: health-check-config
+    app.kubernetes.io/component: configuration
+data:
+  default.conf: |
+    server {
+        listen 8080;
+        server_name localhost;
+        
+        location /health {
+            return 200 '{"status": "healthy", "cluster": "$CLUSTER_NAME", "network": "$NETWORK_NAME"}';
+            add_header Content-Type application/json;
+        }
+        
+        location /ready {
+            return 200 '{"status": "ready", "cluster": "$CLUSTER_NAME", "network": "$NETWORK_NAME"}';
+            add_header Content-Type application/json;
+        }
+        
+        location /endpoints {
+            return 200 '{"endpoints": ["orion-core", "orion-discovery", "orion-orchestration"]}';
+            add_header Content-Type application/json;
+        }
+    }

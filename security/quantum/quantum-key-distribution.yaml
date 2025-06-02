@@ -1,0 +1,551 @@
+# Quantum Key Distribution (QKD) System
+# Sprint 7.1 - Epic 2: Quantum Key Distribution
+# BB84, E91, SARG04, and CV-QKD Protocols
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quantum-qkd
+  labels:
+    security.orion.io/zone: "quantum-qkd"
+    security.orion.io/level: "critical"
+    quantum.orion.io/qkd-enabled: "true"
+    istio-injection: enabled
+---
+# QKD Protocol Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qkd-protocol-engine
+  namespace: quantum-qkd
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: qkd-protocol-engine
+  template:
+    metadata:
+      labels:
+        app: qkd-protocol-engine
+        quantum.orion.io/component: "qkd-engine"
+    spec:
+      serviceAccountName: qkd-protocol-engine
+      containers:
+      - name: qkd-engine
+        image: orion/qkd-engine:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: https-qkd
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 9091
+          name: quantum-channel
+        env:
+        - name: QKD_PROTOCOLS_ENABLED
+          value: "bb84,e91,sarg04,cv-qkd"
+        - name: DEFAULT_PROTOCOL
+          value: "bb84"
+        - name: QUANTUM_CHANNEL_SIMULATION
+          value: "true"
+        - name: KEY_RATE_TARGET
+          value: "1000000"  # 1 Mbps
+        - name: SECURITY_PARAMETER
+          value: "256"
+        volumeMounts:
+        - name: qkd-config
+          mountPath: /etc/qkd
+          readOnly: true
+        - name: quantum-keys
+          mountPath: /var/lib/quantum-keys
+        - name: qkd-certs
+          mountPath: /etc/certs
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: qkd-config
+        configMap:
+          name: qkd-config
+      - name: quantum-keys
+        persistentVolumeClaim:
+          claimName: quantum-keys-storage
+      - name: qkd-certs
+        secret:
+          secretName: qkd-tls-certs
+---
+# BB84 Protocol Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bb84-protocol-service
+  namespace: quantum-qkd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bb84-protocol-service
+  template:
+    metadata:
+      labels:
+        app: bb84-protocol-service
+        quantum.orion.io/component: "bb84-protocol"
+    spec:
+      serviceAccountName: bb84-protocol-service
+      containers:
+      - name: bb84-server
+        image: orion/bb84-protocol:v1.0.0
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 9092
+          name: metrics
+        env:
+        - name: BB84_VARIANT
+          value: "standard"
+        - name: PHOTON_POLARIZATION_BASES
+          value: "rectilinear,diagonal"
+        - name: ERROR_CORRECTION_ENABLED
+          value: "true"
+        - name: PRIVACY_AMPLIFICATION_ENABLED
+          value: "true"
+        - name: QUANTUM_BER_THRESHOLD
+          value: "0.11"  # 11% error rate threshold
+        volumeMounts:
+        - name: bb84-config
+          mountPath: /etc/bb84
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: bb84-config
+        configMap:
+          name: bb84-config
+---
+# E91 Entanglement-Based QKD Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: e91-protocol-service
+  namespace: quantum-qkd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: e91-protocol-service
+  template:
+    metadata:
+      labels:
+        app: e91-protocol-service
+        quantum.orion.io/component: "e91-protocol"
+    spec:
+      serviceAccountName: e91-protocol-service
+      containers:
+      - name: e91-server
+        image: orion/e91-protocol:v1.0.0
+        ports:
+        - containerPort: 8082
+          name: http
+        - containerPort: 9093
+          name: metrics
+        env:
+        - name: ENTANGLEMENT_SOURCE
+          value: "spdc"  # Spontaneous Parametric Down Conversion
+        - name: BELL_STATE_PREPARATION
+          value: "phi_plus"
+        - name: CHSH_INEQUALITY_THRESHOLD
+          value: "2.8"  # Bell inequality violation
+        - name: ENTANGLEMENT_FIDELITY_MIN
+          value: "0.95"
+        volumeMounts:
+        - name: e91-config
+          mountPath: /etc/e91
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: e91-config
+        configMap:
+          name: e91-config
+---
+# SARG04 Protocol Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sarg04-protocol-service
+  namespace: quantum-qkd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sarg04-protocol-service
+  template:
+    metadata:
+      labels:
+        app: sarg04-protocol-service
+        quantum.orion.io/component: "sarg04-protocol"
+    spec:
+      serviceAccountName: sarg04-protocol-service
+      containers:
+      - name: sarg04-server
+        image: orion/sarg04-protocol:v1.0.0
+        ports:
+        - containerPort: 8083
+          name: http
+        - containerPort: 9094
+          name: metrics
+        env:
+        - name: SARG04_VARIANT
+          value: "four_state"
+        - name: ENHANCED_SECURITY
+          value: "true"
+        - name: PNS_ATTACK_RESISTANCE
+          value: "true"  # Photon Number Splitting attack resistance
+        volumeMounts:
+        - name: sarg04-config
+          mountPath: /etc/sarg04
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: sarg04-config
+        configMap:
+          name: sarg04-config
+---
+# Continuous Variable QKD Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cv-qkd-service
+  namespace: quantum-qkd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cv-qkd-service
+  template:
+    metadata:
+      labels:
+        app: cv-qkd-service
+        quantum.orion.io/component: "cv-qkd"
+    spec:
+      serviceAccountName: cv-qkd-service
+      containers:
+      - name: cv-qkd-server
+        image: orion/cv-qkd:v1.0.0
+        ports:
+        - containerPort: 8084
+          name: http
+        - containerPort: 9095
+          name: metrics
+        env:
+        - name: CV_QKD_VARIANT
+          value: "gaussian_modulation"
+        - name: COHERENT_STATES
+          value: "true"
+        - name: HOMODYNE_DETECTION
+          value: "true"
+        - name: REVERSE_RECONCILIATION
+          value: "true"
+        volumeMounts:
+        - name: cv-qkd-config
+          mountPath: /etc/cv-qkd
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: cv-qkd-config
+        configMap:
+          name: cv-qkd-config
+---
+# QKD Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qkd-config
+  namespace: quantum-qkd
+data:
+  qkd-config.yaml: |
+    qkd:
+      enabled: true
+      protocols:
+        bb84:
+          enabled: true
+          description: "Bennett-Brassard 1984 protocol"
+          security_level: "information_theoretic"
+          key_rate: "high"
+          implementation: "four_state_polarization"
+        e91:
+          enabled: true
+          description: "Ekert 1991 entanglement-based protocol"
+          security_level: "information_theoretic"
+          key_rate: "medium"
+          implementation: "bell_state_measurement"
+        sarg04:
+          enabled: true
+          description: "Scarani-Acin-Ribordy-Gisin 2004 protocol"
+          security_level: "enhanced"
+          key_rate: "high"
+          implementation: "four_state_enhanced"
+        cv_qkd:
+          enabled: true
+          description: "Continuous Variable QKD"
+          security_level: "information_theoretic"
+          key_rate: "very_high"
+          implementation: "gaussian_modulation"
+      
+      quantum_channel:
+        simulation_enabled: true
+        channel_model: "lossy_fiber"
+        transmission_distance: "100km"
+        loss_coefficient: "0.2dB/km"
+        noise_model: "thermal_noise"
+        detector_efficiency: "0.8"
+        dark_count_rate: "1e-6"
+      
+      key_management:
+        key_buffer_size: "1MB"
+        key_refresh_rate: "1Hz"
+        key_lifetime: "3600s"
+        secure_deletion: true
+        key_escrow: false
+      
+      security_parameters:
+        error_correction: "ldpc"
+        privacy_amplification: "universal_hashing"
+        authentication: "wegman_carter"
+        security_parameter: 256
+        composable_security: true
+---
+# BB84 Protocol Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bb84-config
+  namespace: quantum-qkd
+data:
+  bb84.yaml: |
+    bb84:
+      protocol_variant: "standard_bb84"
+      polarization_bases:
+        - name: "rectilinear"
+          angles: [0, 90]  # degrees
+        - name: "diagonal"
+          angles: [45, 135]  # degrees
+      
+      quantum_states:
+        - basis: "rectilinear"
+          bit_0: "horizontal"
+          bit_1: "vertical"
+        - basis: "diagonal"
+          bit_0: "diagonal_45"
+          bit_1: "diagonal_135"
+      
+      protocol_steps:
+        1: "quantum_transmission"
+        2: "basis_reconciliation"
+        3: "error_estimation"
+        4: "error_correction"
+        5: "privacy_amplification"
+        6: "authentication"
+      
+      security_analysis:
+        ber_threshold: 0.11  # Bit Error Rate threshold
+        min_key_length: 1000
+        security_proof: "finite_key_analysis"
+        composable_security: true
+---
+# E91 Protocol Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: e91-config
+  namespace: quantum-qkd
+data:
+  e91.yaml: |
+    e91:
+      protocol_variant: "ekert_1991"
+      entanglement_source:
+        type: "spdc"  # Spontaneous Parametric Down Conversion
+        pump_wavelength: "405nm"
+        signal_idler_wavelengths: ["810nm", "810nm"]
+        entanglement_fidelity: 0.95
+      
+      bell_states:
+        - name: "phi_plus"
+          state: "(|00⟩ + |11⟩)/√2"
+        - name: "phi_minus"
+          state: "(|00⟩ - |11⟩)/√2"
+        - name: "psi_plus"
+          state: "(|01⟩ + |10⟩)/√2"
+        - name: "psi_minus"
+          state: "(|01⟩ - |10⟩)/√2"
+      
+      measurement_bases:
+        alice: [0, 45, 90]  # degrees
+        bob: [22.5, 67.5, 112.5]  # degrees
+      
+      bell_inequality:
+        test: "chsh"  # Clauser-Horne-Shimony-Holt
+        classical_bound: 2.0
+        quantum_bound: 2.828
+        violation_threshold: 2.8
+      
+      security_analysis:
+        device_independent: true
+        loophole_free: true
+        finite_statistics: true
+---
+# Quantum Key Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: quantum-keys-storage
+  namespace: quantum-qkd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: encrypted-ssd
+---
+# QKD Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: qkd-protocol-engine
+  namespace: quantum-qkd
+spec:
+  selector:
+    app: qkd-protocol-engine
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: https-qkd
+    port: 8443
+    targetPort: 8443
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+  - name: quantum-channel
+    port: 9091
+    targetPort: 9091
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bb84-protocol-service
+  namespace: quantum-qkd
+spec:
+  selector:
+    app: bb84-protocol-service
+  ports:
+  - name: http
+    port: 8081
+    targetPort: 8081
+  - name: metrics
+    port: 9092
+    targetPort: 9092
+  type: ClusterIP
+---
+# QKD Network Policy for Quantum Channel Security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: qkd-quantum-channel-policy
+  namespace: quantum-qkd
+spec:
+  podSelector:
+    matchLabels:
+      quantum.orion.io/component: "qkd-engine"
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          quantum.orion.io/qkd-client: "true"
+    ports:
+    - protocol: TCP
+      port: 9091  # Quantum channel port
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          quantum.orion.io/qkd-peer: "true"
+    ports:
+    - protocol: TCP
+      port: 9091
+---
+# Service Accounts
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: qkd-protocol-engine
+  namespace: quantum-qkd
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bb84-protocol-service
+  namespace: quantum-qkd
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: e91-protocol-service
+  namespace: quantum-qkd
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sarg04-protocol-service
+  namespace: quantum-qkd
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cv-qkd-service
+  namespace: quantum-qkd

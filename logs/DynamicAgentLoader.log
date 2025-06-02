@@ -1,0 +1,483 @@
+2025-05-29 23:24:17,262 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:17,262 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpa05hi0jl/modules
+2025-05-29 23:24:17,262 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpa05hi0jl/config
+2025-05-29 23:24:17,262 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:17,262 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpgyzcnd7q/modules
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpgyzcnd7q/config
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:17,263 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpsfyl9fpk/modules
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpsfyl9fpk/config
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpsfyl9fpk/modules
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpsfyl9fpk/config
+2025-05-29 23:24:17,264 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:17,265 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-05-29 23:24:19,266 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,266 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,266 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,266 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,266 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,266 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpwrb70kdc/modules
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpwrb70kdc/config
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpwrb70kdc/modules
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpwrb70kdc/config
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,267 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpinw7480n/modules
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpinw7480n/config
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /nonexistent/path
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /nonexistent/config
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - ERROR - error:131 - Directory creation error: [Errno 13] Permission denied: '/nonexistent'
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - ERROR - error:131 - Module not found: nonexistent
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,268 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmppeocw03x/modules
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmppeocw03x/config
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp9j_watra/modules
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp9j_watra/config
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,269 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp5e7x0v9u/modules
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp5e7x0v9u/config
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - ERROR - error:131 - Agent not found: stats_test_agent
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,270 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp0xnm7grf/modules
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp0xnm7grf/config
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,271 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpf68456lh/modules
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpf68456lh/config
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - ERROR - error:131 - Module not found: nonexistent_module
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpeoq4urzh/modules
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpeoq4urzh/config
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,272 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - INFO - info:123 - Reloading module: test_dynamic_agent
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - WARNING - warning:127 - Module not loaded: test_dynamic_agent
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,373 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,374 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,374 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpwn_c06gu/modules
+2025-05-29 23:24:19,374 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpwn_c06gu/config
+2025-05-29 23:24:19,374 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,375 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,375 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,375 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,375 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,375 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpqgl9at5i/modules
+2025-05-29 23:24:19,375 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpqgl9at5i/config
+2025-05-29 23:24:19,375 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - ERROR - error:131 - Security check failed for module: test_dynamic_agent
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - ERROR - error:131 - Agent not found: test_unload_agent
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - WARNING - warning:127 - Module not loaded: test_dynamic_agent
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpw5ia6rk4/modules
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpw5ia6rk4/config
+2025-05-29 23:24:19,376 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:24:19,377 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: os
+2025-05-29 23:24:19,377 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:24:19,377 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:24:19,377 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:25:08,230 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:25:08,230 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-05-29 23:25:08,230 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-05-29 23:25:08,230 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:25:08,230 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:25:08,230 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:25:08,230 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:25:43,037 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:25:43,037 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-05-29 23:25:43,037 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-05-29 23:25:43,037 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:25:43,037 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-05-29 23:25:43,038 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: calculator_agent
+2025-05-29 23:25:43,040 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: calculator_agent
+2025-05-29 23:25:43,040 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: file_monitor_agent
+2025-05-29 23:25:43,042 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: file_monitor_agent
+2025-05-29 23:25:43,043 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: demo_calculator_001 from calculator_agent
+2025-05-29 23:25:43,044 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: demo_monitor_001 from file_monitor_agent
+2025-05-29 23:25:43,045 - Agent.DynamicAgentLoader - INFO - info:123 - Agent started: demo_calculator_001
+2025-05-29 23:25:43,047 - Agent.DynamicAgentLoader - INFO - info:123 - Agent started: demo_monitor_001
+2025-05-29 23:25:58,056 - Agent.DynamicAgentLoader - INFO - info:123 - Reloading module: calculator_agent
+2025-05-29 23:25:58,056 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: calculator_agent
+2025-05-29 23:25:58,057 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: demo_calculator_001
+2025-05-29 23:25:58,057 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: calculator_agent
+2025-05-29 23:25:58,057 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: calculator_agent
+2025-05-29 23:25:58,058 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: calculator_agent
+2025-05-29 23:25:58,058 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:25:58,058 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:25:58,059 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: demo_monitor_001
+2025-05-29 23:25:58,059 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: calculator_agent
+2025-05-29 23:25:58,059 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: calculator_agent
+2025-05-29 23:25:58,059 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: file_monitor_agent
+2025-05-29 23:25:58,059 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: file_monitor_agent
+2025-05-29 23:25:58,059 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:38:32,315 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:38:32,315 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:38:32,315 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:39:13,125 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:39:13,125 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-05-29 23:39:13,125 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-05-29 23:39:13,125 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:39:13,125 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: calculator_agent
+2025-05-29 23:39:13,126 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: calculator_agent
+2025-05-29 23:39:13,127 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: simple_test_agent_1748554753 from calculator_agent
+2025-05-29 23:39:13,127 - Agent.DynamicAgentLoader - INFO - info:123 - Agent started: simple_test_agent_1748554753
+2025-05-29 23:39:15,130 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped: simple_test_agent_1748554753
+2025-05-29 23:39:15,130 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:39:15,130 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:39:15,130 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: simple_test_agent_1748554753
+2025-05-29 23:39:15,130 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: calculator_agent
+2025-05-29 23:39:15,130 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: calculator_agent
+2025-05-29 23:39:15,130 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-05-29 23:39:27,191 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-05-29 23:39:27,191 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-05-29 23:39:27,191 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-05-29 23:39:27,191 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-05-29 23:39:27,192 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: calculator_agent
+2025-05-29 23:39:27,192 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: calculator_agent
+2025-05-29 23:39:27,193 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: simple_test_agent_1748554767 from calculator_agent
+2025-05-29 23:39:27,193 - Agent.DynamicAgentLoader - INFO - info:123 - Agent started: simple_test_agent_1748554767
+2025-05-29 23:39:29,196 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped: simple_test_agent_1748554767
+2025-05-29 23:39:29,196 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-05-29 23:39:29,196 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-05-29 23:39:29,196 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: simple_test_agent_1748554767
+2025-05-29 23:39:29,196 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: calculator_agent
+2025-05-29 23:39:29,196 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: calculator_agent
+2025-05-29 23:39:29,196 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:42,498 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:42,498 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp5vpqsn4z/modules
+2025-06-02 16:08:42,498 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp5vpqsn4z/config
+2025-06-02 16:08:42,498 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:42,498 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: test_dynamic_agent
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: test_agent_001 from test_dynamic_agent
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: test_agent_001
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: test_dynamic_agent
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: test_dynamic_agent
+2025-06-02 16:08:42,499 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:42,500 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:42,500 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpy4kpdwsz/modules
+2025-06-02 16:08:42,500 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpy4kpdwsz/config
+2025-06-02 16:08:42,500 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:42,500 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-06-02 16:08:42,500 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: test_dynamic_agent
+2025-06-02 16:08:42,501 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: test_lifecycle_agent from test_dynamic_agent
+2025-06-02 16:08:42,501 - Agent.DynamicAgentLoader - INFO - info:123 - Agent started: test_lifecycle_agent
+2025-06-02 16:08:43,104 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped: test_lifecycle_agent
+2025-06-02 16:08:43,104 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:43,104 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:43,104 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: test_lifecycle_agent
+2025-06-02 16:08:43,104 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: test_dynamic_agent
+2025-06-02 16:08:43,104 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: test_dynamic_agent
+2025-06-02 16:08:43,104 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:43,105 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:43,105 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmps6x97gf9/modules
+2025-06-02 16:08:43,105 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmps6x97gf9/config
+2025-06-02 16:08:43,105 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:43,105 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:43,105 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmps6x97gf9/modules
+2025-06-02 16:08:43,105 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmps6x97gf9/config
+2025-06-02 16:08:43,106 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:43,106 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 16:08:45,116 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,116 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,116 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,116 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,116 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,116 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp99p1b_hq/modules
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp99p1b_hq/config
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp99p1b_hq/modules
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp99p1b_hq/config
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,117 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpjbr7pz0h/modules
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpjbr7pz0h/config
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /nonexistent/path
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /nonexistent/config
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - ERROR - error:131 - Directory creation error: [Errno 13] Permission denied: '/nonexistent'
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - ERROR - error:131 - Module not found: nonexistent
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp_uvf8m4g/modules
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp_uvf8m4g/config
+2025-06-02 16:08:45,118 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpeo9i6i9w/modules
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpeo9i6i9w/config
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,119 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,120 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,120 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmptkxib_pq/modules
+2025-06-02 16:08:45,120 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmptkxib_pq/config
+2025-06-02 16:08:45,120 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,120 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-06-02 16:08:45,120 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,121 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: stats_test_agent from test_dynamic_agent
+2025-06-02 16:08:45,121 - Agent.DynamicAgentLoader - INFO - info:123 - Agent started: stats_test_agent
+2025-06-02 16:08:45,121 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,121 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,221 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: stats_test_agent
+2025-06-02 16:08:45,221 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: test_dynamic_agent
+2025-06-02 16:08:45,222 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,222 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,222 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,222 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp4t7frglt/modules
+2025-06-02 16:08:45,222 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp4t7frglt/config
+2025-06-02 16:08:45,222 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,223 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-06-02 16:08:45,223 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,223 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,223 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,223 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: test_dynamic_agent
+2025-06-02 16:08:45,223 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,223 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp4gjti8hw/modules
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp4gjti8hw/config
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - ERROR - error:131 - Module not found: nonexistent_module
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,224 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,225 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,225 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp9lc1acb1/modules
+2025-06-02 16:08:45,225 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp9lc1acb1/config
+2025-06-02 16:08:45,225 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,225 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-06-02 16:08:45,225 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,326 - Agent.DynamicAgentLoader - INFO - info:123 - Reloading module: test_dynamic_agent
+2025-06-02 16:08:45,326 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: test_dynamic_agent
+2025-06-02 16:08:45,326 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,326 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-06-02 16:08:45,326 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,326 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,326 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,327 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: test_dynamic_agent
+2025-06-02 16:08:45,327 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,327 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,327 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,327 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpp_4z389v/modules
+2025-06-02 16:08:45,327 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpp_4z389v/config
+2025-06-02 16:08:45,327 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmp5c0f4zkl/modules
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmp5c0f4zkl/config
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,328 - Agent.DynamicAgentLoader - INFO - info:123 - Loading module: test_dynamic_agent
+2025-06-02 16:08:45,329 - Agent.DynamicAgentLoader - INFO - info:123 - Module loaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,329 - Agent.DynamicAgentLoader - INFO - info:123 - Agent created successfully: test_unload_agent from test_dynamic_agent
+2025-06-02 16:08:45,329 - Agent.DynamicAgentLoader - INFO - info:123 - Agent started: test_unload_agent
+2025-06-02 16:08:45,330 - Agent.DynamicAgentLoader - INFO - info:123 - Unloading module: test_dynamic_agent
+2025-06-02 16:08:45,430 - Agent.DynamicAgentLoader - INFO - info:123 - Agent stopped and removed: test_unload_agent
+2025-06-02 16:08:45,430 - Agent.DynamicAgentLoader - INFO - info:123 - Module unloaded successfully: test_dynamic_agent
+2025-06-02 16:08:45,430 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,430 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,430 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: /tmp/tmpiut5k2qp/modules
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: /tmp/tmpiut5k2qp/config
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - WARNING - warning:127 - Forbidden import detected: subprocess
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 16:08:45,431 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 21:45:55,803 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 21:45:55,803 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 21:45:55,803 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 21:45:55,803 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 21:45:55,803 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 21:46:19,743 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 21:46:19,743 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 21:46:19,743 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 21:46:19,743 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 21:46:19,744 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 21:46:49,461 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 21:46:49,461 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 21:46:49,461 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 21:46:49,461 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 21:46:49,461 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 21:47:09,588 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 21:47:09,588 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 21:47:09,589 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 21:47:09,589 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 21:47:09,589 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 21:47:41,874 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 21:47:41,874 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 21:47:41,875 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 21:47:41,875 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 21:47:41,875 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 21:48:11,739 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 21:48:11,739 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 21:48:11,739 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 22:23:10,308 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 22:23:10,308 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 22:23:10,308 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 22:23:10,308 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 22:23:10,308 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 22:23:40,163 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 22:23:40,163 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 22:23:40,163 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 22:25:08,990 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 22:25:08,990 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 22:25:08,990 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 22:25:08,990 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 22:25:08,991 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 22:25:38,841 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 22:25:38,841 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 22:25:38,841 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-02 22:26:34,339 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-02 22:26:34,339 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-02 22:26:34,339 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-02 22:26:34,339 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-02 22:26:34,340 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-02 22:27:04,209 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-02 22:27:04,209 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-02 22:27:04,209 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-03 00:19:58,334 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-03 00:19:58,334 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-03 00:19:58,334 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-03 00:19:58,334 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-03 00:19:58,334 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-03 00:20:28,216 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-03 00:20:28,216 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-03 00:20:28,217 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-03 00:20:49,328 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-03 00:20:49,328 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-03 00:20:49,328 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-03 00:20:49,328 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-03 00:20:49,329 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-03 00:22:00,050 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-03 00:22:00,050 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-03 00:22:00,050 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-03 00:22:00,050 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-03 00:22:00,050 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-03 00:22:44,868 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-03 00:22:44,868 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-03 00:22:44,868 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-03 00:23:32,778 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-03 00:23:32,778 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-03 00:23:32,778 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-03 00:23:32,778 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-03 00:23:32,778 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-03 00:24:02,449 - Agent.DynamicAgentLoader - INFO - info:123 - Shutting down Dynamic Agent Loader...
+2025-06-03 00:24:02,449 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan stopped
+2025-06-03 00:24:02,449 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader shutdown completed
+2025-06-03 00:24:16,580 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-03 00:24:16,580 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-03 00:24:16,581 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-03 00:24:16,581 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-03 00:24:16,581 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started
+2025-06-03 01:35:38,713 - Agent.DynamicAgentLoader - INFO - info:123 - Dynamic Agent Loader initialized
+2025-06-03 01:35:38,713 - Agent.DynamicAgentLoader - INFO - info:123 - Modules dir: agents/dynamic
+2025-06-03 01:35:38,713 - Agent.DynamicAgentLoader - INFO - info:123 - Config dir: config/agents
+2025-06-03 01:35:38,713 - Agent.DynamicAgentLoader - INFO - info:123 - Directories ensured
+2025-06-03 01:35:38,714 - Agent.DynamicAgentLoader - INFO - info:123 - Auto-scan started

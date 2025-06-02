@@ -1,0 +1,198 @@
+# Orion Vision Core - Simplified Local Deployment
+# Phase 3: Python Core Services Only
+version: '3.8'
+
+services:
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: orion-rabbitmq
+    hostname: orion-rabbitmq
+    ports:
+      - "5672:5672"     # AMQP port
+      - "15672:15672"   # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: orion
+      RABBITMQ_DEFAULT_PASS: orion123
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - orion-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Simple Python Test Service
+  python-test:
+    image: python:3.11-slim
+    container_name: orion-python-test
+    ports:
+      - "8001:8000"
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=orion
+      - RABBITMQ_PASS=orion123
+    volumes:
+      - ./python-core:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+    working_dir: /app
+    command: >
+      bash -c "
+        pip install fastapi uvicorn pika requests &&
+        python test_service.py
+      "
+    networks:
+      - orion-network
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  # Hybrid Bridge Service
+  hybrid-bridge:
+    build:
+      context: ./bridge
+      dockerfile: Dockerfile
+    container_name: orion-bridge
+    ports:
+      - "8000:8000"     # Bridge API
+    environment:
+      - PYTHON_CORE_HOST=python-core
+      - PYTHON_CORE_PORT=8001
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=orion
+      - RABBITMQ_PASS=orion123
+      - KUBERNETES_NAMESPACE=orion-system
+      - BRIDGE_HOST=0.0.0.0
+      - BRIDGE_PORT=8000
+    volumes:
+      - ./bridge:/app
+      - ./config:/app/config:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # For Docker API access
+    networks:
+      - orion-network
+    depends_on:
+      python-core:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: orion-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - orion-network
+    restart: unless-stopped
+
+  # Grafana Dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: orion-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=orion123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    networks:
+      - orion-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # Redis Cache (for agent state)
+  redis:
+    image: redis:7-alpine
+    container_name: orion-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - orion-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: orion-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    networks:
+      - orion-network
+    depends_on:
+      - hybrid-bridge
+      - python-core
+      - grafana
+    restart: unless-stopped
+
+# Networks
+networks:
+  orion-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes
+volumes:
+  rabbitmq_data:
+    driver: local
+  ollama_data:
+    driver: local
+  agent_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# Health check and monitoring
+x-healthcheck-defaults: &healthcheck-defaults
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s

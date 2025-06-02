@@ -1,0 +1,23 @@
+2025-05-29 23:39:27,192 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Agent initialized: simple_test_agent_1748554767 (dynamic_agent)
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Agent registered to global registry: simple_test_agent_1748554767
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Capability added: mathematical_calculations
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Capability added: basic_arithmetic
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Capability added: advanced_math
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Capability added: calculation_history
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Calculator Agent initialized with 11 operations
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Starting agent: simple_test_agent_1748554767
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Initializing Calculator Agent...
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Calculator Agent initialization completed
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Calculator Agent main loop started
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Calculation: add([1, 26]) = 27
+2025-05-29 23:39:27,193 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Agent started successfully: simple_test_agent_1748554767
+2025-05-29 23:39:29,195 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Stopping agent: simple_test_agent_1748554767
+2025-05-29 23:39:29,195 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Calculator Agent main loop ended
+2025-05-29 23:39:29,195 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Cleaning up Calculator Agent...
+2025-05-29 23:39:29,195 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Total calculations performed: 2
+2025-05-29 23:39:29,195 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Last result: 27
+2025-05-29 23:39:29,195 - Agent.simple_test_agent_1748554767 - INFO - info:123 - History entries: 2
+2025-05-29 23:39:29,195 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Calculator Agent cleanup completed
+2025-05-29 23:39:29,196 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Agent unregistered from registry: simple_test_agent_1748554767
+2025-05-29 23:39:29,196 - Agent.simple_test_agent_1748554767 - INFO - info:123 - Agent stopped successfully: simple_test_agent_1748554767
+2025-05-29 23:39:29,196 - Agent.simple_test_agent_1748554767 - WARNING - warning:127 - Agent already stopped or stopping: AgentStatus.STOPPED

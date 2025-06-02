@@ -1,0 +1,54 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/src/jobone",
+        "${workspaceFolder}/src/jobone/vision_core",
+        "${workspaceFolder}/src/jobone/vision_core/agents",
+        "${workspaceFolder}/src/jobone/vision_core/communication",
+        "${workspaceFolder}/src/jobone/data_management",
+        "${workspaceFolder}/src/jobone/agent_management",
+        "${workspaceFolder}/tests",
+        "${workspaceFolder}/examples",
+        "${workspaceFolder}/local-deployment/python-core/src",
+        "${workspaceFolder}/vscode-extension"
+    ],
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.include": [
+        "${workspaceFolder}/src/**",
+        "${workspaceFolder}/tests/**",
+        "${workspaceFolder}/local-deployment/**",
+        "${workspaceFolder}/vscode-extension/**"
+    ],
+    "python.analysis.exclude": [
+        "**/node_modules",
+        "**/__pycache__",
+        "**/.*"
+    ],
+    "pylint.args": [
+        "--init-hook",
+        "import sys; import os; sys.path.extend([os.path.join(os.getcwd(), 'src'), os.path.join(os.getcwd(), 'src/jobone'), os.path.join(os.getcwd(), 'src/jobone/vision_core'), os.path.join(os.getcwd(), 'tests'), os.path.join(os.getcwd(), 'local-deployment/python-core/src')])"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.ignorePatterns": [
+        "**/node_modules/**",
+        "**/__pycache__/**"
+    ],
+    "python.testing.unittestEnabled": true,
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+    "files.associations": {
+        "*.py": "python"
+    },
+    "python.formatting.provider": "black",
+    "python.linting.flake8Enabled": false,
+    "python.linting.mypyEnabled": false,
+    "python.envFile": "${workspaceFolder}/.env"
+}

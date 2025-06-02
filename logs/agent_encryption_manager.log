@@ -1,0 +1,6 @@
+2025-06-03 01:49:15,113 - orion.agent.encryption_manager - INFO - {"timestamp": "2025-06-03T01:49:15.113442", "level": "INFO", "agent_id": "encryption_manager", "message": "Metrics Collector initialized", "context": {}}
+2025-06-03 01:49:15,113 - orion.agent.encryption_manager - INFO - {"timestamp": "2025-06-03T01:49:15.113560", "level": "INFO", "agent_id": "encryption_manager", "message": "Encryption Manager initialized", "context": {}}
+2025-06-03 01:51:00,511 - orion.agent.encryption_manager - INFO - {"timestamp": "2025-06-03T01:51:00.511498", "level": "INFO", "agent_id": "encryption_manager", "message": "Metrics Collector initialized", "context": {}}
+2025-06-03 01:51:00,511 - orion.agent.encryption_manager - INFO - {"timestamp": "2025-06-03T01:51:00.511564", "level": "INFO", "agent_id": "encryption_manager", "message": "Encryption Manager initialized", "context": {}}
+2025-06-03 01:51:23,010 - orion.agent.encryption_manager - INFO - {"timestamp": "2025-06-03T01:51:23.010740", "level": "INFO", "agent_id": "encryption_manager", "message": "Metrics Collector initialized", "context": {}}
+2025-06-03 01:51:23,010 - orion.agent.encryption_manager - INFO - {"timestamp": "2025-06-03T01:51:23.010804", "level": "INFO", "agent_id": "encryption_manager", "message": "Encryption Manager initialized", "context": {}}

@@ -1,0 +1,4 @@
+YAML ERROR: while scanning a simple key
+  in "local-deployment/docker-compose-simple.yml", line 46, column 1
+could not find expected ':'
+  in "local-deployment/docker-compose-simple.yml", line 47, column 1

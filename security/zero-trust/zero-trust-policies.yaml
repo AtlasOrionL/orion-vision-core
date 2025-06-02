@@ -1,0 +1,479 @@
+# Orion Vision Core - Zero Trust Security Policies
+# Sprint 5.1 - Service Mesh & Advanced Security
+
+# Zero Trust Network Policy - Default Deny All
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zero-trust-default-deny
+  namespace: orion-system
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+---
+# Zero Trust - Allow Istio System Communication
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zero-trust-istio-system
+  namespace: orion-system
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow Istio sidecar injection and communication
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 15090  # Envoy admin
+    - protocol: TCP
+      port: 15000  # Envoy admin
+    - protocol: TCP
+      port: 15001  # Envoy outbound
+    - protocol: TCP
+      port: 15006  # Envoy inbound
+  egress:
+  # Allow communication to Istio control plane
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 15010  # Pilot discovery
+    - protocol: TCP
+      port: 15011  # Pilot discovery
+    - protocol: TCP
+      port: 15014  # Pilot monitoring
+
+---
+# Zero Trust - Orion Core Service Communication
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zero-trust-orion-core
+  namespace: orion-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress gateway traffic
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+      podSelector:
+        matchLabels:
+          istio: ingressgateway
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 8001
+    - protocol: TCP
+      port: 8002
+  
+  # Allow monitoring traffic
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 9090  # Metrics
+    - protocol: TCP
+      port: 15090 # Envoy admin
+  
+  # Allow health checks
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: TCP
+      port: 8000
+  
+  egress:
+  # Allow Redis communication
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  
+  # Allow DNS resolution
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  
+  # Allow external authentication service
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    namespaceSelector: {}
+
+---
+# Zero Trust - Redis Communication
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zero-trust-redis
+  namespace: orion-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Only allow Orion Core services
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: orion-vision-core
+    ports:
+    - protocol: TCP
+      port: 6379
+  
+  # Allow monitoring
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 6379
+  
+  egress:
+  # Allow DNS resolution
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# Pod Security Policy - Restricted
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: orion-restricted-psp
+  namespace: orion-system
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'persistentVolumeClaim'
+  runAsUser:
+    rule: 'MustRunAsNonRoot'
+  runAsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  seLinux:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+  readOnlyRootFilesystem: false
+  seccompProfile:
+    type: 'RuntimeDefault'
+
+---
+# Security Context Constraints (OpenShift)
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: orion-restricted-scc
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegedContainer: false
+allowedCapabilities: null
+defaultAddCapabilities: null
+fsGroup:
+  type: RunAsAny
+readOnlyRootFilesystem: false
+requiredDropCapabilities:
+- ALL
+runAsUser:
+  type: MustRunAsNonRoot
+seLinuxContext:
+  type: MustRunAs
+volumes:
+- configMap
+- downwardAPI
+- emptyDir
+- persistentVolumeClaim
+- projected
+- secret
+
+---
+# RBAC - Zero Trust Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: orion-zero-trust-sa
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: security
+automountServiceAccountToken: false
+
+---
+# RBAC - Minimal ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: orion-zero-trust-role
+rules:
+# Minimal permissions for service discovery
+- apiGroups: [""]
+  resources: ["services", "endpoints"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+  resourceNames: [] # Restrict to specific pods if needed
+
+---
+# RBAC - ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: orion-zero-trust-binding
+subjects:
+- kind: ServiceAccount
+  name: orion-zero-trust-sa
+  namespace: orion-system
+roleRef:
+  kind: ClusterRole
+  name: orion-zero-trust-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# Admission Controller - Deny Privileged Containers
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionWebhook
+metadata:
+  name: deny-privileged-containers
+webhooks:
+- name: deny-privileged.orion-platform.com
+  clientConfig:
+    service:
+      name: orion-admission-controller
+      namespace: orion-system
+      path: "/validate-privileged"
+  rules:
+  - operations: ["CREATE", "UPDATE"]
+    apiGroups: [""]
+    apiVersions: ["v1"]
+    resources: ["pods"]
+  admissionReviewVersions: ["v1", "v1beta1"]
+  sideEffects: None
+  failurePolicy: Fail
+
+---
+# Admission Controller - Enforce Security Context
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionWebhook
+metadata:
+  name: enforce-security-context
+webhooks:
+- name: security-context.orion-platform.com
+  clientConfig:
+    service:
+      name: orion-admission-controller
+      namespace: orion-system
+      path: "/validate-security-context"
+  rules:
+  - operations: ["CREATE", "UPDATE"]
+    apiGroups: [""]
+    apiVersions: ["v1"]
+    resources: ["pods"]
+  admissionReviewVersions: ["v1", "v1beta1"]
+  sideEffects: None
+  failurePolicy: Fail
+
+---
+# Secret Management - Sealed Secrets
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: orion-tls-secret
+  namespace: orion-system
+spec:
+  encryptedData:
+    tls.crt: AgBy3i4OJSWK+PiTySYZZA9rO43cGDEQAx...
+    tls.key: AgBy3i4OJSWK+PiTySYZZA9rO43cGDEQAx...
+  template:
+    metadata:
+      name: orion-tls-secret
+      namespace: orion-system
+    type: kubernetes.io/tls
+
+---
+# External Secrets Operator Configuration
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: orion-vault-secret-store
+  namespace: orion-system
+spec:
+  provider:
+    vault:
+      server: "https://vault.orion-platform.com"
+      path: "secret"
+      version: "v2"
+      auth:
+        kubernetes:
+          mountPath: "kubernetes"
+          role: "orion-secret-reader"
+          serviceAccountRef:
+            name: "orion-zero-trust-sa"
+
+---
+# External Secret for Database Credentials
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: orion-db-credentials
+  namespace: orion-system
+spec:
+  refreshInterval: 15s
+  secretStoreRef:
+    name: orion-vault-secret-store
+    kind: SecretStore
+  target:
+    name: orion-db-secret
+    creationPolicy: Owner
+  data:
+  - secretKey: username
+    remoteRef:
+      key: database/orion
+      property: username
+  - secretKey: password
+    remoteRef:
+      key: database/orion
+      property: password
+
+---
+# Certificate Management
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: orion-ca-certificate
+  namespace: orion-system
+spec:
+  secretName: orion-ca-tls
+  issuerRef:
+    name: orion-ca-issuer
+    kind: ClusterIssuer
+  commonName: orion-ca.orion-platform.com
+  isCA: true
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days
+  subject:
+    organizationalUnits:
+    - "Orion Platform"
+    organizations:
+    - "Orion Security"
+    countries:
+    - "US"
+  privateKey:
+    algorithm: RSA
+    size: 4096
+
+---
+# Certificate for Service-to-Service Communication
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: orion-service-certificate
+  namespace: orion-system
+spec:
+  secretName: orion-service-tls
+  issuerRef:
+    name: orion-ca-issuer
+    kind: ClusterIssuer
+  dnsNames:
+  - orion-core-service.orion-system.svc.cluster.local
+  - orion-redis.orion-system.svc.cluster.local
+  - "*.orion-system.svc.cluster.local"
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days
+  subject:
+    organizationalUnits:
+    - "Orion Services"
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+---
+# Image Security Policy
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orion-image-security-policy
+  namespace: orion-system
+data:
+  policy.yaml: |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: image-security-policy
+    data:
+      policy: |
+        # Only allow images from trusted registries
+        allowed_registries:
+          - "orion-registry.company.com"
+          - "gcr.io/distroless"
+          - "docker.io/library"
+        
+        # Deny images with known vulnerabilities
+        deny_vulnerabilities:
+          - "CRITICAL"
+          - "HIGH"
+        
+        # Require image signing
+        require_signature: true
+        
+        # Trusted signers
+        trusted_signers:
+          - "orion-security@company.com"

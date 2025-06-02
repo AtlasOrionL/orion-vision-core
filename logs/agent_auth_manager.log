@@ -1,0 +1,2 @@
+2025-06-03 01:51:23,010 - orion.agent.auth_manager - INFO - {"timestamp": "2025-06-03T01:51:23.010466", "level": "INFO", "agent_id": "auth_manager", "message": "Metrics Collector initialized", "context": {}}
+2025-06-03 01:51:23,010 - orion.agent.auth_manager - INFO - {"timestamp": "2025-06-03T01:51:23.010602", "level": "INFO", "agent_id": "auth_manager", "message": "Authentication Manager initialized", "context": {}}

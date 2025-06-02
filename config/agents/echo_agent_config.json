@@ -1,0 +1,52 @@
+{
+  "agent_id": "echo_agent_001",
+  "agent_name": "Echo Response Agent",
+  "agent_type": "echo_agent",
+  "priority": 5,
+  "auto_start": false,
+  "max_retries": 3,
+  "retry_delay": 1.5,
+  "heartbeat_interval": 20.0,
+  "timeout": 180.0,
+  "capabilities": [
+    "echo_response",
+    "task_echo",
+    "status_report",
+    "agent_discovery_response",
+    "message_reflection"
+  ],
+  "dependencies": [
+    "communication_agent_001"
+  ],
+  "config_file": "config/agents/echo_agent_config.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Echo agent for testing inter-agent communication",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "echo_settings": {
+      "response_delay": 0.1,
+      "echo_prefix": "Echo: ",
+      "max_echo_length": 1000,
+      "supported_message_types": [
+        "agent_communication",
+        "task_request",
+        "system_status",
+        "discovery"
+      ]
+    },
+    "communication_settings": {
+      "auto_register": true,
+      "discovery_interval": 60,
+      "heartbeat_to_system": true
+    },
+    "monitoring": {
+      "enable_metrics": true,
+      "metrics_interval": 45,
+      "health_check_interval": 20,
+      "track_response_times": true
+    }
+  }
+}

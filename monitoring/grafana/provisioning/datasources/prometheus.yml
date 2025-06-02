@@ -1,0 +1,88 @@
+# Orion Vision Core - Grafana Datasources
+# Sprint 4.3 - Production Deployment & Advanced Monitoring
+
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+    jsonData:
+      timeInterval: "15s"
+      queryTimeout: "60s"
+      httpMethod: "POST"
+      manageAlerts: true
+      alertmanagerUid: "alertmanager"
+    secureJsonData: {}
+
+  - name: Prometheus-Long-Term
+    type: prometheus
+    access: proxy
+    url: https://prometheus-remote-read.company.com
+    isDefault: false
+    editable: false
+    basicAuth: true
+    basicAuthUser: "orion-grafana"
+    jsonData:
+      timeInterval: "1m"
+      queryTimeout: "300s"
+      httpMethod: "POST"
+    secureJsonData:
+      basicAuthPassword: "grafana-password"
+
+  - name: Elasticsearch
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    database: "orion-logs-*"
+    isDefault: false
+    editable: true
+    jsonData:
+      interval: "Daily"
+      timeField: "@timestamp"
+      esVersion: "8.11.0"
+      maxConcurrentShardRequests: 5
+      logMessageField: "message"
+      logLevelField: "level"
+
+  - name: Jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    isDefault: false
+    editable: true
+    jsonData:
+      tracesToLogs:
+        datasourceUid: "elasticsearch"
+        tags: ["trace_id", "span_id"]
+        mappedTags:
+          - key: "service_name"
+            value: "service"
+        mapTagNamesEnabled: true
+        spanStartTimeShift: "-1h"
+        spanEndTimeShift: "1h"
+        filterByTraceID: true
+        filterBySpanID: false
+
+  - name: Redis
+    type: redis-datasource
+    access: proxy
+    url: redis://orion-redis:6379
+    isDefault: false
+    editable: true
+    jsonData:
+      client: "standalone"
+      poolSize: 5
+      timeout: 10
+      pingInterval: 0
+      pipelineWindow: 0
+
+  - name: TestData
+    type: testdata
+    access: proxy
+    isDefault: false
+    editable: true
+    jsonData: {}

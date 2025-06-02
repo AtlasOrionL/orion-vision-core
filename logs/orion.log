@@ -1,0 +1,712 @@
+2025-06-01 13:33:13,088 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-01 13:33:13,088 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-01 13:33:13,088 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-01 13:33:13,107 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-01 13:33:13,107 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-01 13:33:13,197 - OrionCoordinator - ERROR - ❌ Critical component core_ai_manager failed: CoreAIManager._update_status() takes 1 positional argument but 2 were given
+2025-06-01 13:33:13,198 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orionprojesi/Masaüstü/Orion_C/Atlas/orion_component_coordinator.py", line 287, in _load_component
+    status.instance = component_class()
+  File "/home/orionprojesi/Masaüstü/Orion_C/Atlas/src/jobone/vision_core/core_ai_manager.py", line 145, in __init__
+    self._initialize_ai_system()
+  File "/home/orionprojesi/Masaüstü/Orion_C/Atlas/src/jobone/vision_core/core_ai_manager.py", line 152, in _initialize_ai_system
+    self._update_status("AI System Ready")
+TypeError: CoreAIManager._update_status() takes 1 positional argument but 2 were given
+
+2025-06-01 13:33:13,198 - OrionCoordinator - ERROR - ❌ Critical component core_ai_manager failed, aborting startup
+2025-06-02 20:46:01,774 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 20:46:01,774 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 20:46:01,774 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 20:46:01,775 - OrionCoordinator - ERROR - ❌ Critical component runner_service failed: No module named 'httpx'
+2025-06-02 20:46:01,775 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 277, in _load_component
+    module = __import__(component_info.module_path, fromlist=[module_parts[-1]])
+  File "/home/orion/Masaüstü/Atlas/src/jobone/vision_core/runner_service.py", line 11, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+2025-06-02 20:46:01,775 - OrionCoordinator - ERROR - ❌ Critical component runner_service failed, aborting startup
+2025-06-02 20:46:20,409 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 20:46:20,409 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 20:46:20,409 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 20:46:20,422 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 20:46:20,423 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 20:46:20,430 - OrionCoordinator - ERROR - ❌ Critical component core_ai_manager failed: CoreAIManager._update_status() takes 1 positional argument but 2 were given
+2025-06-02 20:46:20,430 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 287, in _load_component
+    status.instance = component_class()
+  File "/home/orion/Masaüstü/Atlas/src/jobone/vision_core/core_ai_manager.py", line 145, in __init__
+    self._initialize_ai_system()
+  File "/home/orion/Masaüstü/Atlas/src/jobone/vision_core/core_ai_manager.py", line 152, in _initialize_ai_system
+    self._update_status("AI System Ready")
+TypeError: CoreAIManager._update_status() takes 1 positional argument but 2 were given
+
+2025-06-02 20:46:20,430 - OrionCoordinator - ERROR - ❌ Critical component core_ai_manager failed, aborting startup
+2025-06-02 21:39:37,266 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 21:39:37,266 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 21:39:37,266 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 21:39:37,282 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 21:39:37,282 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 21:39:37,292 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 21:39:37,292 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 21:39:37,293 - OrionCoordinator - ERROR - ❌ Critical component agent_core failed: module 'src.jobone.vision_core.agent_core' has no attribute 'AgentCore'
+2025-06-02 21:39:37,293 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 280, in _load_component
+    component_class = getattr(module, component_info.class_name)
+AttributeError: module 'src.jobone.vision_core.agent_core' has no attribute 'AgentCore'
+
+2025-06-02 21:39:37,293 - OrionCoordinator - ERROR - ❌ Critical component agent_core failed, aborting startup
+2025-06-02 21:40:49,317 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 21:40:49,317 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 21:40:49,317 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 21:40:49,331 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 21:40:49,331 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 21:40:49,339 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 21:40:49,339 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 21:40:49,344 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 21:40:49,344 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 21:40:49,344 - OrionCoordinator - ERROR - ❌ Critical component dynamic_agent_loader failed: No module named 'agent_core'
+2025-06-02 21:40:49,345 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 277, in _load_component
+    module = __import__(component_info.module_path, fromlist=[module_parts[-1]])
+  File "/home/orion/Masaüstü/Atlas/src/jobone/vision_core/dynamic_agent_loader.py", line 28, in <module>
+    from agent_core import Agent, AgentConfig, AgentLogger, load_agent_config
+ModuleNotFoundError: No module named 'agent_core'
+
+2025-06-02 21:40:49,345 - OrionCoordinator - ERROR - ❌ Critical component dynamic_agent_loader failed, aborting startup
+2025-06-02 21:45:55,776 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 21:45:55,776 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 21:45:55,776 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 21:45:55,801 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 21:45:55,801 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 21:45:55,802 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 21:45:55,802 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 21:45:55,802 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 21:45:55,802 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 21:45:55,803 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 21:45:55,803 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 21:45:55,804 - OrionCoordinator - ERROR - ❌ Critical component agent_management_api failed: attempted relative import with no known parent package
+2025-06-02 21:45:55,805 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 277, in _load_component
+    module = __import__(component_info.module_path, fromlist=[module_parts[-1]])
+  File "/home/orion/Masaüstü/Atlas/src/jobone/vision_core/agent_management_api.py", line 33, in <module>
+    from dynamic_agent_loader import DynamicAgentLoader, get_global_loader, AgentModuleInfo
+  File "/home/orion/Masaüstü/Atlas/src/jobone/vision_core/dynamic_agent_loader.py", line 28, in <module>
+    from .agent_core import Agent, AgentConfig, AgentLogger, load_agent_config
+ImportError: attempted relative import with no known parent package
+
+2025-06-02 21:45:55,805 - OrionCoordinator - ERROR - ❌ Critical component agent_management_api failed, aborting startup
+2025-06-02 21:46:19,716 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 21:46:19,717 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 21:46:19,717 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 21:46:19,742 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 21:46:19,742 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 21:46:19,742 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 21:46:19,742 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 21:46:19,743 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 21:46:19,743 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 21:46:19,744 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 21:46:19,744 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 21:46:19,747 - OrionCoordinator - ERROR - ❌ Critical component agent_management_api failed: jinja2 must be installed to use Jinja2Templates
+2025-06-02 21:46:19,748 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 277, in _load_component
+    module = __import__(component_info.module_path, fromlist=[module_parts[-1]])
+  File "/home/orion/Masaüstü/Atlas/src/jobone/vision_core/agent_management_api.py", line 130, in <module>
+    templates = Jinja2Templates(directory=os.path.join(current_dir, "templates"))
+  File "/home/orion/.local/lib/python3.10/site-packages/starlette/templating.py", line 96, in __init__
+    assert jinja2 is not None, "jinja2 must be installed to use Jinja2Templates"
+AssertionError: jinja2 must be installed to use Jinja2Templates
+
+2025-06-02 21:46:19,748 - OrionCoordinator - ERROR - ❌ Critical component agent_management_api failed, aborting startup
+2025-06-02 21:46:49,434 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 21:46:49,434 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 21:46:49,434 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 21:46:49,459 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 21:46:49,459 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 21:46:49,460 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 21:46:49,460 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 21:46:49,460 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 21:46:49,460 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 21:46:49,461 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 21:46:49,461 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 21:46:49,481 - OrionCoordinator - ERROR - ❌ Critical component agent_management_api failed: module 'src.jobone.vision_core.agent_management_api' has no attribute 'AgentManagementAPI'
+2025-06-02 21:46:49,483 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 280, in _load_component
+    component_class = getattr(module, component_info.class_name)
+AttributeError: module 'src.jobone.vision_core.agent_management_api' has no attribute 'AgentManagementAPI'
+
+2025-06-02 21:46:49,483 - OrionCoordinator - ERROR - ❌ Critical component agent_management_api failed, aborting startup
+2025-06-02 21:47:09,562 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 21:47:09,562 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 21:47:09,562 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 21:47:09,587 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 21:47:09,587 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 21:47:09,588 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 21:47:09,588 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 21:47:09,588 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 21:47:09,588 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 21:47:09,589 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 21:47:09,589 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 21:47:09,608 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-02 21:47:09,608 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-02 21:47:09,608 - OrionCoordinator - WARNING - ⚠️ Optional component service_discovery failed: module 'src.jobone.vision_core.service_discovery' has no attribute 'ServiceDiscovery'
+2025-06-02 21:47:09,608 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 21:47:09,609 - OrionCoordinator - WARNING - ⚠️ Optional component event_driven_communication failed: No module named 'communication_agent'
+2025-06-02 21:47:09,609 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 21:47:09,618 - OrionCoordinator - WARNING - ⚠️ Optional component multi_protocol_communication failed: No module named 'communication_agent'
+2025-06-02 21:47:09,618 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-02 21:47:09,618 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-02 21:47:09,618 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 21:47:09,619 - OrionCoordinator - ERROR - ❌ Critical component streamlit_app failed: No module named 'streamlit'
+2025-06-02 21:47:09,620 - OrionCoordinator - ERROR - Traceback (most recent call last):
+  File "/home/orion/Masaüstü/Atlas/orion_component_coordinator.py", line 277, in _load_component
+    module = __import__(component_info.module_path, fromlist=[module_parts[-1]])
+  File "/home/orion/Masaüstü/Atlas/src/jobone/presentation/streamlit_app.py", line 1, in <module>
+    import streamlit as st
+ModuleNotFoundError: No module named 'streamlit'
+
+2025-06-02 21:47:09,620 - OrionCoordinator - ERROR - ❌ Critical component streamlit_app failed, aborting startup
+2025-06-02 21:47:41,847 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 21:47:41,848 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 21:47:41,848 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 21:47:41,873 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 21:47:41,873 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 21:47:41,874 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 21:47:41,874 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 21:47:41,874 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 21:47:41,874 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 21:47:41,875 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 21:47:41,875 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 21:47:41,894 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-02 21:47:41,895 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-02 21:47:41,895 - OrionCoordinator - WARNING - ⚠️ Optional component service_discovery failed: module 'src.jobone.vision_core.service_discovery' has no attribute 'ServiceDiscovery'
+2025-06-02 21:47:41,895 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 21:47:41,895 - OrionCoordinator - WARNING - ⚠️ Optional component event_driven_communication failed: No module named 'communication_agent'
+2025-06-02 21:47:41,895 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 21:47:41,904 - OrionCoordinator - WARNING - ⚠️ Optional component multi_protocol_communication failed: No module named 'communication_agent'
+2025-06-02 21:47:41,904 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-02 21:47:41,904 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-02 21:47:41,904 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 21:47:41,904 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 21:47:41,904 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 21:47:41,944 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-02 21:47:41,944 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-02 21:47:41,944 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-02 21:47:41,945 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: service_discovery
+2025-06-02 21:47:41,946 - OrionCoordinator - INFO - 🔄 Restarting component service_discovery (attempt 1)
+2025-06-02 21:47:41,946 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-02 21:47:41,946 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-02 21:47:46,971 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-02 21:47:46,971 - OrionCoordinator - WARNING - ⚠️ Optional component service_discovery failed: module 'src.jobone.vision_core.service_discovery' has no attribute 'ServiceDiscovery'
+2025-06-02 21:47:46,971 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: event_driven_communication
+2025-06-02 21:47:46,972 - OrionCoordinator - INFO - 🔄 Restarting component event_driven_communication (attempt 1)
+2025-06-02 21:47:46,972 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-02 21:47:46,972 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-02 21:47:51,979 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 21:47:51,980 - OrionCoordinator - WARNING - ⚠️ Optional component event_driven_communication failed: No module named 'communication_agent'
+2025-06-02 21:47:51,980 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: multi_protocol_communication
+2025-06-02 21:47:51,980 - OrionCoordinator - INFO - 🔄 Restarting component multi_protocol_communication (attempt 1)
+2025-06-02 21:47:51,980 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-02 21:47:51,980 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-02 21:47:57,005 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 21:47:57,006 - OrionCoordinator - WARNING - ⚠️ Optional component multi_protocol_communication failed: No module named 'communication_agent'
+2025-06-02 21:47:57,006 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-02 21:47:57,006 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 1)
+2025-06-02 21:47:57,006 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 21:47:57,006 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 21:48:02,028 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 21:48:02,029 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 21:48:02,029 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-02 21:48:02,029 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-02 21:48:02,029 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 21:48:02,029 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 21:48:07,054 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 21:48:07,056 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: module 'src.jobone.vision_core.voice' has no attribute 'VoiceSystem'
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - 🛑 Stopping all Orion components...
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - 🛑 Stopping component: task_orchestration
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - ✅ Component stopped: task_orchestration
+2025-06-02 21:48:11,738 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - 🛑 Stopping component: agent_management_api
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: agent_management_api
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - 🛑 Stopping component: dynamic_agent_loader
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: dynamic_agent_loader
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - 🛑 Stopping component: agent_core
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: agent_core
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - 🛑 Stopping component: core_ai_manager
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: core_ai_manager
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - 🛑 Stopping component: runner_service
+2025-06-02 21:48:11,739 - OrionCoordinator - INFO - ✅ Component stopped: runner_service
+2025-06-02 21:48:16,739 - OrionCoordinator - INFO - ✅ All components stopped
+2025-06-02 22:23:10,281 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 22:23:10,281 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 22:23:10,281 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 22:23:10,306 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 22:23:10,306 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 22:23:10,307 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 22:23:10,307 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 22:23:10,307 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 22:23:10,307 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 22:23:10,308 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 22:23:10,308 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 22:23:10,328 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-02 22:23:10,328 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-02 22:23:10,328 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-02 22:23:10,328 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 22:23:10,347 - OrionCoordinator - WARNING - ⚠️ Optional component event_driven_communication failed: module 'src.jobone.vision_core.event_driven_communication' has no attribute 'EventDrivenCommunication'
+2025-06-02 22:23:10,347 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 22:23:10,347 - OrionCoordinator - WARNING - ⚠️ Optional component multi_protocol_communication failed: module 'src.jobone.vision_core.multi_protocol_communication' has no attribute 'MultiProtocolCommunication'
+2025-06-02 22:23:10,347 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-02 22:23:10,347 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-02 22:23:10,347 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 22:23:10,348 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 22:23:10,348 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 22:23:10,389 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-02 22:23:10,389 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-02 22:23:10,389 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-02 22:23:10,391 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: event_driven_communication
+2025-06-02 22:23:10,391 - OrionCoordinator - INFO - 🔄 Restarting component event_driven_communication (attempt 1)
+2025-06-02 22:23:10,391 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-02 22:23:10,391 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-02 22:23:15,394 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 22:23:15,394 - OrionCoordinator - WARNING - ⚠️ Optional component event_driven_communication failed: module 'src.jobone.vision_core.event_driven_communication' has no attribute 'EventDrivenCommunication'
+2025-06-02 22:23:15,394 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: multi_protocol_communication
+2025-06-02 22:23:15,394 - OrionCoordinator - INFO - 🔄 Restarting component multi_protocol_communication (attempt 1)
+2025-06-02 22:23:15,394 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-02 22:23:15,394 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-02 22:23:20,419 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 22:23:20,419 - OrionCoordinator - WARNING - ⚠️ Optional component multi_protocol_communication failed: module 'src.jobone.vision_core.multi_protocol_communication' has no attribute 'MultiProtocolCommunication'
+2025-06-02 22:23:20,419 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-02 22:23:20,420 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 1)
+2025-06-02 22:23:20,420 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 22:23:20,420 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 22:23:25,445 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 22:23:25,446 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 22:23:25,446 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-02 22:23:25,446 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-02 22:23:25,446 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 22:23:25,446 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 22:23:30,471 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 22:23:30,473 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: module 'src.jobone.vision_core.voice' has no attribute 'VoiceSystem'
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - 🛑 Stopping all Orion components...
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - 🛑 Stopping component: task_orchestration
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - ✅ Component stopped: task_orchestration
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-02 22:23:40,162 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - 🛑 Stopping component: agent_management_api
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - ✅ Component stopped: agent_management_api
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - 🛑 Stopping component: dynamic_agent_loader
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - ✅ Component stopped: dynamic_agent_loader
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - 🛑 Stopping component: agent_core
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - ✅ Component stopped: agent_core
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - 🛑 Stopping component: core_ai_manager
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - ✅ Component stopped: core_ai_manager
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - 🛑 Stopping component: runner_service
+2025-06-02 22:23:40,163 - OrionCoordinator - INFO - ✅ Component stopped: runner_service
+2025-06-02 22:23:45,163 - OrionCoordinator - INFO - ✅ All components stopped
+2025-06-02 22:25:08,963 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 22:25:08,963 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 22:25:08,963 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 22:25:08,989 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 22:25:08,989 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 22:25:08,989 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 22:25:08,989 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 22:25:08,990 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 22:25:08,990 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 22:25:08,991 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 22:25:08,991 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 22:25:09,011 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-02 22:25:09,011 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-02 22:25:09,011 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-02 22:25:09,011 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 22:25:09,029 - OrionCoordinator - WARNING - ⚠️ Optional component event_driven_communication failed: EventDrivenCommunicationManager.__init__() missing 1 required positional argument: 'agent_id'
+2025-06-02 22:25:09,029 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 22:25:09,030 - OrionCoordinator - WARNING - ⚠️ Optional component multi_protocol_communication failed: MultiProtocolCommunicationManager.__init__() missing 1 required positional argument: 'agent_id'
+2025-06-02 22:25:09,030 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-02 22:25:09,030 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-02 22:25:09,030 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 22:25:09,030 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 22:25:09,030 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 22:25:09,072 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-02 22:25:09,072 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-02 22:25:09,072 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-02 22:25:09,073 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: event_driven_communication
+2025-06-02 22:25:09,074 - OrionCoordinator - INFO - 🔄 Restarting component event_driven_communication (attempt 1)
+2025-06-02 22:25:09,074 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-02 22:25:09,074 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-02 22:25:14,087 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 22:25:14,088 - OrionCoordinator - WARNING - ⚠️ Optional component event_driven_communication failed: EventDrivenCommunicationManager.__init__() missing 1 required positional argument: 'agent_id'
+2025-06-02 22:25:14,088 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: multi_protocol_communication
+2025-06-02 22:25:14,088 - OrionCoordinator - INFO - 🔄 Restarting component multi_protocol_communication (attempt 1)
+2025-06-02 22:25:14,088 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-02 22:25:14,088 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-02 22:25:19,113 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 22:25:19,113 - OrionCoordinator - WARNING - ⚠️ Optional component multi_protocol_communication failed: MultiProtocolCommunicationManager.__init__() missing 1 required positional argument: 'agent_id'
+2025-06-02 22:25:19,113 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-02 22:25:19,113 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 1)
+2025-06-02 22:25:19,113 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 22:25:19,113 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 22:25:24,132 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 22:25:24,132 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 22:25:24,133 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-02 22:25:24,133 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-02 22:25:24,133 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 22:25:24,133 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 22:25:29,158 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 22:25:29,160 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: module 'src.jobone.vision_core.voice' has no attribute 'VoiceSystem'
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - 🛑 Stopping all Orion components...
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - 🛑 Stopping component: task_orchestration
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - ✅ Component stopped: task_orchestration
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-02 22:25:38,840 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - 🛑 Stopping component: agent_management_api
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - ✅ Component stopped: agent_management_api
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - 🛑 Stopping component: dynamic_agent_loader
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - ✅ Component stopped: dynamic_agent_loader
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - 🛑 Stopping component: agent_core
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - ✅ Component stopped: agent_core
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - 🛑 Stopping component: core_ai_manager
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - ✅ Component stopped: core_ai_manager
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - 🛑 Stopping component: runner_service
+2025-06-02 22:25:38,841 - OrionCoordinator - INFO - ✅ Component stopped: runner_service
+2025-06-02 22:25:43,842 - OrionCoordinator - INFO - ✅ All components stopped
+2025-06-02 22:26:34,311 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-02 22:26:34,312 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-02 22:26:34,312 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-02 22:26:34,338 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-02 22:26:34,338 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-02 22:26:34,338 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-02 22:26:34,338 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-02 22:26:34,339 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-02 22:26:34,339 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-02 22:26:34,340 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-02 22:26:34,340 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-02 22:26:34,364 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-02 22:26:34,364 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-02 22:26:34,364 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-02 22:26:34,364 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-02 22:26:34,387 - OrionCoordinator - INFO - ✅ Component started: event_driven_communication
+2025-06-02 22:26:34,387 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-02 22:26:34,387 - OrionCoordinator - INFO - ✅ Component started: multi_protocol_communication
+2025-06-02 22:26:34,387 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-02 22:26:34,387 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-02 22:26:34,388 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 22:26:34,388 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 22:26:34,388 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 22:26:34,433 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-02 22:26:34,433 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-02 22:26:34,433 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-02 22:26:34,435 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-02 22:26:34,436 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 1)
+2025-06-02 22:26:34,436 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 22:26:34,436 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 22:26:39,447 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-02 22:26:39,448 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-02 22:26:39,448 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-02 22:26:39,448 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-02 22:26:39,448 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 22:26:39,448 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 22:26:44,468 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-02 22:26:44,470 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: module 'src.jobone.vision_core.voice' has no attribute 'VoiceSystem'
+2025-06-02 22:27:04,208 - OrionCoordinator - INFO - 🛑 Stopping all Orion components...
+2025-06-02 22:27:04,208 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-02 22:27:04,208 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-02 22:27:04,208 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-02 22:27:04,208 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-02 22:27:04,208 - OrionCoordinator - INFO - 🛑 Stopping component: task_orchestration
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - ✅ Component stopped: task_orchestration
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - 🛑 Stopping component: agent_management_api
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - ✅ Component stopped: agent_management_api
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - 🛑 Stopping component: dynamic_agent_loader
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - ✅ Component stopped: dynamic_agent_loader
+2025-06-02 22:27:04,209 - OrionCoordinator - INFO - 🛑 Stopping component: agent_core
+2025-06-02 22:27:04,210 - OrionCoordinator - INFO - ✅ Component stopped: agent_core
+2025-06-02 22:27:04,210 - OrionCoordinator - INFO - 🛑 Stopping component: core_ai_manager
+2025-06-02 22:27:04,210 - OrionCoordinator - INFO - ✅ Component stopped: core_ai_manager
+2025-06-02 22:27:04,210 - OrionCoordinator - INFO - 🛑 Stopping component: runner_service
+2025-06-02 22:27:04,210 - OrionCoordinator - INFO - ✅ Component stopped: runner_service
+2025-06-02 22:27:09,210 - OrionCoordinator - INFO - ✅ All components stopped
+2025-06-03 00:19:58,307 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-03 00:19:58,308 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-03 00:19:58,308 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-03 00:19:58,332 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-03 00:19:58,333 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-03 00:19:58,333 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-03 00:19:58,333 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-03 00:19:58,333 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-03 00:19:58,333 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-03 00:19:58,334 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-03 00:19:58,334 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-03 00:19:58,354 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-03 00:19:58,354 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-03 00:19:58,354 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-03 00:19:58,354 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-03 00:19:58,372 - OrionCoordinator - INFO - ✅ Component started: event_driven_communication
+2025-06-03 00:19:58,372 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-03 00:19:58,372 - OrionCoordinator - INFO - ✅ Component started: multi_protocol_communication
+2025-06-03 00:19:58,372 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-03 00:19:58,372 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-03 00:19:58,372 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:19:58,372 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-03 00:19:58,372 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:19:58,413 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-03 00:19:58,413 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-03 00:19:58,413 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-03 00:19:58,415 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-03 00:19:58,415 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 1)
+2025-06-03 00:19:58,416 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-03 00:19:58,416 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-03 00:20:03,441 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:20:03,441 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-03 00:20:03,442 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-03 00:20:03,442 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-03 00:20:03,442 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:20:03,442 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:20:08,467 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:20:08,470 - OrionCoordinator - INFO - ✅ Component started: voice_system
+2025-06-03 00:20:28,215 - OrionCoordinator - INFO - 🛑 Stopping all Orion components...
+2025-06-03 00:20:28,215 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:20:28,215 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:20:28,215 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - 🛑 Stopping component: task_orchestration
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - ✅ Component stopped: task_orchestration
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - 🛑 Stopping component: agent_management_api
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - ✅ Component stopped: agent_management_api
+2025-06-03 00:20:28,216 - OrionCoordinator - INFO - 🛑 Stopping component: dynamic_agent_loader
+2025-06-03 00:20:28,217 - OrionCoordinator - INFO - ✅ Component stopped: dynamic_agent_loader
+2025-06-03 00:20:28,217 - OrionCoordinator - INFO - 🛑 Stopping component: agent_core
+2025-06-03 00:20:28,217 - OrionCoordinator - INFO - ✅ Component stopped: agent_core
+2025-06-03 00:20:28,217 - OrionCoordinator - INFO - 🛑 Stopping component: core_ai_manager
+2025-06-03 00:20:28,217 - OrionCoordinator - INFO - ✅ Component stopped: core_ai_manager
+2025-06-03 00:20:28,217 - OrionCoordinator - INFO - 🛑 Stopping component: runner_service
+2025-06-03 00:20:28,217 - OrionCoordinator - INFO - ✅ Component stopped: runner_service
+2025-06-03 00:20:33,217 - OrionCoordinator - INFO - ✅ All components stopped
+2025-06-03 00:20:49,302 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-03 00:20:49,302 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-03 00:20:49,302 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-03 00:20:49,327 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-03 00:20:49,327 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-03 00:20:49,327 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-03 00:20:49,328 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-03 00:20:49,328 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-03 00:20:49,328 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-03 00:20:49,329 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-03 00:20:49,329 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-03 00:20:49,349 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-03 00:20:49,349 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-03 00:20:49,349 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-03 00:20:49,349 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-03 00:20:49,367 - OrionCoordinator - INFO - ✅ Component started: event_driven_communication
+2025-06-03 00:20:49,367 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-03 00:20:49,367 - OrionCoordinator - INFO - ✅ Component started: multi_protocol_communication
+2025-06-03 00:20:49,367 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-03 00:20:49,368 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-03 00:20:49,368 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:20:49,368 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-03 00:20:49,368 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:20:49,409 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-03 00:20:49,409 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-03 00:20:49,409 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-03 00:20:49,411 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-03 00:20:49,411 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 1)
+2025-06-03 00:20:49,411 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-03 00:20:49,411 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-03 00:20:54,436 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:20:54,437 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: No module named 'streamlit'
+2025-06-03 00:20:54,437 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-03 00:20:54,437 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-03 00:20:54,437 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:20:54,438 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:20:59,463 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:20:59,466 - OrionCoordinator - INFO - ✅ Component started: voice_system
+2025-06-03 00:22:00,023 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-03 00:22:00,023 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-03 00:22:00,023 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-03 00:22:00,048 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-03 00:22:00,049 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-03 00:22:00,049 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-03 00:22:00,049 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-03 00:22:00,049 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-03 00:22:00,049 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-03 00:22:00,050 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-03 00:22:00,050 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-03 00:22:00,070 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-03 00:22:00,070 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-03 00:22:00,070 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-03 00:22:00,070 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-03 00:22:00,088 - OrionCoordinator - INFO - ✅ Component started: event_driven_communication
+2025-06-03 00:22:00,088 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-03 00:22:00,088 - OrionCoordinator - INFO - ✅ Component started: multi_protocol_communication
+2025-06-03 00:22:00,088 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-03 00:22:00,088 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-03 00:22:00,088 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:22:00,488 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: module 'src.jobone.presentation.streamlit_app' has no attribute 'StreamlitApp'
+2025-06-03 00:22:00,488 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:22:00,528 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-03 00:22:00,529 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-03 00:22:00,529 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-03 00:22:00,531 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-03 00:22:00,531 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 1)
+2025-06-03 00:22:00,531 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-03 00:22:00,531 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-03 00:22:05,548 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:22:05,548 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: module 'src.jobone.presentation.streamlit_app' has no attribute 'StreamlitApp'
+2025-06-03 00:22:05,549 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-03 00:22:05,549 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-03 00:22:05,549 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:22:05,549 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:22:10,574 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:22:10,577 - OrionCoordinator - INFO - ✅ Component started: voice_system
+2025-06-03 00:22:40,678 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: streamlit_app
+2025-06-03 00:22:40,678 - OrionCoordinator - INFO - 🔄 Restarting component streamlit_app (attempt 2)
+2025-06-03 00:22:40,678 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-03 00:22:40,678 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - 🛑 Stopping all Orion components...
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - 🛑 Stopping component: task_orchestration
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - ✅ Component stopped: task_orchestration
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-03 00:22:44,867 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - 🛑 Stopping component: agent_management_api
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - ✅ Component stopped: agent_management_api
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - 🛑 Stopping component: dynamic_agent_loader
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - ✅ Component stopped: dynamic_agent_loader
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - 🛑 Stopping component: agent_core
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - ✅ Component stopped: agent_core
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - 🛑 Stopping component: core_ai_manager
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - ✅ Component stopped: core_ai_manager
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - 🛑 Stopping component: runner_service
+2025-06-03 00:22:44,868 - OrionCoordinator - INFO - ✅ Component stopped: runner_service
+2025-06-03 00:22:45,703 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:22:45,703 - OrionCoordinator - WARNING - ⚠️ Optional component streamlit_app failed: module 'src.jobone.presentation.streamlit_app' has no attribute 'StreamlitApp'
+2025-06-03 00:22:49,868 - OrionCoordinator - INFO - ✅ All components stopped
+2025-06-03 00:23:32,584 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-03 00:23:32,584 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-03 00:23:32,585 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-03 00:23:32,776 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-03 00:23:32,776 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-03 00:23:32,777 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-03 00:23:32,777 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-03 00:23:32,777 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-03 00:23:32,777 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-03 00:23:32,778 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-03 00:23:32,778 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-03 00:23:32,798 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-03 00:23:32,798 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-03 00:23:32,798 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-03 00:23:32,798 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-03 00:23:32,816 - OrionCoordinator - INFO - ✅ Component started: event_driven_communication
+2025-06-03 00:23:32,817 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-03 00:23:32,817 - OrionCoordinator - INFO - ✅ Component started: multi_protocol_communication
+2025-06-03 00:23:32,817 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-03 00:23:32,817 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-03 00:23:32,817 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:23:33,195 - OrionCoordinator - INFO - ✅ Component started: streamlit_app
+2025-06-03 00:23:33,195 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:23:33,264 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-03 00:23:33,264 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-03 00:23:33,264 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-03 00:23:33,267 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-03 00:23:33,267 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-03 00:23:33,267 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:23:33,267 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:23:38,284 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:23:38,287 - OrionCoordinator - INFO - ✅ Component started: voice_system
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - 🛑 Stopping all Orion components...
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - 🛑 Stopping component: streamlit_app
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - ✅ Component stopped: streamlit_app
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - 🛑 Stopping component: task_orchestration
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - ✅ Component stopped: task_orchestration
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - 🛑 Stopping component: multi_protocol_communication
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - ✅ Component stopped: multi_protocol_communication
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - 🛑 Stopping component: event_driven_communication
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - ✅ Component stopped: event_driven_communication
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - 🛑 Stopping component: service_discovery
+2025-06-03 00:24:02,448 - OrionCoordinator - INFO - ✅ Component stopped: service_discovery
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - 🛑 Stopping component: agent_management_api
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - ✅ Component stopped: agent_management_api
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - 🛑 Stopping component: dynamic_agent_loader
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - ✅ Component stopped: dynamic_agent_loader
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - 🛑 Stopping component: agent_core
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - ✅ Component stopped: agent_core
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - 🛑 Stopping component: core_ai_manager
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - ✅ Component stopped: core_ai_manager
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - 🛑 Stopping component: runner_service
+2025-06-03 00:24:02,449 - OrionCoordinator - INFO - ✅ Component stopped: runner_service
+2025-06-03 00:24:07,449 - OrionCoordinator - INFO - ✅ All components stopped
+2025-06-03 00:24:16,553 - OrionCoordinator - INFO - 🚀 Starting all Orion components...
+2025-06-03 00:24:16,553 - OrionCoordinator - INFO - 📋 Component start order: ['runner_service', 'core_ai_manager', 'agent_core', 'dynamic_agent_loader', 'agent_management_api', 'service_discovery', 'event_driven_communication', 'multi_protocol_communication', 'task_orchestration', 'streamlit_app', 'voice_system']
+2025-06-03 00:24:16,553 - OrionCoordinator - INFO - 🔄 Initializing component: runner_service
+2025-06-03 00:24:16,579 - OrionCoordinator - INFO - ✅ Component started: runner_service
+2025-06-03 00:24:16,579 - OrionCoordinator - INFO - 🔄 Initializing component: core_ai_manager
+2025-06-03 00:24:16,580 - OrionCoordinator - INFO - ✅ Component started: core_ai_manager
+2025-06-03 00:24:16,580 - OrionCoordinator - INFO - 🔄 Initializing component: agent_core
+2025-06-03 00:24:16,580 - OrionCoordinator - INFO - ✅ Component started: agent_core
+2025-06-03 00:24:16,580 - OrionCoordinator - INFO - 🔄 Initializing component: dynamic_agent_loader
+2025-06-03 00:24:16,581 - OrionCoordinator - INFO - ✅ Component started: dynamic_agent_loader
+2025-06-03 00:24:16,581 - OrionCoordinator - INFO - 🔄 Initializing component: agent_management_api
+2025-06-03 00:24:16,602 - OrionCoordinator - INFO - ✅ Component started: agent_management_api
+2025-06-03 00:24:16,602 - OrionCoordinator - INFO - 🔄 Initializing component: service_discovery
+2025-06-03 00:24:16,602 - OrionCoordinator - INFO - ✅ Component started: service_discovery
+2025-06-03 00:24:16,602 - OrionCoordinator - INFO - 🔄 Initializing component: event_driven_communication
+2025-06-03 00:24:16,622 - OrionCoordinator - INFO - ✅ Component started: event_driven_communication
+2025-06-03 00:24:16,622 - OrionCoordinator - INFO - 🔄 Initializing component: multi_protocol_communication
+2025-06-03 00:24:16,622 - OrionCoordinator - INFO - ✅ Component started: multi_protocol_communication
+2025-06-03 00:24:16,622 - OrionCoordinator - INFO - 🔄 Initializing component: task_orchestration
+2025-06-03 00:24:16,622 - OrionCoordinator - INFO - ✅ Component started: task_orchestration
+2025-06-03 00:24:16,622 - OrionCoordinator - INFO - 🔄 Initializing component: streamlit_app
+2025-06-03 00:24:16,965 - OrionCoordinator - INFO - ✅ Component started: streamlit_app
+2025-06-03 00:24:16,965 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:24:17,033 - OrionCoordinator - WARNING - ⚠️ Optional component voice_system failed: can't set attribute
+2025-06-03 00:24:17,034 - OrionCoordinator - INFO - 🏥 Health monitoring started
+2025-06-03 00:24:17,034 - OrionCoordinator - INFO - ✅ All components started successfully
+2025-06-03 00:24:17,036 - OrionCoordinator - WARNING - 🔄 Restarting unhealthy component: voice_system
+2025-06-03 00:24:17,037 - OrionCoordinator - INFO - 🔄 Restarting component voice_system (attempt 1)
+2025-06-03 00:24:17,037 - OrionCoordinator - INFO - 🛑 Stopping component: voice_system
+2025-06-03 00:24:17,037 - OrionCoordinator - INFO - ✅ Component stopped: voice_system
+2025-06-03 00:24:22,062 - OrionCoordinator - INFO - 🔄 Initializing component: voice_system
+2025-06-03 00:24:22,065 - OrionCoordinator - INFO - ✅ Component started: voice_system

@@ -1,0 +1,362 @@
+# Orion Vision Core - Istio Service Mesh Installation
+# Sprint 5.1 - Service Mesh & Advanced Security
+
+# Istio Operator Configuration
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: orion-istio-control-plane
+  namespace: istio-system
+spec:
+  # Istio configuration
+  values:
+    global:
+      # Mesh configuration
+      meshID: orion-mesh
+      multiCluster:
+        clusterName: orion-production
+      network: orion-network
+      
+      # Security configuration
+      defaultPodDisruptionBudget:
+        enabled: true
+      
+      # Proxy configuration
+      proxy:
+        # Resource limits
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        
+        # Security settings
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1337
+        
+        # Logging
+        logLevel: warning
+        componentLogLevel: "misc:error"
+        
+        # Tracing
+        tracer: jaeger
+        
+        # Access logging
+        accessLogFile: /dev/stdout
+        accessLogFormat: |
+          [%START_TIME%] "%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%"
+          %RESPONSE_CODE% %RESPONSE_FLAGS% %BYTES_RECEIVED% %BYTES_SENT%
+          %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% "%REQ(X-FORWARDED-FOR)%"
+          "%REQ(USER-AGENT)%" "%REQ(X-REQUEST-ID)%" "%REQ(:AUTHORITY)%" "%UPSTREAM_HOST%"
+          %UPSTREAM_CLUSTER% %UPSTREAM_LOCAL_ADDRESS% %DOWNSTREAM_LOCAL_ADDRESS%
+          %DOWNSTREAM_REMOTE_ADDRESS% %REQUESTED_SERVER_NAME% %ROUTE_NAME%
+      
+      # Pilot configuration
+      pilot:
+        env:
+          EXTERNAL_ISTIOD: false
+          PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
+          PILOT_ENABLE_CROSS_CLUSTER_WORKLOAD_ENTRY: true
+          PILOT_TRACE_SAMPLING: 1.0
+        
+        # Resource limits
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      
+      # Telemetry v2 configuration
+      telemetryV2:
+        enabled: true
+        prometheus:
+          configOverride:
+            metric_relabeling_configs:
+            - source_labels: [__name__]
+              regex: 'istio_.*'
+              action: keep
+    
+    # Pilot specific configuration
+    pilot:
+      # Security
+      env:
+        PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
+        PILOT_ENABLE_CROSS_CLUSTER_WORKLOAD_ENTRY: true
+        PILOT_TRACE_SAMPLING: 1.0
+        PILOT_ENABLE_STATUS: true
+        PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_OUTBOUND: true
+        PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_INBOUND: true
+      
+      # Tracing
+      traceSampling: 1.0
+  
+  # Component configuration
+  components:
+    # Pilot (Istiod)
+    pilot:
+      enabled: true
+      k8s:
+        # Resource configuration
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        
+        # Pod configuration
+        podAnnotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "15014"
+          prometheus.io/path: "/stats/prometheus"
+        
+        # Security context
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1337
+          runAsGroup: 1337
+          fsGroup: 1337
+        
+        # Service configuration
+        service:
+          type: ClusterIP
+          ports:
+          - port: 15010
+            name: grpc-xds
+          - port: 15011
+            name: https-dns
+          - port: 15014
+            name: http-monitoring
+        
+        # Deployment configuration
+        deployment:
+          replicas: 2
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 1
+              maxUnavailable: 0
+    
+    # Ingress Gateway
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        # Resource configuration
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        
+        # Service configuration
+        service:
+          type: LoadBalancer
+          ports:
+          - port: 15021
+            targetPort: 15021
+            name: status-port
+            protocol: TCP
+          - port: 80
+            targetPort: 8080
+            name: http2
+            protocol: TCP
+          - port: 443
+            targetPort: 8443
+            name: https
+            protocol: TCP
+          - port: 15443
+            targetPort: 15443
+            name: tls
+            protocol: TCP
+        
+        # Pod configuration
+        podAnnotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "15020"
+          prometheus.io/path: "/stats/prometheus"
+        
+        # Security context
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1337
+          runAsGroup: 1337
+          fsGroup: 1337
+        
+        # Deployment configuration
+        deployment:
+          replicas: 2
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 1
+              maxUnavailable: 0
+    
+    # Egress Gateway
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: true
+      k8s:
+        # Resource configuration
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        
+        # Service configuration
+        service:
+          type: ClusterIP
+          ports:
+          - port: 80
+            name: http2
+            protocol: TCP
+          - port: 443
+            name: https
+            protocol: TCP
+        
+        # Deployment configuration
+        deployment:
+          replicas: 1
+          strategy:
+            type: RollingUpdate
+
+---
+# Istio Gateway for Orion Services
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: orion-gateway
+  namespace: orion-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - orion-api.company.com
+    - orion-discovery.company.com
+    - orion-orchestration.company.com
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - orion-api.company.com
+    - orion-discovery.company.com
+    - orion-orchestration.company.com
+    tls:
+      mode: SIMPLE
+      credentialName: orion-tls-secret
+
+---
+# Virtual Service for Orion API
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: orion-api-vs
+  namespace: orion-system
+spec:
+  hosts:
+  - orion-api.company.com
+  gateways:
+  - orion-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/v1/
+    route:
+    - destination:
+        host: orion-core-service
+        port:
+          number: 8000
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+  - match:
+    - uri:
+        prefix: /health
+    route:
+    - destination:
+        host: orion-core-service
+        port:
+          number: 8000
+    timeout: 5s
+  - match:
+    - uri:
+        prefix: /metrics
+    route:
+    - destination:
+        host: orion-core-service
+        port:
+          number: 9090
+    timeout: 10s
+
+---
+# Virtual Service for Service Discovery
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: orion-discovery-vs
+  namespace: orion-system
+spec:
+  hosts:
+  - orion-discovery.company.com
+  gateways:
+  - orion-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /discovery/
+    route:
+    - destination:
+        host: orion-core-service
+        port:
+          number: 8001
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+
+---
+# Virtual Service for Task Orchestration
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: orion-orchestration-vs
+  namespace: orion-system
+spec:
+  hosts:
+  - orion-orchestration.company.com
+  gateways:
+  - orion-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /orchestration/
+    route:
+    - destination:
+        host: orion-core-service
+        port:
+          number: 8002
+    timeout: 60s
+    retries:
+      attempts: 3
+      perTryTimeout: 20s

@@ -1,0 +1,9 @@
+2025-05-31 11:00:26,833 - jobone.vision_core.tests - INFO - 📦 Orion Vision Core Tests Module v8.8.0 loaded
+2025-05-31 11:00:26,839 - jobone.vision_core.deployment - INFO - 📦 Orion Vision Core Deployment Module v8.8.0 loaded
+2025-05-31 15:42:17,746 - OrionMain - INFO - 📋 Logging level set to INFO
+2025-05-31 15:42:17,746 - OrionMain - INFO - 🚀 Orion Vision Core v8.8.0 initializing...
+2025-05-31 15:42:17,746 - OrionMain - INFO - 🔧 Initializing Orion subsystems...
+2025-05-31 15:42:17,746 - OrionMain - INFO - 🔧 Loading core modules...
+2025-05-31 15:42:17,746 - OrionMain - ERROR - ❌ Error loading core modules: attempted relative import with no known parent package
+2025-05-31 15:42:17,746 - OrionMain - ERROR - ❌ Error initializing Orion: attempted relative import with no known parent package
+2025-05-31 15:42:17,746 - OrionMain - ERROR - ❌ Failed to initialize Orion

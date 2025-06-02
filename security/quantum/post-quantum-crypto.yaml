@@ -1,0 +1,519 @@
+# Post-Quantum Cryptography Implementation
+# Sprint 7.1 - Epic 1: Post-Quantum Cryptography Foundation
+# NIST-Approved Post-Quantum Algorithms
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quantum-security
+  labels:
+    security.orion.io/zone: "quantum"
+    security.orion.io/level: "critical"
+    quantum.orion.io/enabled: "true"
+    istio-injection: enabled
+---
+# Post-Quantum Cryptography Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-quantum-crypto-service
+  namespace: quantum-security
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: post-quantum-crypto-service
+  template:
+    metadata:
+      labels:
+        app: post-quantum-crypto-service
+        quantum.orion.io/component: "post-quantum-crypto"
+    spec:
+      serviceAccountName: post-quantum-crypto-service
+      containers:
+      - name: pq-crypto-server
+        image: orion/post-quantum-crypto:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: https
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: PQ_ALGORITHMS_ENABLED
+          value: "kyber,dilithium,falcon,sphincs"
+        - name: HYBRID_MODE_ENABLED
+          value: "true"
+        - name: CLASSICAL_FALLBACK
+          value: "true"
+        - name: KEY_STORE_TYPE
+          value: "quantum_safe"
+        volumeMounts:
+        - name: pq-config
+          mountPath: /etc/pq-config
+          readOnly: true
+        - name: pq-keys
+          mountPath: /var/lib/pq-keys
+        - name: tls-certs
+          mountPath: /etc/certs
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: pq-config
+        configMap:
+          name: post-quantum-config
+      - name: pq-keys
+        persistentVolumeClaim:
+          claimName: pq-keys-storage
+      - name: tls-certs
+        secret:
+          secretName: pq-crypto-tls-certs
+---
+# CRYSTALS-Kyber Key Encapsulation Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kyber-kem-service
+  namespace: quantum-security
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kyber-kem-service
+  template:
+    metadata:
+      labels:
+        app: kyber-kem-service
+        quantum.orion.io/component: "kyber-kem"
+    spec:
+      serviceAccountName: kyber-kem-service
+      containers:
+      - name: kyber-server
+        image: orion/kyber-kem:v1.0.0
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 9091
+          name: metrics
+        env:
+        - name: KYBER_VARIANT
+          value: "kyber1024"  # 256-bit security level
+        - name: KEY_GENERATION_RATE
+          value: "1000"  # keys per second
+        - name: CACHE_ENABLED
+          value: "true"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: url
+        volumeMounts:
+        - name: kyber-config
+          mountPath: /etc/kyber
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: kyber-config
+        configMap:
+          name: kyber-config
+---
+# CRYSTALS-Dilithium Digital Signature Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dilithium-signature-service
+  namespace: quantum-security
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dilithium-signature-service
+  template:
+    metadata:
+      labels:
+        app: dilithium-signature-service
+        quantum.orion.io/component: "dilithium-signature"
+    spec:
+      serviceAccountName: dilithium-signature-service
+      containers:
+      - name: dilithium-server
+        image: orion/dilithium-signature:v1.0.0
+        ports:
+        - containerPort: 8082
+          name: http
+        - containerPort: 9092
+          name: metrics
+        env:
+        - name: DILITHIUM_VARIANT
+          value: "dilithium5"  # Highest security level
+        - name: SIGNATURE_CACHE_SIZE
+          value: "10000"
+        - name: VERIFICATION_THREADS
+          value: "4"
+        volumeMounts:
+        - name: dilithium-config
+          mountPath: /etc/dilithium
+          readOnly: true
+        - name: signature-keys
+          mountPath: /var/lib/signature-keys
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: dilithium-config
+        configMap:
+          name: dilithium-config
+      - name: signature-keys
+        persistentVolumeClaim:
+          claimName: signature-keys-storage
+---
+# FALCON Compact Signature Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: falcon-signature-service
+  namespace: quantum-security
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: falcon-signature-service
+  template:
+    metadata:
+      labels:
+        app: falcon-signature-service
+        quantum.orion.io/component: "falcon-signature"
+    spec:
+      serviceAccountName: falcon-signature-service
+      containers:
+      - name: falcon-server
+        image: orion/falcon-signature:v1.0.0
+        ports:
+        - containerPort: 8083
+          name: http
+        - containerPort: 9093
+          name: metrics
+        env:
+        - name: FALCON_VARIANT
+          value: "falcon1024"  # 256-bit security level
+        - name: COMPACT_MODE
+          value: "true"
+        - name: FAST_VERIFICATION
+          value: "true"
+        volumeMounts:
+        - name: falcon-config
+          mountPath: /etc/falcon
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: falcon-config
+        configMap:
+          name: falcon-config
+---
+# SPHINCS+ Stateless Hash-Based Signature Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sphincs-signature-service
+  namespace: quantum-security
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sphincs-signature-service
+  template:
+    metadata:
+      labels:
+        app: sphincs-signature-service
+        quantum.orion.io/component: "sphincs-signature"
+    spec:
+      serviceAccountName: sphincs-signature-service
+      containers:
+      - name: sphincs-server
+        image: orion/sphincs-signature:v1.0.0
+        ports:
+        - containerPort: 8084
+          name: http
+        - containerPort: 9094
+          name: metrics
+        env:
+        - name: SPHINCS_VARIANT
+          value: "sphincs-sha2-256f"  # Fast variant
+        - name: HASH_FUNCTION
+          value: "sha2"
+        - name: STATELESS_MODE
+          value: "true"
+        volumeMounts:
+        - name: sphincs-config
+          mountPath: /etc/sphincs
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "300m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: sphincs-config
+        configMap:
+          name: sphincs-config
+---
+# Post-Quantum Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: post-quantum-config
+  namespace: quantum-security
+data:
+  pq-config.yaml: |
+    post_quantum:
+      enabled: true
+      algorithms:
+        key_encapsulation:
+          - name: "kyber512"
+            security_level: 128
+            enabled: true
+          - name: "kyber768"
+            security_level: 192
+            enabled: true
+          - name: "kyber1024"
+            security_level: 256
+            enabled: true
+            default: true
+        digital_signatures:
+          - name: "dilithium2"
+            security_level: 128
+            enabled: true
+          - name: "dilithium3"
+            security_level: 192
+            enabled: true
+          - name: "dilithium5"
+            security_level: 256
+            enabled: true
+            default: true
+          - name: "falcon512"
+            security_level: 128
+            enabled: true
+          - name: "falcon1024"
+            security_level: 256
+            enabled: true
+          - name: "sphincs-sha2-128f"
+            security_level: 128
+            enabled: true
+          - name: "sphincs-sha2-256f"
+            security_level: 256
+            enabled: true
+      hybrid_mode:
+        enabled: true
+        classical_algorithms:
+          - "rsa4096"
+          - "ecdsa-p384"
+          - "ed25519"
+        combination_strategy: "concatenate"
+      migration:
+        gradual_rollout: true
+        compatibility_mode: true
+        fallback_enabled: true
+        monitoring_enabled: true
+---
+# Kyber Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kyber-config
+  namespace: quantum-security
+data:
+  kyber.yaml: |
+    kyber:
+      variants:
+        kyber512:
+          n: 256
+          k: 2
+          q: 3329
+          eta1: 3
+          eta2: 2
+          du: 10
+          dv: 4
+        kyber768:
+          n: 256
+          k: 3
+          q: 3329
+          eta1: 2
+          eta2: 2
+          du: 10
+          dv: 4
+        kyber1024:
+          n: 256
+          k: 4
+          q: 3329
+          eta1: 2
+          eta2: 2
+          du: 11
+          dv: 5
+      performance:
+        key_generation_cache: 1000
+        encapsulation_cache: 5000
+        decapsulation_cache: 5000
+        parallel_operations: true
+        batch_size: 100
+---
+# Dilithium Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dilithium-config
+  namespace: quantum-security
+data:
+  dilithium.yaml: |
+    dilithium:
+      variants:
+        dilithium2:
+          n: 256
+          k: 4
+          l: 4
+          eta: 2
+          tau: 39
+          beta: 78
+          gamma1: 131072
+          gamma2: 95232
+        dilithium3:
+          n: 256
+          k: 6
+          l: 5
+          eta: 4
+          tau: 49
+          beta: 196
+          gamma1: 524288
+          gamma2: 261888
+        dilithium5:
+          n: 256
+          k: 8
+          l: 7
+          eta: 2
+          tau: 60
+          beta: 120
+          gamma1: 524288
+          gamma2: 261888
+      optimization:
+        ntt_optimization: true
+        avx2_acceleration: true
+        signature_caching: true
+        verification_batching: true
+---
+# Services for Post-Quantum Components
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-quantum-crypto-service
+  namespace: quantum-security
+spec:
+  selector:
+    app: post-quantum-crypto-service
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: https
+    port: 8443
+    targetPort: 8443
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kyber-kem-service
+  namespace: quantum-security
+spec:
+  selector:
+    app: kyber-kem-service
+  ports:
+  - name: http
+    port: 8081
+    targetPort: 8081
+  - name: metrics
+    port: 9091
+    targetPort: 9091
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dilithium-signature-service
+  namespace: quantum-security
+spec:
+  selector:
+    app: dilithium-signature-service
+  ports:
+  - name: http
+    port: 8082
+    targetPort: 8082
+  - name: metrics
+    port: 9092
+    targetPort: 9092
+  type: ClusterIP
+---
+# Persistent Volume Claims for Key Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pq-keys-storage
+  namespace: quantum-security
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast-ssd
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: signature-keys-storage
+  namespace: quantum-security
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: fast-ssd

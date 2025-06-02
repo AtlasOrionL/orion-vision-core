@@ -1,0 +1,162 @@
+{
+  "rabbitmq": {
+    "connection": {
+      "host": "localhost",
+      "port": 5672,
+      "virtual_host": "orion_vhost",
+      "username": "orion_admin",
+      "password": "orion_secure_2024",
+      "heartbeat_interval": 600,
+      "blocked_connection_timeout": 300,
+      "auto_reconnect": true,
+      "max_reconnect_attempts": 5,
+      "reconnect_delay": 5
+    },
+    "queues": {
+      "system": {
+        "heartbeat": "orion.system.heartbeat",
+        "discovery": "orion.system.discovery",
+        "errors": "orion.system.errors",
+        "logs": "orion.system.logs"
+      },
+      "agent_prefix": "orion.agent.",
+      "task_prefix": "orion.task.",
+      "broadcast": "orion.broadcast"
+    },
+    "exchanges": {
+      "agents": {
+        "name": "orion.agents",
+        "type": "topic",
+        "durable": true
+      },
+      "tasks": {
+        "name": "orion.tasks",
+        "type": "direct",
+        "durable": true
+      },
+      "system": {
+        "name": "orion.system",
+        "type": "fanout",
+        "durable": true
+      }
+    }
+  },
+  "message_format": {
+    "version": "1.0",
+    "encoding": "utf-8",
+    "serialization": "json",
+    "compression": false,
+    "encryption": false,
+    "max_message_size": 1048576,
+    "required_fields": [
+      "message_type",
+      "content",
+      "sender_id",
+      "timestamp"
+    ],
+    "optional_fields": [
+      "target_agent",
+      "priority",
+      "correlation_id",
+      "metadata"
+    ]
+  },
+  "message_types": {
+    "agent_communication": {
+      "description": "Agent'lar arası genel iletişim",
+      "priority": "normal",
+      "ttl": 3600
+    },
+    "system_status": {
+      "description": "Sistem durumu raporları",
+      "priority": "low",
+      "ttl": 1800
+    },
+    "task_request": {
+      "description": "Görev istekleri",
+      "priority": "high",
+      "ttl": 7200
+    },
+    "task_response": {
+      "description": "Görev yanıtları",
+      "priority": "high",
+      "ttl": 7200
+    },
+    "error_report": {
+      "description": "Hata raporları",
+      "priority": "critical",
+      "ttl": 86400
+    },
+    "heartbeat": {
+      "description": "Agent yaşam sinyali",
+      "priority": "low",
+      "ttl": 300
+    },
+    "discovery": {
+      "description": "Agent keşfi",
+      "priority": "normal",
+      "ttl": 1800
+    },
+    "shutdown": {
+      "description": "Kapatma sinyali",
+      "priority": "critical",
+      "ttl": 60
+    }
+  },
+  "priority_levels": {
+    "low": {
+      "value": 1,
+      "description": "Düşük öncelik - sistem logları, heartbeat"
+    },
+    "normal": {
+      "value": 5,
+      "description": "Normal öncelik - genel iletişim"
+    },
+    "high": {
+      "value": 8,
+      "description": "Yüksek öncelik - görev istekleri"
+    },
+    "critical": {
+      "value": 10,
+      "description": "Kritik öncelik - hatalar, acil durumlar"
+    }
+  },
+  "agent_discovery": {
+    "enabled": true,
+    "discovery_interval": 30,
+    "discovery_timeout": 10,
+    "max_agents": 100,
+    "agent_registry_queue": "orion.system.registry"
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics_interval": 60,
+    "metrics_queue": "orion.system.metrics",
+    "log_level": "INFO",
+    "performance_tracking": true
+  },
+  "security": {
+    "message_validation": true,
+    "sender_verification": true,
+    "content_filtering": false,
+    "rate_limiting": {
+      "enabled": true,
+      "max_messages_per_minute": 1000,
+      "burst_limit": 100
+    }
+  },
+  "error_handling": {
+    "max_retries": 3,
+    "retry_delay": 1,
+    "dead_letter_queue": "orion.system.dead_letters",
+    "error_notification": true,
+    "auto_recovery": true
+  },
+  "performance": {
+    "connection_pool_size": 10,
+    "channel_pool_size": 20,
+    "prefetch_count": 10,
+    "batch_size": 100,
+    "flush_interval": 5
+  }
+}

@@ -1,0 +1,537 @@
+# Autonomous Threat Detection System
+# Sprint 6.1 - Epic 2: Autonomous Security Systems
+# Story 2.1: Autonomous Threat Detection
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: autonomous-security
+  labels:
+    security.orion.io/zone: "autonomous"
+    security.orion.io/level: "critical"
+    istio-injection: enabled
+---
+# ML-based Anomaly Detection Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anomaly-detection-engine
+  namespace: autonomous-security
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: anomaly-detection-engine
+  template:
+    metadata:
+      labels:
+        app: anomaly-detection-engine
+        security.orion.io/component: "threat-detection"
+    spec:
+      serviceAccountName: anomaly-detection-engine
+      containers:
+      - name: anomaly-detector
+        image: orion/anomaly-detector:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: MODEL_PATH
+          value: "/models/anomaly-detection-model.pkl"
+        - name: KAFKA_BROKERS
+          value: "kafka.autonomous-security.svc.cluster.local:9092"
+        - name: ELASTICSEARCH_URL
+          valueFrom:
+            secretKeyRef:
+              name: elasticsearch-credentials
+              key: url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: url
+        volumeMounts:
+        - name: ml-models
+          mountPath: /models
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+            nvidia.com/gpu: "0"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+            nvidia.com/gpu: "1"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: ml-models
+        configMap:
+          name: ml-models
+      - name: config
+        configMap:
+          name: anomaly-detection-config
+---
+# Behavioral Analysis Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: behavioral-analysis-engine
+  namespace: autonomous-security
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: behavioral-analysis-engine
+  template:
+    metadata:
+      labels:
+        app: behavioral-analysis-engine
+        security.orion.io/component: "behavioral-analysis"
+    spec:
+      serviceAccountName: behavioral-analysis-engine
+      containers:
+      - name: behavioral-analyzer
+        image: orion/behavioral-analyzer:v1.0.0
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 9091
+          name: metrics
+        env:
+        - name: BASELINE_LEARNING_PERIOD
+          value: "7d"
+        - name: ANOMALY_THRESHOLD
+          value: "0.8"
+        - name: KAFKA_BROKERS
+          value: "kafka.autonomous-security.svc.cluster.local:9092"
+        - name: TIMESERIES_DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: timeseries-db-credentials
+              key: url
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: behavioral-models
+          mountPath: /models/behavioral
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: config
+        configMap:
+          name: behavioral-analysis-config
+      - name: behavioral-models
+        configMap:
+          name: behavioral-models
+---
+# Threat Intelligence Integration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: threat-intelligence-engine
+  namespace: autonomous-security
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: threat-intelligence-engine
+  template:
+    metadata:
+      labels:
+        app: threat-intelligence-engine
+        security.orion.io/component: "threat-intel"
+    spec:
+      serviceAccountName: threat-intelligence-engine
+      containers:
+      - name: threat-intel-processor
+        image: orion/threat-intel-processor:v1.0.0
+        ports:
+        - containerPort: 8082
+          name: http
+        - containerPort: 9092
+          name: metrics
+        env:
+        - name: THREAT_FEEDS
+          value: "misp,otx,virustotal,crowdstrike"
+        - name: UPDATE_INTERVAL
+          value: "1h"
+        - name: KAFKA_BROKERS
+          value: "kafka.autonomous-security.svc.cluster.local:9092"
+        - name: THREAT_DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: threat-db-credentials
+              key: url
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: threat-feeds-config
+          mountPath: /etc/feeds
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: config
+        configMap:
+          name: threat-intelligence-config
+      - name: threat-feeds-config
+        secret:
+          secretName: threat-feeds-credentials
+---
+# Real-time Threat Scoring Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: threat-scoring-engine
+  namespace: autonomous-security
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: threat-scoring-engine
+  template:
+    metadata:
+      labels:
+        app: threat-scoring-engine
+        security.orion.io/component: "threat-scoring"
+    spec:
+      serviceAccountName: threat-scoring-engine
+      containers:
+      - name: threat-scorer
+        image: orion/threat-scorer:v1.0.0
+        ports:
+        - containerPort: 8083
+          name: http
+        - containerPort: 9093
+          name: metrics
+        env:
+        - name: SCORING_MODEL
+          value: "ensemble"
+        - name: REAL_TIME_PROCESSING
+          value: "true"
+        - name: KAFKA_BROKERS
+          value: "kafka.autonomous-security.svc.cluster.local:9092"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: url
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: scoring-models
+          mountPath: /models/scoring
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: config
+        configMap:
+          name: threat-scoring-config
+      - name: scoring-models
+        configMap:
+          name: scoring-models
+---
+# Anomaly Detection Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anomaly-detection-config
+  namespace: autonomous-security
+data:
+  config.yaml: |
+    anomaly_detection:
+      enabled: true
+      models:
+        - name: "isolation_forest"
+          type: "unsupervised"
+          contamination: 0.1
+          features:
+            - "network_traffic_volume"
+            - "api_request_rate"
+            - "error_rate"
+            - "response_time"
+        - name: "autoencoder"
+          type: "deep_learning"
+          architecture: "encoder-decoder"
+          latent_dim: 32
+          features:
+            - "system_metrics"
+            - "user_behavior"
+            - "network_patterns"
+        - name: "lstm_anomaly"
+          type: "time_series"
+          sequence_length: 50
+          features:
+            - "temporal_patterns"
+            - "seasonal_behavior"
+            - "trend_analysis"
+      thresholds:
+        low: 0.3
+        medium: 0.6
+        high: 0.8
+        critical: 0.95
+      data_sources:
+        - "prometheus_metrics"
+        - "application_logs"
+        - "network_flows"
+        - "system_events"
+      processing:
+        batch_size: 1000
+        window_size: "5m"
+        overlap: "1m"
+        real_time: true
+---
+# Behavioral Analysis Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: behavioral-analysis-config
+  namespace: autonomous-security
+data:
+  config.yaml: |
+    behavioral_analysis:
+      enabled: true
+      baseline_learning:
+        period: "7d"
+        min_samples: 1000
+        update_frequency: "1h"
+        features:
+          - "login_patterns"
+          - "access_patterns"
+          - "resource_usage"
+          - "network_behavior"
+      anomaly_detection:
+        algorithms:
+          - "statistical_outlier"
+          - "clustering_based"
+          - "neural_network"
+        thresholds:
+          deviation_factor: 3.0
+          confidence_level: 0.95
+          min_anomaly_score: 0.7
+      user_profiling:
+        attributes:
+          - "role_based_behavior"
+          - "time_based_patterns"
+          - "location_patterns"
+          - "device_patterns"
+        profile_update: "continuous"
+        retention_period: "90d"
+      entity_behavior:
+        entities:
+          - "users"
+          - "devices"
+          - "applications"
+          - "services"
+        behavioral_models:
+          - "markov_chains"
+          - "hidden_markov_models"
+          - "recurrent_neural_networks"
+---
+# Threat Intelligence Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: threat-intelligence-config
+  namespace: autonomous-security
+data:
+  config.yaml: |
+    threat_intelligence:
+      enabled: true
+      feeds:
+        - name: "misp"
+          url: "https://misp.orion.local"
+          format: "json"
+          update_interval: "1h"
+          priority: "high"
+        - name: "otx"
+          url: "https://otx.alienvault.com"
+          format: "json"
+          update_interval: "2h"
+          priority: "medium"
+        - name: "virustotal"
+          url: "https://www.virustotal.com/api/v3"
+          format: "json"
+          update_interval: "4h"
+          priority: "medium"
+        - name: "crowdstrike"
+          url: "https://api.crowdstrike.com"
+          format: "json"
+          update_interval: "30m"
+          priority: "high"
+      indicators:
+        types:
+          - "ip_addresses"
+          - "domains"
+          - "urls"
+          - "file_hashes"
+          - "email_addresses"
+          - "certificates"
+        enrichment:
+          - "geolocation"
+          - "reputation_scoring"
+          - "malware_family"
+          - "attack_techniques"
+      correlation:
+        enabled: true
+        algorithms:
+          - "pattern_matching"
+          - "graph_analysis"
+          - "temporal_correlation"
+        confidence_scoring: true
+        false_positive_reduction: true
+---
+# Threat Scoring Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: threat-scoring-config
+  namespace: autonomous-security
+data:
+  config.yaml: |
+    threat_scoring:
+      enabled: true
+      scoring_models:
+        - name: "risk_based_scoring"
+          weight: 0.4
+          factors:
+            - "threat_intelligence_match"
+            - "anomaly_score"
+            - "behavioral_deviation"
+            - "vulnerability_exposure"
+        - name: "impact_based_scoring"
+          weight: 0.3
+          factors:
+            - "asset_criticality"
+            - "data_sensitivity"
+            - "business_impact"
+            - "compliance_requirements"
+        - name: "context_based_scoring"
+          weight: 0.3
+          factors:
+            - "time_context"
+            - "location_context"
+            - "user_context"
+            - "system_context"
+      ensemble_method: "weighted_average"
+      score_normalization: "min_max"
+      confidence_intervals: true
+      real_time_updates: true
+      thresholds:
+        informational: 0.0-0.3
+        low: 0.3-0.5
+        medium: 0.5-0.7
+        high: 0.7-0.9
+        critical: 0.9-1.0
+      actions:
+        informational: ["log"]
+        low: ["log", "monitor"]
+        medium: ["log", "monitor", "alert"]
+        high: ["log", "monitor", "alert", "investigate"]
+        critical: ["log", "monitor", "alert", "investigate", "contain"]
+---
+# Services for Threat Detection Components
+apiVersion: v1
+kind: Service
+metadata:
+  name: anomaly-detection-service
+  namespace: autonomous-security
+spec:
+  selector:
+    app: anomaly-detection-engine
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: behavioral-analysis-service
+  namespace: autonomous-security
+spec:
+  selector:
+    app: behavioral-analysis-engine
+  ports:
+  - name: http
+    port: 8081
+    targetPort: 8081
+  - name: metrics
+    port: 9091
+    targetPort: 9091
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: threat-intelligence-service
+  namespace: autonomous-security
+spec:
+  selector:
+    app: threat-intelligence-engine
+  ports:
+  - name: http
+    port: 8082
+    targetPort: 8082
+  - name: metrics
+    port: 9092
+    targetPort: 9092
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: threat-scoring-service
+  namespace: autonomous-security
+spec:
+  selector:
+    app: threat-scoring-engine
+  ports:
+  - name: http
+    port: 8083
+    targetPort: 8083
+  - name: metrics
+    port: 9093
+    targetPort: 9093
+  type: ClusterIP

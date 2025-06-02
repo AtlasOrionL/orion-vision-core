@@ -1,0 +1,6 @@
+DOSYA VARLIK KONTROLÜ
+==============================
+Mevcut: 13/13
+Eksik: 0/13
+
+TÜM DOSYALAR MEVCUT!

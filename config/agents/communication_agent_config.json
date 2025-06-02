@@ -1,0 +1,52 @@
+{
+  "agent_id": "communication_agent_001",
+  "agent_name": "Communication Coordinator Agent",
+  "agent_type": "communication_agent",
+  "priority": 8,
+  "auto_start": true,
+  "max_retries": 5,
+  "retry_delay": 1.0,
+  "heartbeat_interval": 10.0,
+  "timeout": 300.0,
+  "capabilities": [
+    "message_routing",
+    "agent_discovery",
+    "communication_monitoring",
+    "protocol_management",
+    "queue_management"
+  ],
+  "dependencies": [
+    "rabbitmq_server"
+  ],
+  "config_file": "config/agents/communication_agent_config.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Central communication coordinator for inter-agent messaging",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "rabbitmq_settings": {
+      "host": "localhost",
+      "port": 5672,
+      "virtual_host": "orion_vhost",
+      "username": "orion_admin",
+      "password": "orion_secure_2024",
+      "auto_reconnect": true,
+      "heartbeat_interval": 600
+    },
+    "message_settings": {
+      "default_priority": "normal",
+      "max_message_size": 1048576,
+      "compression": false,
+      "encryption": false,
+      "ttl": 3600
+    },
+    "monitoring": {
+      "enable_metrics": true,
+      "metrics_interval": 30,
+      "health_check_interval": 15,
+      "performance_tracking": true
+    }
+  }
+}

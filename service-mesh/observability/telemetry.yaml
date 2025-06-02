@@ -1,0 +1,406 @@
+# Orion Vision Core - Service Mesh Observability
+# Sprint 5.1 - Service Mesh & Advanced Security
+
+# Telemetry v2 Configuration
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: orion-mesh-telemetry
+  namespace: istio-system
+spec:
+  # Metrics configuration
+  metrics:
+  - providers:
+    - name: prometheus
+  - overrides:
+    - match:
+        metric: ALL_METRICS
+      tagOverrides:
+        # Add custom labels
+        orion_service:
+          operation: UPSERT
+          value: |
+            has(source.labels["app.kubernetes.io/name"]) ? source.labels["app.kubernetes.io/name"] : "unknown"
+        orion_version:
+          operation: UPSERT
+          value: |
+            has(source.labels["app.kubernetes.io/version"]) ? source.labels["app.kubernetes.io/version"] : "unknown"
+        orion_component:
+          operation: UPSERT
+          value: |
+            has(source.labels["app.kubernetes.io/component"]) ? source.labels["app.kubernetes.io/component"] : "unknown"
+  
+  # Access logging configuration
+  accessLogging:
+  - providers:
+    - name: otel
+  - providers:
+    - name: stdout
+  
+  # Tracing configuration
+  tracing:
+  - providers:
+    - name: jaeger
+
+---
+# Orion-specific Telemetry Configuration
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: orion-service-telemetry
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  
+  # Custom metrics for Orion services
+  metrics:
+  - providers:
+    - name: prometheus
+  - overrides:
+    - match:
+        metric: requests_total
+      tagOverrides:
+        orion_endpoint:
+          operation: UPSERT
+          value: |
+            request.url_path | "/unknown"
+        orion_method:
+          operation: UPSERT
+          value: |
+            request.method | "UNKNOWN"
+        orion_user_agent:
+          operation: UPSERT
+          value: |
+            request.headers["user-agent"] | "unknown"
+    
+    - match:
+        metric: request_duration_milliseconds
+      tagOverrides:
+        orion_service_type:
+          operation: UPSERT
+          value: |
+            has(destination.labels["app.kubernetes.io/component"]) ? destination.labels["app.kubernetes.io/component"] : "core"
+  
+  # Enhanced access logging
+  accessLogging:
+  - providers:
+    - name: otel
+  - providers:
+    - name: stdout
+  - overrides:
+    - match:
+        mode: CLIENT
+      providers:
+      - name: otel
+  
+  # Distributed tracing
+  tracing:
+  - providers:
+    - name: jaeger
+  - customTags:
+      orion.service:
+        literal:
+          value: "orion-core"
+      orion.version:
+        environment:
+          name: ORION_VERSION
+          defaultValue: "1.0.0"
+      orion.request_id:
+        header:
+          name: x-orion-request-id
+
+---
+# Prometheus ServiceMonitor for Istio
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-mesh-metrics
+  namespace: istio-system
+  labels:
+    app: istiod
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: istiod
+  endpoints:
+  - port: http-monitoring
+    interval: 15s
+    path: /stats/prometheus
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+      action: keep
+      regex: istiod;http-monitoring
+    - sourceLabels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+      action: replace
+      regex: ([^:]+)(?::\d+)?;(\d+)
+      replacement: $1:$2
+      targetLabel: __address__
+    - action: labelmap
+      regex: __meta_kubernetes_service_label_(.+)
+    - sourceLabels: [__meta_kubernetes_namespace]
+      action: replace
+      targetLabel: kubernetes_namespace
+    - sourceLabels: [__meta_kubernetes_service_name]
+      action: replace
+      targetLabel: kubernetes_name
+
+---
+# ServiceMonitor for Istio Gateways
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-gateway-metrics
+  namespace: istio-system
+  labels:
+    app: istio-gateway
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  endpoints:
+  - port: http-envoy-prom
+    interval: 15s
+    path: /stats/prometheus
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+      action: keep
+      regex: istio-ingressgateway;http-envoy-prom
+    - sourceLabels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+      action: replace
+      regex: ([^:]+)(?::\d+)?;(\d+)
+      replacement: $1:$2
+      targetLabel: __address__
+    - action: labelmap
+      regex: __meta_kubernetes_service_label_(.+)
+    - sourceLabels: [__meta_kubernetes_namespace]
+      action: replace
+      targetLabel: kubernetes_namespace
+    - sourceLabels: [__meta_kubernetes_service_name]
+      action: replace
+      targetLabel: kubernetes_name
+
+---
+# ServiceMonitor for Orion Services with Istio Sidecar
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orion-istio-metrics
+  namespace: orion-system
+  labels:
+    app: orion-core
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  endpoints:
+  # Application metrics
+  - port: metrics
+    interval: 15s
+    path: /metrics
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+      action: keep
+      regex: true
+    - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+      action: replace
+      targetLabel: __metrics_path__
+      regex: (.+)
+    - sourceLabels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      action: replace
+      regex: ([^:]+)(?::\d+)?;(\d+)
+      replacement: $1:$2
+      targetLabel: __address__
+    - action: labelmap
+      regex: __meta_kubernetes_pod_label_(.+)
+    - sourceLabels: [__meta_kubernetes_namespace]
+      action: replace
+      targetLabel: kubernetes_namespace
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      action: replace
+      targetLabel: kubernetes_pod_name
+  
+  # Istio sidecar metrics
+  - port: http-envoy-prom
+    interval: 15s
+    path: /stats/prometheus
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_container_name]
+      action: keep
+      regex: istio-proxy
+    - sourceLabels: [__address__]
+      action: replace
+      regex: ([^:]+):(\d+)
+      replacement: $1:15090
+      targetLabel: __address__
+    - action: labelmap
+      regex: __meta_kubernetes_pod_label_(.+)
+    - sourceLabels: [__meta_kubernetes_namespace]
+      action: replace
+      targetLabel: kubernetes_namespace
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      action: replace
+      targetLabel: kubernetes_pod_name
+    - sourceLabels: [__meta_kubernetes_pod_container_name]
+      action: replace
+      targetLabel: container_name
+
+---
+# Jaeger Tracing Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jaeger-configuration
+  namespace: istio-system
+data:
+  jaeger.yaml: |
+    apiVersion: jaegertracing.io/v1
+    kind: Jaeger
+    metadata:
+      name: jaeger
+      namespace: istio-system
+    spec:
+      strategy: production
+      collector:
+        maxReplicas: 5
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      storage:
+        type: elasticsearch
+        elasticsearch:
+          nodeCount: 3
+          storage:
+            storageClassName: fast-ssd
+            size: 10Gi
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "1000m"
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+        hosts:
+        - jaeger.orion-platform.com
+        tls:
+        - secretName: jaeger-tls
+          hosts:
+          - jaeger.orion-platform.com
+
+---
+# Kiali Configuration for Service Mesh Visualization
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiali-config
+  namespace: istio-system
+data:
+  config.yaml: |
+    auth:
+      strategy: anonymous
+    deployment:
+      accessible_namespaces:
+      - "**"
+      namespace: istio-system
+    external_services:
+      prometheus:
+        url: "http://prometheus:9090"
+      grafana:
+        enabled: true
+        in_cluster_url: "http://grafana:3000"
+        url: "https://grafana.orion-platform.com"
+      jaeger:
+        enabled: true
+        in_cluster_url: "http://jaeger-query:16686"
+        url: "https://jaeger.orion-platform.com"
+      istio:
+        config_map_name: "istio"
+        istio_sidecar_annotation: "sidecar.istio.io/status"
+        url_service_version: "http://istiod:15014/version"
+    server:
+      web_root: "/kiali"
+      web_fqdn: "kiali.orion-platform.com"
+      web_port: 20001
+
+---
+# Grafana Dashboard ConfigMap for Istio
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: istio-service-mesh-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  istio-service-mesh.json: |
+    {
+      "dashboard": {
+        "id": null,
+        "title": "Istio Service Mesh - Orion Platform",
+        "tags": ["istio", "service-mesh", "orion"],
+        "style": "dark",
+        "timezone": "browser",
+        "panels": [
+          {
+            "id": 1,
+            "title": "Request Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "sum(rate(istio_requests_total{destination_service_namespace=\"orion-system\"}[5m])) by (destination_service_name)",
+                "legendFormat": "{{destination_service_name}}"
+              }
+            ],
+            "yAxes": [
+              {
+                "label": "Requests/sec"
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "title": "Success Rate",
+            "type": "singlestat",
+            "targets": [
+              {
+                "expr": "sum(rate(istio_requests_total{destination_service_namespace=\"orion-system\",response_code!~\"5.*\"}[5m])) / sum(rate(istio_requests_total{destination_service_namespace=\"orion-system\"}[5m]))",
+                "legendFormat": "Success Rate"
+              }
+            ],
+            "valueName": "current",
+            "format": "percentunit"
+          },
+          {
+            "id": 3,
+            "title": "Response Time (P99)",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.99, sum(rate(istio_request_duration_milliseconds_bucket{destination_service_namespace=\"orion-system\"}[5m])) by (destination_service_name, le))",
+                "legendFormat": "{{destination_service_name}} P99"
+              }
+            ],
+            "yAxes": [
+              {
+                "label": "Milliseconds"
+              }
+            ]
+          }
+        ],
+        "time": {
+          "from": "now-1h",
+          "to": "now"
+        },
+        "refresh": "5s"
+      }
+    }

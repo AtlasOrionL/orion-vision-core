@@ -1,0 +1,178 @@
+{
+  "agent_id": "multi_protocol_agent_dynamic_001",
+  "agent_name": "Dynamic Multi-Protocol Agent",
+  "agent_type": "multi_protocol_agent",
+  "priority": 8,
+  "auto_start": false,
+  "max_retries": 5,
+  "retry_delay": 2.0,
+  "heartbeat_interval": 15.0,
+  "timeout": 300.0,
+  "capabilities": [
+    "multi_protocol_communication",
+    "protocol_routing",
+    "failover_support",
+    "load_balancing",
+    "circuit_breaker",
+    "dynamic_loading"
+  ],
+  "dependencies": [],
+  "config_file": "config/agents/multi_protocol_agent_dynamic.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Dynamically loaded multi-protocol communication agent",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "module_info": {
+      "module_name": "multi_protocol_agent",
+      "module_path": "agents/dynamic/multi_protocol_agent.py",
+      "class_name": "MultiProtocolAgent"
+    },
+    "protocol_settings": {
+      "supported_protocols": [
+        "rabbitmq",
+        "websocket",
+        "http",
+        "http2"
+      ],
+      "default_protocol": "rabbitmq",
+      "protocol_preferences": [
+        "websocket",
+        "rabbitmq",
+        "http2",
+        "http"
+      ],
+      "failover_enabled": true,
+      "circuit_breaker_enabled": true,
+      "load_balancing_enabled": false
+    },
+    "rabbitmq_config": {
+      "host": "localhost",
+      "port": 5672,
+      "username": "guest",
+      "password": "guest",
+      "virtual_host": "/",
+      "heartbeat_interval": 600
+    },
+    "websocket_config": {
+      "host": "localhost",
+      "port": 8765,
+      "path": "/ws",
+      "ssl_enabled": false,
+      "timeout": 30.0,
+      "server_mode": false
+    },
+    "http_config": {
+      "host": "localhost",
+      "port": 8000,
+      "path": "/api",
+      "ssl_enabled": false,
+      "timeout": 30.0,
+      "polling_interval": 1.0
+    },
+    "http2_config": {
+      "host": "localhost",
+      "port": 8443,
+      "path": "/api/v2",
+      "ssl_enabled": true,
+      "timeout": 30.0,
+      "verify_ssl": false
+    },
+    "routing_rules": [
+      {
+        "name": "realtime_to_websocket",
+        "source_protocol": "rabbitmq",
+        "target_protocol": "websocket",
+        "source_pattern": "*",
+        "target_pattern": "realtime_*",
+        "priority": 10
+      },
+      {
+        "name": "api_to_http2",
+        "source_protocol": "websocket",
+        "target_protocol": "http2",
+        "source_pattern": "*",
+        "target_pattern": "api_*",
+        "priority": 8
+      },
+      {
+        "name": "bulk_to_rabbitmq",
+        "source_protocol": "http",
+        "target_protocol": "rabbitmq",
+        "source_pattern": "*",
+        "target_pattern": "bulk_*",
+        "priority": 6
+      }
+    ],
+    "circuit_breaker_settings": {
+      "failure_threshold": 5,
+      "recovery_timeout": 30,
+      "half_open_max_calls": 3,
+      "enabled": true
+    },
+    "load_balancer_settings": {
+      "algorithm": "round_robin",
+      "health_check_interval": 10,
+      "enabled": false
+    },
+    "performance_settings": {
+      "work_interval": 5.0,
+      "test_message_interval": 10.0,
+      "health_check_interval": 15.0,
+      "statistics_update_interval": 5.0,
+      "max_concurrent_connections": 10
+    },
+    "monitoring": {
+      "enable_metrics": true,
+      "metrics_interval": 30,
+      "health_check_interval": 15,
+      "track_protocol_performance": true,
+      "track_routing_decisions": true,
+      "track_failover_events": true,
+      "log_protocol_switches": true
+    },
+    "security": {
+      "enable_auth": false,
+      "auth_token": null,
+      "allowed_protocols": [
+        "rabbitmq",
+        "websocket",
+        "http",
+        "http2"
+      ],
+      "protocol_restrictions": {
+        "websocket": {
+          "max_connections": 100,
+          "rate_limit": 1000
+        },
+        "http": {
+          "max_requests_per_minute": 6000,
+          "timeout": 30
+        },
+        "http2": {
+          "max_streams": 100,
+          "timeout": 60
+        }
+      }
+    },
+    "error_handling": {
+      "retry_attempts": 3,
+      "retry_delay": 1.0,
+      "exponential_backoff": true,
+      "max_retry_delay": 30.0,
+      "dead_letter_queue": "orion.dlq.multi_protocol",
+      "error_notification": true
+    },
+    "features": {
+      "auto_protocol_discovery": true,
+      "dynamic_routing": true,
+      "protocol_health_monitoring": true,
+      "automatic_failover": true,
+      "message_transformation": false,
+      "compression": false,
+      "encryption": false
+    }
+  }
+}

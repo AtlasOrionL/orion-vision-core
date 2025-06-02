@@ -1,0 +1,26 @@
+[
+  {
+    "context_id": "system_state_1748736102_d24a47c0",
+    "context_type": "system_state",
+    "scope": "global",
+    "content": "System is currently running in development mode",
+    "metadata": {},
+    "relevance_score": 1.0,
+    "created_at": "2025-06-01T02:01:42.398677",
+    "last_accessed": "2025-06-01T02:01:42.398677",
+    "access_count": 0,
+    "expires_at": null
+  },
+  {
+    "context_id": "system_state_1748766499_d24a47c0",
+    "context_type": "system_state",
+    "scope": "global",
+    "content": "System is currently running in development mode",
+    "metadata": {},
+    "relevance_score": 1.0,
+    "created_at": "2025-06-01T10:28:19.232280",
+    "last_accessed": "2025-06-01T10:28:19.232280",
+    "access_count": 0,
+    "expires_at": null
+  }
+]

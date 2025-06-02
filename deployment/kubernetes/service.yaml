@@ -1,0 +1,163 @@
+# Orion Vision Core - Kubernetes Services
+# Sprint 4.3 - Production Deployment & Advanced Monitoring
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: orion-core-service
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: orion-platform
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http-api
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  - name: discovery
+    port: 8001
+    targetPort: 8001
+    protocol: TCP
+  - name: orchestration
+    port: 8002
+    targetPort: 8002
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  - name: health
+    port: 9091
+    targetPort: 9091
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: core
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orion-core-headless
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: headless-service
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http-api
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  - name: discovery
+    port: 8001
+    targetPort: 8001
+    protocol: TCP
+  - name: orchestration
+    port: 8002
+    targetPort: 8002
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: core
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orion-redis
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: cache-service
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  type: ClusterIP
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: 6379
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: cache
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orion-core-nodeport
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: nodeport-service
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  type: NodePort
+  ports:
+  - name: http-api
+    port: 8000
+    targetPort: 8000
+    nodePort: 30800
+    protocol: TCP
+  - name: discovery
+    port: 8001
+    targetPort: 8001
+    nodePort: 30801
+    protocol: TCP
+  - name: orchestration
+    port: 8002
+    targetPort: 8002
+    nodePort: 30802
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+    nodePort: 30900
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: core
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orion-core-loadbalancer
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: loadbalancer-service
+    app.kubernetes.io/part-of: orion-platform
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http-api
+    port: 80
+    targetPort: 8000
+    protocol: TCP
+  - name: https-api
+    port: 443
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: core
+  loadBalancerSourceRanges:
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16

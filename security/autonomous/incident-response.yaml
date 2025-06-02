@@ -1,0 +1,609 @@
+# Automated Incident Response System
+# Sprint 6.1 - Epic 2: Autonomous Security Systems
+# Story 2.2: Automated Incident Response
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: incident-response
+  labels:
+    security.orion.io/zone: "incident-response"
+    security.orion.io/level: "critical"
+    istio-injection: enabled
+---
+# Automated Response Orchestrator
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: response-orchestrator
+  namespace: incident-response
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: response-orchestrator
+  template:
+    metadata:
+      labels:
+        app: response-orchestrator
+        security.orion.io/component: "response-orchestrator"
+    spec:
+      serviceAccountName: response-orchestrator
+      containers:
+      - name: orchestrator
+        image: orion/response-orchestrator:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: PLAYBOOK_PATH
+          value: "/playbooks"
+        - name: KAFKA_BROKERS
+          value: "kafka.incident-response.svc.cluster.local:9092"
+        - name: WORKFLOW_ENGINE
+          value: "argo-workflows"
+        - name: NOTIFICATION_CHANNELS
+          value: "slack,email,pagerduty"
+        volumeMounts:
+        - name: playbooks
+          mountPath: /playbooks
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: playbooks
+        configMap:
+          name: response-playbooks
+      - name: config
+        configMap:
+          name: response-orchestrator-config
+---
+# Self-Healing Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: self-healing-engine
+  namespace: incident-response
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: self-healing-engine
+  template:
+    metadata:
+      labels:
+        app: self-healing-engine
+        security.orion.io/component: "self-healing"
+    spec:
+      serviceAccountName: self-healing-engine
+      containers:
+      - name: healing-engine
+        image: orion/self-healing-engine:v1.0.0
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 9091
+          name: metrics
+        env:
+        - name: HEALING_POLICIES_PATH
+          value: "/policies"
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: AUTO_HEALING_ENABLED
+          value: "true"
+        - name: ROLLBACK_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: healing-policies
+          mountPath: /policies
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: healing-policies
+        configMap:
+          name: self-healing-policies
+      - name: config
+        configMap:
+          name: self-healing-config
+---
+# Automated Containment System
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: containment-system
+  namespace: incident-response
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: containment-system
+  template:
+    metadata:
+      labels:
+        app: containment-system
+        security.orion.io/component: "containment"
+    spec:
+      serviceAccountName: containment-system
+      containers:
+      - name: containment-controller
+        image: orion/containment-controller:v1.0.0
+        ports:
+        - containerPort: 8082
+          name: http
+        - containerPort: 9092
+          name: metrics
+        env:
+        - name: CONTAINMENT_STRATEGIES
+          value: "network_isolation,pod_quarantine,user_suspension"
+        - name: KAFKA_BROKERS
+          value: "kafka.incident-response.svc.cluster.local:9092"
+        - name: ISTIO_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: containment-policies
+          mountPath: /policies
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: containment-policies
+        configMap:
+          name: containment-policies
+      - name: config
+        configMap:
+          name: containment-config
+---
+# Incident Escalation Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: escalation-engine
+  namespace: incident-response
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: escalation-engine
+  template:
+    metadata:
+      labels:
+        app: escalation-engine
+        security.orion.io/component: "escalation"
+    spec:
+      serviceAccountName: escalation-engine
+      containers:
+      - name: escalation-controller
+        image: orion/escalation-controller:v1.0.0
+        ports:
+        - containerPort: 8083
+          name: http
+        - containerPort: 9093
+          name: metrics
+        env:
+        - name: ESCALATION_RULES_PATH
+          value: "/rules"
+        - name: NOTIFICATION_SERVICE
+          value: "notification-service.incident-response.svc.cluster.local:8080"
+        - name: TICKETING_SYSTEM
+          value: "jira"
+        volumeMounts:
+        - name: escalation-rules
+          mountPath: /rules
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: escalation-rules
+        configMap:
+          name: escalation-rules
+      - name: config
+        configMap:
+          name: escalation-config
+---
+# Response Playbooks Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: response-playbooks
+  namespace: incident-response
+data:
+  malware-detection.yaml: |
+    playbook:
+      name: "malware_detection_response"
+      version: "1.0"
+      trigger:
+        event_type: "malware_detected"
+        severity: ["high", "critical"]
+      steps:
+        - name: "isolate_infected_host"
+          type: "containment"
+          action: "network_isolation"
+          parameters:
+            target: "{{ event.source_host }}"
+            duration: "24h"
+        - name: "collect_forensic_data"
+          type: "investigation"
+          action: "memory_dump"
+          parameters:
+            target: "{{ event.source_host }}"
+            storage: "forensic_storage"
+        - name: "scan_related_systems"
+          type: "investigation"
+          action: "lateral_scan"
+          parameters:
+            scope: "network_segment"
+            indicators: "{{ event.iocs }}"
+        - name: "notify_security_team"
+          type: "notification"
+          action: "alert"
+          parameters:
+            channels: ["slack", "email"]
+            severity: "{{ event.severity }}"
+        - name: "create_incident_ticket"
+          type: "ticketing"
+          action: "create_ticket"
+          parameters:
+            system: "jira"
+            priority: "{{ event.severity }}"
+  
+  data-exfiltration.yaml: |
+    playbook:
+      name: "data_exfiltration_response"
+      version: "1.0"
+      trigger:
+        event_type: "data_exfiltration"
+        severity: ["medium", "high", "critical"]
+      steps:
+        - name: "block_suspicious_traffic"
+          type: "containment"
+          action: "network_block"
+          parameters:
+            target: "{{ event.destination_ip }}"
+            protocol: "{{ event.protocol }}"
+        - name: "suspend_user_account"
+          type: "containment"
+          action: "user_suspension"
+          parameters:
+            user: "{{ event.user_id }}"
+            duration: "2h"
+        - name: "analyze_data_flow"
+          type: "investigation"
+          action: "traffic_analysis"
+          parameters:
+            timeframe: "1h"
+            source: "{{ event.source_ip }}"
+        - name: "escalate_to_dpo"
+          type: "escalation"
+          action: "notify_dpo"
+          parameters:
+            data_classification: "{{ event.data_classification }}"
+  
+  brute-force-attack.yaml: |
+    playbook:
+      name: "brute_force_response"
+      version: "1.0"
+      trigger:
+        event_type: "brute_force_attack"
+        severity: ["medium", "high"]
+      steps:
+        - name: "block_source_ip"
+          type: "containment"
+          action: "ip_block"
+          parameters:
+            ip: "{{ event.source_ip }}"
+            duration: "1h"
+        - name: "force_password_reset"
+          type: "remediation"
+          action: "password_reset"
+          parameters:
+            user: "{{ event.target_user }}"
+            force_mfa: true
+        - name: "increase_monitoring"
+          type: "monitoring"
+          action: "enhanced_logging"
+          parameters:
+            target: "{{ event.target_user }}"
+            duration: "24h"
+---
+# Self-Healing Policies
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: self-healing-policies
+  namespace: incident-response
+data:
+  healing-policies.yaml: |
+    self_healing:
+      enabled: true
+      policies:
+        - name: "pod_restart_policy"
+          trigger:
+            condition: "pod_crash_loop"
+            threshold: 3
+            timeframe: "5m"
+          actions:
+            - type: "restart_pod"
+              parameters:
+                grace_period: "30s"
+            - type: "scale_replicas"
+              parameters:
+                increment: 1
+                max_replicas: 10
+        
+        - name: "service_recovery_policy"
+          trigger:
+            condition: "service_unavailable"
+            threshold: 1
+            timeframe: "1m"
+          actions:
+            - type: "restart_service"
+            - type: "check_dependencies"
+            - type: "rollback_deployment"
+              parameters:
+                max_rollback_revisions: 3
+        
+        - name: "resource_exhaustion_policy"
+          trigger:
+            condition: "resource_exhaustion"
+            metrics:
+              - "cpu_usage > 90%"
+              - "memory_usage > 85%"
+            timeframe: "2m"
+          actions:
+            - type: "scale_horizontally"
+              parameters:
+                target_cpu: "70%"
+                max_replicas: 20
+            - type: "optimize_resources"
+            - type: "alert_operations"
+        
+        - name: "security_breach_policy"
+          trigger:
+            condition: "security_incident"
+            severity: ["high", "critical"]
+          actions:
+            - type: "isolate_workload"
+            - type: "preserve_evidence"
+            - type: "notify_security_team"
+            - type: "initiate_forensics"
+---
+# Containment Policies
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: containment-policies
+  namespace: incident-response
+data:
+  containment-policies.yaml: |
+    containment:
+      enabled: true
+      strategies:
+        network_isolation:
+          description: "Isolate network traffic for infected hosts"
+          implementation: "istio_authorization_policy"
+          parameters:
+            deny_all_traffic: true
+            allow_management: true
+            duration: "24h"
+        
+        pod_quarantine:
+          description: "Move suspicious pods to quarantine namespace"
+          implementation: "kubernetes_namespace_move"
+          parameters:
+            quarantine_namespace: "security-quarantine"
+            preserve_logs: true
+            duration: "72h"
+        
+        user_suspension:
+          description: "Temporarily suspend user accounts"
+          implementation: "identity_provider_api"
+          parameters:
+            suspend_duration: "2h"
+            require_admin_approval: true
+            notify_user: true
+        
+        traffic_blocking:
+          description: "Block malicious network traffic"
+          implementation: "network_policy"
+          parameters:
+            block_ingress: true
+            block_egress: true
+            whitelist_management: true
+      
+      escalation_matrix:
+        low:
+          auto_containment: false
+          manual_approval: true
+          notification: ["security_team"]
+        medium:
+          auto_containment: true
+          manual_approval: false
+          notification: ["security_team", "operations"]
+        high:
+          auto_containment: true
+          manual_approval: false
+          notification: ["security_team", "operations", "management"]
+        critical:
+          auto_containment: true
+          manual_approval: false
+          notification: ["security_team", "operations", "management", "executives"]
+---
+# Escalation Rules
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: escalation-rules
+  namespace: incident-response
+data:
+  escalation-rules.yaml: |
+    escalation:
+      enabled: true
+      rules:
+        - name: "time_based_escalation"
+          trigger:
+            type: "time_elapsed"
+            conditions:
+              - "incident_age > 30m AND severity = 'high'"
+              - "incident_age > 15m AND severity = 'critical'"
+          actions:
+            - type: "escalate_to_manager"
+            - type: "increase_priority"
+            - type: "add_resources"
+        
+        - name: "severity_based_escalation"
+          trigger:
+            type: "severity_change"
+            conditions:
+              - "severity_increased_to = 'critical'"
+              - "impact_level = 'business_critical'"
+          actions:
+            - type: "immediate_notification"
+              targets: ["ciso", "cto", "incident_commander"]
+            - type: "activate_war_room"
+            - type: "engage_external_resources"
+        
+        - name: "failed_containment_escalation"
+          trigger:
+            type: "containment_failure"
+            conditions:
+              - "containment_attempts > 3"
+              - "spread_detected = true"
+          actions:
+            - type: "escalate_to_expert_team"
+            - type: "consider_isolation"
+            - type: "prepare_communication_plan"
+      
+      notification_channels:
+        slack:
+          webhook_url: "{{ secrets.slack_webhook }}"
+          channels:
+            - "#security-alerts"
+            - "#incident-response"
+        email:
+          smtp_server: "{{ secrets.smtp_server }}"
+          recipients:
+            - "security-team@orion.local"
+            - "operations@orion.local"
+        pagerduty:
+          integration_key: "{{ secrets.pagerduty_key }}"
+          escalation_policy: "security_incidents"
+---
+# Service Accounts and RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: response-orchestrator
+  namespace: incident-response
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: self-healing-engine
+  namespace: incident-response
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: containment-system
+  namespace: incident-response
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: escalation-engine
+  namespace: incident-response
+---
+# ClusterRole for Incident Response
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: incident-response-operator
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "namespaces"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["security.istio.io"]
+  resources: ["authorizationpolicies"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+# ClusterRoleBindings
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: response-orchestrator
+subjects:
+- kind: ServiceAccount
+  name: response-orchestrator
+  namespace: incident-response
+roleRef:
+  kind: ClusterRole
+  name: incident-response-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: self-healing-engine
+subjects:
+- kind: ServiceAccount
+  name: self-healing-engine
+  namespace: incident-response
+roleRef:
+  kind: ClusterRole
+  name: incident-response-operator
+  apiGroup: rbac.authorization.k8s.io

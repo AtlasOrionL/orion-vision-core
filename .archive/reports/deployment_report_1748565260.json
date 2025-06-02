@@ -1,0 +1,192 @@
+{
+  "deployment_info": {
+    "environment": "demo-production",
+    "namespace": "orion-demo",
+    "image_tag": "v1.0.0-demo",
+    "deployment_time": "2025-05-30T02:34:20.556206",
+    "deployment_duration": 56.17,
+    "dry_run": true
+  },
+  "service_health": {
+    "timestamp": "2025-05-30T02:34:01.363365",
+    "overall_status": "healthy",
+    "services": {
+      "orion-core": {
+        "status": "healthy",
+        "uptime": 19.287940979003906,
+        "cpu_usage": 36.0,
+        "memory_usage": 36.0,
+        "request_rate": 64.0,
+        "error_rate": 0.14
+      },
+      "orion-discovery": {
+        "status": "healthy",
+        "uptime": 19.89105463027954,
+        "cpu_usage": 39.0,
+        "memory_usage": 56.0,
+        "request_rate": 38.0,
+        "error_rate": 0.12
+      },
+      "orion-orchestration": {
+        "status": "healthy",
+        "uptime": 20.69518208503723,
+        "cpu_usage": 40.0,
+        "memory_usage": 62.0,
+        "request_rate": 30.0,
+        "error_rate": 0.11
+      },
+      "redis": {
+        "status": "healthy",
+        "uptime": 21.097314834594727,
+        "cpu_usage": 32.0,
+        "memory_usage": 45.0,
+        "request_rate": 55.0,
+        "error_rate": 0.14
+      },
+      "prometheus": {
+        "status": "healthy",
+        "uptime": 22.303457975387573,
+        "cpu_usage": 32.0,
+        "memory_usage": 54.0,
+        "request_rate": 45.0,
+        "error_rate": 0.12
+      },
+      "grafana": {
+        "status": "healthy",
+        "uptime": 23.910672664642334,
+        "cpu_usage": 25.0,
+        "memory_usage": 42.0,
+        "request_rate": 42.0,
+        "error_rate": 0.13
+      },
+      "elasticsearch": {
+        "status": "healthy",
+        "uptime": 25.920670747756958,
+        "cpu_usage": 21.0,
+        "memory_usage": 62.0,
+        "request_rate": 18.0,
+        "error_rate": 0.11
+      },
+      "jaeger": {
+        "status": "healthy",
+        "uptime": 26.72482657432556,
+        "cpu_usage": 45.0,
+        "memory_usage": 32.0,
+        "request_rate": 50.0,
+        "error_rate": 0.11
+      }
+    },
+    "summary": {
+      "total_services": 8,
+      "healthy_services": 8,
+      "unhealthy_services": 0,
+      "degraded_services": 0
+    }
+  },
+  "load_testing": {
+    "scenarios": [
+      {
+        "name": "Baseline Load",
+        "rps": 100,
+        "duration": 30,
+        "total_requests": 3000,
+        "successful_requests": 2970,
+        "failed_requests": 30,
+        "success_rate": 99.0,
+        "average_response_time": 64.0,
+        "max_response_time": 128.0,
+        "throughput": 99.0
+      },
+      {
+        "name": "Moderate Load",
+        "rps": 500,
+        "duration": 60,
+        "total_requests": 30000,
+        "successful_requests": 29400,
+        "failed_requests": 600,
+        "success_rate": 98.0,
+        "average_response_time": 138.0,
+        "max_response_time": 552.0,
+        "throughput": 490.0
+      },
+      {
+        "name": "High Load",
+        "rps": 1000,
+        "duration": 45,
+        "total_requests": 45000,
+        "successful_requests": 43650,
+        "failed_requests": 1350,
+        "success_rate": 97.0,
+        "average_response_time": 182.0,
+        "max_response_time": 728.0,
+        "throughput": 970.0
+      },
+      {
+        "name": "Spike Test",
+        "rps": 2000,
+        "duration": 30,
+        "total_requests": 60000,
+        "successful_requests": 58800,
+        "failed_requests": 1200,
+        "success_rate": 98.0,
+        "average_response_time": 278.0,
+        "max_response_time": 1112.0,
+        "throughput": 1960.0
+      },
+      {
+        "name": "Stress Test",
+        "rps": 5000,
+        "duration": 60,
+        "total_requests": 300000,
+        "successful_requests": 291000,
+        "failed_requests": 9000,
+        "success_rate": 97.0,
+        "average_response_time": 557.0,
+        "max_response_time": 2228.0,
+        "throughput": 4850.0
+      }
+    ],
+    "summary": {
+      "total_requests": 438000,
+      "successful_requests": 425820,
+      "failed_requests": 12180,
+      "average_response_time": 448.18,
+      "max_response_time": 2228.0,
+      "throughput": 1892.53
+    }
+  },
+  "infrastructure": {
+    "kubernetes_version": "1.28.0",
+    "node_count": 5,
+    "total_cpu": "20 cores",
+    "total_memory": "80 GB",
+    "storage": "500 GB SSD"
+  },
+  "monitoring": {
+    "enabled": true,
+    "prometheus_retention": "30 days",
+    "grafana_dashboards": 6,
+    "alert_rules": 25,
+    "log_retention": "90 days"
+  },
+  "autoscaling": {
+    "enabled": true,
+    "min_replicas": 3,
+    "max_replicas": 20,
+    "current_replicas": 3,
+    "scaling_events": 0
+  },
+  "security": {
+    "rbac_enabled": true,
+    "network_policies": true,
+    "pod_security_standards": "restricted",
+    "tls_enabled": true,
+    "secrets_encrypted": true
+  },
+  "performance": {
+    "average_response_time": 448.18,
+    "peak_throughput": 1892.53,
+    "availability": 99.9,
+    "error_rate": 0.1
+  }
+}

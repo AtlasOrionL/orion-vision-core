@@ -1,0 +1,686 @@
+# Orion Vision Core - AI/ML Model Security & Adversarial Defense
+# Sprint 5.3 - Compliance Automation & Edge Security
+
+# Adversarial Defense Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adversarial-defense-engine
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: adversarial-defense-engine
+    app.kubernetes.io/component: model-protection
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: adversarial-defense-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: adversarial-defense-engine
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      serviceAccountName: ai-security-service
+      containers:
+      - name: adversarial-defense
+        image: orion-registry.company.com/adversarial-defense:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: DEFENSE_METHODS
+          value: "adversarial_training,input_preprocessing,detection,certified_defense"
+        - name: ATTACK_DETECTION_ENABLED
+          value: "true"
+        - name: REAL_TIME_MONITORING
+          value: "true"
+        - name: MODEL_INTEGRITY_CHECK
+          value: "true"
+        - name: EXPLAINABILITY_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: defense-config
+          mountPath: /etc/adversarial-defense
+        - name: ml-models
+          mountPath: /models
+        - name: defense-data
+          mountPath: /data/defense
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+            nvidia.com/gpu: 1
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+            nvidia.com/gpu: 1
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: defense-config
+        configMap:
+          name: adversarial-defense-config
+      - name: ml-models
+        persistentVolumeClaim:
+          claimName: ml-models-pvc
+      - name: defense-data
+        persistentVolumeClaim:
+          claimName: defense-data-pvc
+
+---
+# Adversarial Defense Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: adversarial-defense-config
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: adversarial-defense-config
+    app.kubernetes.io/component: configuration
+data:
+  defense-methods.yaml: |
+    # Adversarial Defense Methods
+    defense_strategies:
+      adversarial_training:
+        enabled: true
+        description: "Train models with adversarial examples"
+        methods:
+          - name: "FGSM_training"
+            epsilon: 0.1
+            alpha: 0.01
+            iterations: 10
+            
+          - name: "PGD_training"
+            epsilon: 0.1
+            alpha: 0.01
+            iterations: 20
+            random_start: true
+            
+          - name: "C&W_training"
+            confidence: 0.0
+            learning_rate: 0.01
+            max_iterations: 1000
+        
+        training_parameters:
+          adversarial_ratio: 0.5
+          clean_ratio: 0.5
+          batch_size: 32
+          epochs: 100
+          learning_rate: 0.001
+      
+      input_preprocessing:
+        enabled: true
+        description: "Preprocess inputs to remove adversarial perturbations"
+        methods:
+          - name: "gaussian_noise"
+            std_dev: 0.1
+            
+          - name: "median_filter"
+            kernel_size: 3
+            
+          - name: "jpeg_compression"
+            quality: 75
+            
+          - name: "bit_depth_reduction"
+            bits: 4
+            
+          - name: "total_variance_minimization"
+            lambda_tv: 0.1
+            iterations: 10
+      
+      detection_methods:
+        enabled: true
+        description: "Detect adversarial examples before inference"
+        methods:
+          - name: "statistical_detection"
+            features: ["mean", "std", "skewness", "kurtosis"]
+            threshold: 0.95
+            
+          - name: "neural_network_detection"
+            model_type: "binary_classifier"
+            architecture: "simple_cnn"
+            threshold: 0.8
+            
+          - name: "feature_squeezing"
+            squeeze_methods: ["bit_depth", "median_filter"]
+            threshold: 0.1
+            
+          - name: "local_intrinsic_dimensionality"
+            k_neighbors: 20
+            threshold: 0.9
+      
+      certified_defense:
+        enabled: true
+        description: "Provide certified robustness guarantees"
+        methods:
+          - name: "randomized_smoothing"
+            noise_std: 0.25
+            num_samples: 1000
+            confidence_level: 0.95
+            
+          - name: "interval_bound_propagation"
+            epsilon: 0.1
+            
+          - name: "lipschitz_regularization"
+            lipschitz_constant: 1.0
+            regularization_weight: 0.01
+
+  attack-detection.yaml: |
+    # Adversarial Attack Detection
+    detection_pipeline:
+      preprocessing:
+        - name: "input_validation"
+          checks: ["range", "format", "size"]
+          
+        - name: "statistical_analysis"
+          features: ["distribution", "entropy", "correlation"]
+          
+        - name: "feature_extraction"
+          methods: ["gradient", "activation", "prediction_confidence"]
+      
+      detection_models:
+        - name: "ensemble_detector"
+          models: ["statistical", "neural", "feature_based"]
+          voting_strategy: "majority"
+          confidence_threshold: 0.8
+          
+        - name: "anomaly_detector"
+          algorithm: "isolation_forest"
+          contamination: 0.1
+          threshold: 0.7
+          
+        - name: "gradient_detector"
+          method: "gradient_magnitude"
+          threshold: 0.5
+      
+      response_actions:
+        low_confidence:
+          - "log_event"
+          - "request_human_review"
+          
+        medium_confidence:
+          - "apply_preprocessing"
+          - "use_robust_model"
+          - "alert_security_team"
+          
+        high_confidence:
+          - "reject_input"
+          - "trigger_incident_response"
+          - "update_defense_models"
+
+  model-integrity.yaml: |
+    # ML Model Integrity Protection
+    integrity_checks:
+      model_validation:
+        - name: "cryptographic_hash"
+          algorithm: "SHA-256"
+          frequency: "on_load"
+          
+        - name: "digital_signature"
+          algorithm: "ECDSA-P256"
+          frequency: "on_load"
+          
+        - name: "behavioral_validation"
+          test_cases: "golden_dataset"
+          frequency: "periodic"
+          threshold: 0.95
+      
+      runtime_monitoring:
+        - name: "prediction_monitoring"
+          metrics: ["confidence", "entropy", "consistency"]
+          alert_thresholds:
+            confidence_drop: 0.1
+            entropy_increase: 0.2
+            
+        - name: "gradient_monitoring"
+          metrics: ["magnitude", "direction", "stability"]
+          alert_thresholds:
+            gradient_explosion: 10.0
+            gradient_vanishing: 0.001
+            
+        - name: "activation_monitoring"
+          layers: ["all"]
+          metrics: ["mean", "std", "dead_neurons"]
+          alert_thresholds:
+            dead_neuron_ratio: 0.1
+      
+      tampering_detection:
+        - name: "weight_analysis"
+          method: "statistical_deviation"
+          baseline_period: "7d"
+          threshold: 3.0
+          
+        - name: "architecture_validation"
+          method: "structural_hash"
+          frequency: "on_inference"
+          
+        - name: "memory_protection"
+          method: "control_flow_integrity"
+          hardware_support: true
+
+  explainable-ai.yaml: |
+    # Explainable AI for Security
+    explainability_methods:
+      local_explanations:
+        - name: "LIME"
+          description: "Local Interpretable Model-agnostic Explanations"
+          applicable_models: ["all"]
+          explanation_type: "feature_importance"
+          
+        - name: "SHAP"
+          description: "SHapley Additive exPlanations"
+          applicable_models: ["tree_based", "neural_networks"]
+          explanation_type: "feature_attribution"
+          
+        - name: "Integrated_Gradients"
+          description: "Attribution method for neural networks"
+          applicable_models: ["neural_networks"]
+          explanation_type: "input_attribution"
+          
+        - name: "GradCAM"
+          description: "Gradient-weighted Class Activation Mapping"
+          applicable_models: ["cnn"]
+          explanation_type: "visual_attribution"
+      
+      global_explanations:
+        - name: "Permutation_Importance"
+          description: "Global feature importance via permutation"
+          applicable_models: ["all"]
+          explanation_type: "feature_importance"
+          
+        - name: "Partial_Dependence_Plots"
+          description: "Effect of features on predictions"
+          applicable_models: ["all"]
+          explanation_type: "feature_effect"
+          
+        - name: "TCAV"
+          description: "Testing with Concept Activation Vectors"
+          applicable_models: ["neural_networks"]
+          explanation_type: "concept_importance"
+      
+      security_applications:
+        adversarial_detection:
+          - "explanation_consistency_check"
+          - "attribution_magnitude_analysis"
+          - "concept_drift_detection"
+          
+        model_debugging:
+          - "decision_boundary_visualization"
+          - "feature_interaction_analysis"
+          - "bias_detection"
+          
+        compliance_reporting:
+          - "automated_explanation_generation"
+          - "fairness_assessment"
+          - "transparency_documentation"
+
+---
+# Federated Learning Security
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: federated-learning-security
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: federated-learning-security
+    app.kubernetes.io/component: federated-learning
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: federated-learning-security
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: federated-learning-security
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: fl-security
+        image: orion-registry.company.com/federated-learning-security:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: DIFFERENTIAL_PRIVACY_ENABLED
+          value: "true"
+        - name: SECURE_AGGREGATION_ENABLED
+          value: "true"
+        - name: BYZANTINE_TOLERANCE_ENABLED
+          value: "true"
+        - name: HOMOMORPHIC_ENCRYPTION_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: fl-config
+          mountPath: /etc/federated-learning
+        - name: crypto-keys
+          mountPath: /data/crypto
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+      volumes:
+      - name: fl-config
+        configMap:
+          name: federated-learning-config
+      - name: crypto-keys
+        secret:
+          secretName: fl-crypto-keys
+
+---
+# Federated Learning Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: federated-learning-config
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: federated-learning-config
+    app.kubernetes.io/component: configuration
+data:
+  fl-security.yaml: |
+    # Federated Learning Security Configuration
+    privacy_preservation:
+      differential_privacy:
+        enabled: true
+        epsilon: 1.0  # Privacy budget
+        delta: 1e-5   # Failure probability
+        mechanism: "gaussian"
+        clipping_norm: 1.0
+        
+      secure_aggregation:
+        enabled: true
+        protocol: "SecAgg"
+        threshold: 0.8  # Minimum participation
+        dropout_resilience: true
+        
+      homomorphic_encryption:
+        enabled: true
+        scheme: "CKKS"
+        key_size: 16384
+        precision: 40
+    
+    robustness:
+      byzantine_tolerance:
+        enabled: true
+        detection_methods:
+          - "coordinate_wise_median"
+          - "trimmed_mean"
+          - "krum"
+          - "bulyan"
+        byzantine_ratio: 0.2
+        
+      poisoning_defense:
+        enabled: true
+        methods:
+          - "norm_clipping"
+          - "cosine_similarity_check"
+          - "statistical_outlier_detection"
+        thresholds:
+          norm_threshold: 2.0
+          similarity_threshold: 0.5
+    
+    communication_security:
+      encryption:
+        algorithm: "AES-256-GCM"
+        key_rotation: "per_round"
+        
+      authentication:
+        method: "mutual_tls"
+        certificate_validation: true
+        
+      integrity:
+        message_authentication: true
+        replay_protection: true
+
+---
+# Model Governance Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-governance-engine
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: model-governance-engine
+    app.kubernetes.io/component: model-governance
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: model-governance-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: model-governance-engine
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: governance-engine
+        image: orion-registry.company.com/model-governance:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: MODEL_REGISTRY_ENABLED
+          value: "true"
+        - name: LIFECYCLE_MANAGEMENT_ENABLED
+          value: "true"
+        - name: COMPLIANCE_MONITORING_ENABLED
+          value: "true"
+        - name: BIAS_DETECTION_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: governance-config
+          mountPath: /etc/governance
+        - name: model-registry
+          mountPath: /data/registry
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+      volumes:
+      - name: governance-config
+        configMap:
+          name: model-governance-config
+      - name: model-registry
+        persistentVolumeClaim:
+          claimName: model-registry-pvc
+
+---
+# Storage for AI Security Components
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ml-models-pvc
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: ml-models-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: defense-data-pvc
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: defense-data-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-registry-pvc
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: model-registry-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: fast-ssd
+
+---
+# AI Security RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ai-security-service
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: ai-security-service
+    app.kubernetes.io/component: service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ai-security-service
+  labels:
+    app.kubernetes.io/name: ai-security-service
+    app.kubernetes.io/component: rbac
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "update", "patch"]
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ai-security-service
+  labels:
+    app.kubernetes.io/name: ai-security-service
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ai-security-service
+subjects:
+- kind: ServiceAccount
+  name: ai-security-service
+  namespace: ai-security
+
+---
+# AI Security Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: adversarial-defense-engine
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: adversarial-defense-engine
+    app.kubernetes.io/component: defense-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: adversarial-defense-engine
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: federated-learning-security
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: federated-learning-security
+    app.kubernetes.io/component: fl-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: federated-learning-security
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-governance-engine
+  namespace: ai-security
+  labels:
+    app.kubernetes.io/name: model-governance-engine
+    app.kubernetes.io/component: governance-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: model-governance-engine

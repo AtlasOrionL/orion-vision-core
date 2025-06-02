@@ -1,0 +1,1 @@
+2025-06-02 01:47:54,398 - orion.agent.test_protocol - INFO - {"timestamp": "2025-06-02T01:47:54.398163", "level": "INFO", "agent_id": "test_protocol", "message": "Protocol adapter initialized", "context": {"protocol_type": "http", "agent_id": "test_agent", "host": "localhost", "port": 8080}}

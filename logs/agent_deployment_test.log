@@ -1,0 +1,2 @@
+2025-06-01 20:07:22,846 - orion.agent.deployment_test - INFO - {"timestamp": "2025-06-01T20:07:22.846023", "level": "INFO", "agent_id": "deployment_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 20:07:22,846 - orion.agent.deployment_test - INFO - {"timestamp": "2025-06-01T20:07:22.846489", "level": "INFO", "agent_id": "deployment_test", "message": "Deployment Manager initialized", "context": {}}

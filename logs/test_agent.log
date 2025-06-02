@@ -1,0 +1,227 @@
+2025-05-29 16:27:38,807 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:38,807 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-05-29 16:27:38,808 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-05-29 16:27:39,008 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:27:39,008 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-05-29 16:27:39,008 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:39,008 - Agent.test_agent - INFO - info:123 - Capability added: test_capability
+2025-05-29 16:27:39,008 - Agent.test_agent - INFO - info:123 - Capability removed: test_capability
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Config updated: max_retries = 5
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Config updated: heartbeat_interval = 20.0
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Config updated: log_level = DEBUG
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-05-29 16:27:39,009 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:27:39,109 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-05-29 16:27:39,110 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:39,110 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:39,110 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-05-29 16:27:39,110 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-05-29 16:27:39,311 - Agent.test_agent - INFO - info:123 - Restarting agent: test_agent
+2025-05-29 16:27:39,311 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:27:39,311 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-05-29 16:27:40,312 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-05-29 16:27:40,312 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-05-29 16:27:40,313 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:27:40,412 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-05-29 16:27:40,413 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:40,413 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-05-29 16:27:40,413 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-05-29 16:27:40,914 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:27:40,914 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-05-29 16:27:40,914 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:27:40,914 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-05-29 16:27:40,914 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-05-29 16:27:40,914 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:27:41,015 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-05-29 16:39:38,398 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,499 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,500 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,501 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,502 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,502 - Agent.test_agent - INFO - info:123 - Capability added: test_capability
+2025-05-29 16:39:38,503 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,504 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,505 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,505 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-05-29 16:39:38,505 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:39:38,505 - Agent.test_agent - INFO - info:123 - Agent unregistered from registry: test_agent
+2025-05-29 16:39:38,505 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-05-29 16:39:38,506 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-05-29 16:39:38,506 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-05-29 16:39:38,506 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-05-29 16:39:38,506 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-05-29 16:39:38,506 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-05-29 16:39:38,607 - Agent.test_agent - INFO - info:123 - Agent unregistered from registry: test_agent
+2025-05-29 16:39:38,607 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:07:51,824 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:51,824 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:51,824 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:07:51,825 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:07:52,026 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:07:52,026 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:07:52,026 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:52,026 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:52,026 - Agent.test_agent - INFO - info:123 - Capability added: test_capability
+2025-06-02 16:07:52,026 - Agent.test_agent - INFO - info:123 - Capability removed: test_capability
+2025-06-02 16:07:52,026 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:52,026 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Config updated: max_retries = 5
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Config updated: heartbeat_interval = 20.0
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Config updated: log_level = DEBUG
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:52,027 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:52,027 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:07:52,027 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:07:52,128 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:07:52,128 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:52,128 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:52,128 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:52,128 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:52,128 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:07:52,128 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:07:52,329 - Agent.test_agent - INFO - info:123 - Restarting agent: test_agent
+2025-06-02 16:07:52,330 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:07:52,330 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:07:53,332 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:07:53,332 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:07:53,332 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:07:53,433 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:07:53,433 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:53,433 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:53,433 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:07:53,433 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:07:53,936 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:07:53,936 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:07:53,936 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:07:53,936 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:07:53,936 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:07:53,936 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:07:53,936 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:07:54,037 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:08:19,092 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:19,092 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:19,093 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:08:19,093 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:08:19,294 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:08:19,294 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:08:19,294 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:19,294 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:19,294 - Agent.test_agent - INFO - info:123 - Capability added: test_capability
+2025-06-02 16:08:19,294 - Agent.test_agent - INFO - info:123 - Capability removed: test_capability
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:19,295 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Config updated: max_retries = 5
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Config updated: heartbeat_interval = 20.0
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Config updated: log_level = DEBUG
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:19,295 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:19,295 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:08:19,295 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:08:19,396 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:08:19,396 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:19,396 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:19,396 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:19,396 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:19,396 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:08:19,396 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:08:19,597 - Agent.test_agent - INFO - info:123 - Restarting agent: test_agent
+2025-06-02 16:08:19,597 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:08:19,597 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:08:20,602 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:08:20,602 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:08:20,602 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:08:20,703 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:08:20,703 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:20,703 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:20,703 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:08:20,704 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:08:21,204 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:08:21,204 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:08:21,205 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:21,205 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:21,205 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:08:21,205 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:08:21,205 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:08:21,305 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:08:33,786 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,900 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,909 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,921 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,927 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,927 - Agent.test_agent - INFO - info:123 - Capability added: test_capability
+2025-06-02 16:08:33,928 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,949 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,958 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,958 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:33,959 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:08:33,959 - Agent.test_agent - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-02 16:08:33,959 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:08:33,959 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:18:40,963 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:40,964 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-06-02 16:18:40,964 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:18:40,971 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:18:41,172 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:18:41,294 - Agent.test_agent - INFO - info:123 - Agent unregistered from registry: test_agent
+2025-06-02 16:18:41,294 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Capability added: test_capability
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Capability removed: test_capability
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:41,295 - Agent.test_agent - WARNING - warning:127 - Failed to register agent to global registry: test_agent
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Config updated: max_retries = 5
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Config updated: heartbeat_interval = 20.0
+2025-06-02 16:18:41,295 - Agent.test_agent - INFO - info:123 - Config updated: log_level = DEBUG
+2025-06-02 16:18:41,296 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:41,296 - Agent.test_agent - WARNING - warning:127 - Failed to register agent to global registry: test_agent
+2025-06-02 16:18:41,296 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:41,296 - Agent.test_agent - WARNING - warning:127 - Failed to register agent to global registry: test_agent
+2025-06-02 16:18:41,296 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:18:41,296 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:18:41,296 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:18:41,470 - Agent.test_agent - INFO - info:123 - Agent unregistered from registry: test_agent
+2025-06-02 16:18:41,470 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:18:41,470 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:41,499 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-06-02 16:18:41,499 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:41,499 - Agent.test_agent - WARNING - warning:127 - Failed to register agent to global registry: test_agent
+2025-06-02 16:18:41,499 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:18:41,523 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:18:41,724 - Agent.test_agent - INFO - info:123 - Restarting agent: test_agent
+2025-06-02 16:18:41,724 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:18:41,774 - Agent.test_agent - INFO - info:123 - Agent unregistered from registry: test_agent
+2025-06-02 16:18:41,774 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:18:42,775 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:18:42,776 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:18:42,776 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:18:42,876 - Agent.test_agent - WARNING - warning:127 - Failed to unregister agent from registry: test_agent
+2025-06-02 16:18:42,876 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:18:42,876 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:42,877 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-06-02 16:18:42,877 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:18:42,930 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:18:43,433 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:18:43,465 - Agent.test_agent - INFO - info:123 - Agent unregistered from registry: test_agent
+2025-06-02 16:18:43,465 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:18:43,466 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:18:43,673 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-06-02 16:18:43,674 - Agent.test_agent - INFO - info:123 - Starting agent: test_agent
+2025-06-02 16:18:43,771 - Agent.test_agent - INFO - info:123 - Agent started successfully: test_agent
+2025-06-02 16:18:43,771 - Agent.test_agent - INFO - info:123 - Stopping agent: test_agent
+2025-06-02 16:18:43,790 - Agent.test_agent - INFO - info:123 - Agent unregistered from registry: test_agent
+2025-06-02 16:18:43,790 - Agent.test_agent - INFO - info:123 - Agent stopped successfully: test_agent
+2025-06-02 16:20:45,548 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:20:45,568 - Agent.test_agent - INFO - info:123 - Agent registered to global registry: test_agent
+2025-06-02 16:21:32,369 - Agent.test_agent - INFO - info:123 - Agent initialized: test_agent (test)
+2025-06-02 16:21:32,370 - Agent.test_agent - WARNING - warning:127 - Failed to register agent to global registry: test_agent

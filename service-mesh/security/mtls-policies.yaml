@@ -1,0 +1,365 @@
+# Orion Vision Core - mTLS Security Policies
+# Sprint 5.1 - Service Mesh & Advanced Security
+
+# Mesh-wide mTLS Policy
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  mtls:
+    mode: STRICT
+
+---
+# Orion System Namespace mTLS Policy
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: orion-system-mtls
+  namespace: orion-system
+spec:
+  mtls:
+    mode: STRICT
+
+---
+# Orion Core Service mTLS Policy
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: orion-core-mtls
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  mtls:
+    mode: STRICT
+  portLevelMtls:
+    8000:  # API port
+      mode: STRICT
+    8001:  # Discovery port
+      mode: STRICT
+    8002:  # Orchestration port
+      mode: STRICT
+    9090:  # Metrics port
+      mode: PERMISSIVE  # Allow Prometheus scraping
+
+---
+# Redis mTLS Policy
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: redis-mtls
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  mtls:
+    mode: STRICT
+
+---
+# Authorization Policy for Orion Core
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: orion-core-authz
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  rules:
+  # Allow ingress gateway access
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/api/*", "/health", "/ready"]
+    - operation:
+        methods: ["GET"]
+        paths: ["/metrics"]
+  
+  # Allow internal service communication
+  - from:
+    - source:
+        namespaces: ["orion-system"]
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        ports: ["8000", "8001", "8002"]
+  
+  # Allow Prometheus metrics scraping
+  - from:
+    - source:
+        namespaces: ["monitoring", "istio-system"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/metrics", "/stats/prometheus"]
+        ports: ["9090", "15020"]
+  
+  # Allow health checks
+  - from:
+    - source:
+        namespaces: ["kube-system", "istio-system"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/health", "/ready"]
+
+---
+# Authorization Policy for Redis
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: redis-authz
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  rules:
+  # Allow only Orion Core services to access Redis
+  - from:
+    - source:
+        principals: ["cluster.local/ns/orion-system/sa/orion-service-account"]
+    to:
+    - operation:
+        ports: ["6379"]
+
+---
+# Authorization Policy for Service Discovery
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: orion-discovery-authz
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  rules:
+  # Allow agent registration and discovery
+  - from:
+    - source:
+        namespaces: ["orion-system"]
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/discovery/*"]
+        ports: ["8001"]
+  
+  # Allow external agent registration (through ingress)
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+    to:
+    - operation:
+        methods: ["POST", "PUT"]
+        paths: ["/discovery/register", "/discovery/heartbeat"]
+        ports: ["8001"]
+
+---
+# Authorization Policy for Task Orchestration
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: orion-orchestration-authz
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  rules:
+  # Allow task submission and management
+  - from:
+    - source:
+        namespaces: ["orion-system"]
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/orchestration/*"]
+        ports: ["8002"]
+  
+  # Allow external task submission (through ingress)
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+    to:
+    - operation:
+        methods: ["POST", "PUT"]
+        paths: ["/orchestration/tasks", "/orchestration/consensus"]
+        ports: ["8002"]
+
+---
+# Request Authentication for JWT validation
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: orion-jwt-auth
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  jwtRules:
+  - issuer: "https://auth.orion-platform.com"
+    jwksUri: "https://auth.orion-platform.com/.well-known/jwks.json"
+    audiences:
+    - "orion-api"
+    - "orion-discovery"
+    - "orion-orchestration"
+    forwardOriginalToken: true
+    fromHeaders:
+    - name: Authorization
+      prefix: "Bearer "
+    fromParams:
+    - "access_token"
+
+---
+# Authorization Policy with JWT requirements
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: orion-jwt-authz
+  namespace: orion-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  rules:
+  # Require JWT for API access
+  - from:
+    - source:
+        requestPrincipals: ["https://auth.orion-platform.com/*"]
+    to:
+    - operation:
+        methods: ["POST", "PUT", "DELETE"]
+        paths: ["/api/*"]
+    when:
+    - key: request.auth.claims[aud]
+      values: ["orion-api"]
+  
+  # Allow health checks without JWT
+  - to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/health", "/ready", "/metrics"]
+
+---
+# Security Policy for Egress Traffic
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: orion-egress-authz
+  namespace: orion-system
+spec:
+  # Apply to all workloads in the namespace
+  rules:
+  # Allow DNS resolution
+  - to:
+    - operation:
+        ports: ["53"]
+  
+  # Allow HTTPS to external services
+  - to:
+    - operation:
+        ports: ["443"]
+        hosts: ["*.company.com", "*.googleapis.com", "*.github.com"]
+  
+  # Allow HTTP to specific external services
+  - to:
+    - operation:
+        ports: ["80"]
+        hosts: ["*.company.com"]
+  
+  # Deny all other egress traffic
+  action: DENY
+
+---
+# Network Policy for additional security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: orion-mtls-network-policy
+  namespace: orion-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from Istio proxy
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 15090  # Envoy admin
+  
+  # Allow traffic from same namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: orion-system
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 8001
+    - protocol: TCP
+      port: 8002
+  
+  egress:
+  # Allow traffic to Istio control plane
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 15010  # Pilot
+    - protocol: TCP
+      port: 15011  # Pilot
+  
+  # Allow traffic to same namespace
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: orion-system
+    ports:
+    - protocol: TCP
+      port: 6379   # Redis
+  
+  # Allow DNS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+---
+# Destination Rule for mTLS
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: orion-mtls-dr
+  namespace: orion-system
+spec:
+  host: "*.orion-system.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  exportTo:
+  - "."

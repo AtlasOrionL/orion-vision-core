@@ -1,0 +1,689 @@
+# Orion Vision Core - Automated Incident Response
+# Sprint 5.2.2 - Advanced Threat Detection
+
+# SOAR (Security Orchestration, Automation and Response) Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soar-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: soar-engine
+    app.kubernetes.io/component: incident-response
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: soar-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: soar-engine
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      serviceAccountName: soar-engine
+      containers:
+      - name: soar-engine
+        image: orion-registry.company.com/soar-engine:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: PLAYBOOK_PATH
+          value: "/playbooks"
+        - name: WORKFLOW_ENGINE
+          value: "argo"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: soar-config
+          mountPath: /etc/soar
+        - name: playbooks
+          mountPath: /playbooks
+        - name: forensics-data
+          mountPath: /forensics
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: soar-config
+        configMap:
+          name: soar-config
+      - name: playbooks
+        configMap:
+          name: incident-response-playbooks
+      - name: forensics-data
+        persistentVolumeClaim:
+          claimName: forensics-data-pvc
+
+---
+# Threat Hunting Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: threat-hunting-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-hunting-engine
+    app.kubernetes.io/component: threat-hunting
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: threat-hunting-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: threat-hunting-engine
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: threat-hunter
+        image: orion-registry.company.com/threat-hunter:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: HUNTING_RULES_PATH
+          value: "/hunting-rules"
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch.logging.svc.cluster.local:9200"
+        - name: SPLUNK_URL
+          value: "https://splunk.security.company.com:8089"
+        - name: HUNTING_INTERVAL
+          value: "1h"
+        volumeMounts:
+        - name: hunting-config
+          mountPath: /etc/hunting
+        - name: hunting-rules
+          mountPath: /hunting-rules
+        - name: threat-intelligence
+          mountPath: /threat-intel
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: hunting-config
+        configMap:
+          name: threat-hunting-config
+      - name: hunting-rules
+        configMap:
+          name: threat-hunting-rules
+      - name: threat-intelligence
+        persistentVolumeClaim:
+          claimName: threat-intel-pvc
+
+---
+# Forensic Analysis Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forensic-analysis-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: forensic-analysis-engine
+    app.kubernetes.io/component: forensics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forensic-analysis-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: forensic-analysis-engine
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: forensic-analyzer
+        image: orion-registry.company.com/forensic-analyzer:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: EVIDENCE_RETENTION
+          value: "90d"
+        - name: AUTO_COLLECTION_ENABLED
+          value: "true"
+        - name: TIMELINE_ANALYSIS_ENABLED
+          value: "true"
+        - name: MALWARE_ANALYSIS_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: forensic-config
+          mountPath: /etc/forensics
+        - name: forensics-data
+          mountPath: /forensics
+        - name: evidence-storage
+          mountPath: /evidence
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: forensic-config
+        configMap:
+          name: forensic-config
+      - name: forensics-data
+        persistentVolumeClaim:
+          claimName: forensics-data-pvc
+      - name: evidence-storage
+        persistentVolumeClaim:
+          claimName: evidence-storage-pvc
+
+---
+# SOAR Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soar-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: soar-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # SOAR Engine Configuration
+    orchestration:
+      workflow_engine: "argo"
+      max_concurrent_workflows: 10
+      workflow_timeout: "30m"
+      retry_attempts: 3
+    
+    automation:
+      auto_response_enabled: true
+      approval_required_for:
+        - "isolate_host"
+        - "block_ip"
+        - "quarantine_user"
+      
+      response_thresholds:
+        low: "log_only"
+        medium: "alert_and_investigate"
+        high: "auto_contain"
+        critical: "auto_isolate"
+    
+    integrations:
+      kubernetes:
+        enabled: true
+        namespace: "threat-detection"
+        rbac_enabled: true
+      
+      istio:
+        enabled: true
+        auto_policy_creation: true
+        traffic_blocking: true
+      
+      slack:
+        enabled: true
+        webhook_url: "https://hooks.slack.com/services/..."
+        channels:
+          alerts: "#security-alerts"
+          incidents: "#security-incidents"
+      
+      email:
+        enabled: true
+        smtp_server: "smtp.company.com"
+        security_team: "security@company.com"
+      
+      ticketing:
+        enabled: true
+        system: "jira"
+        api_url: "https://company.atlassian.net"
+        project_key: "SEC"
+    
+    playbooks:
+      - name: "malware_detection"
+        trigger: "malware_detected"
+        severity: "high"
+        auto_execute: true
+      
+      - name: "data_exfiltration"
+        trigger: "data_exfiltration_detected"
+        severity: "critical"
+        auto_execute: true
+      
+      - name: "lateral_movement"
+        trigger: "lateral_movement_detected"
+        severity: "high"
+        auto_execute: false
+      
+      - name: "privilege_escalation"
+        trigger: "privilege_escalation_detected"
+        severity: "high"
+        auto_execute: true
+
+---
+# Incident Response Playbooks
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: incident-response-playbooks
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: incident-response-playbooks
+    app.kubernetes.io/component: configuration
+data:
+  malware_detection.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: WorkflowTemplate
+    metadata:
+      name: malware-detection-response
+    spec:
+      entrypoint: malware-response
+      templates:
+      - name: malware-response
+        steps:
+        - - name: isolate-pod
+            template: isolate-infected-pod
+        - - name: collect-evidence
+            template: collect-forensic-evidence
+        - - name: analyze-malware
+            template: analyze-malware-sample
+        - - name: update-signatures
+            template: update-detection-signatures
+        - - name: notify-team
+            template: notify-security-team
+      
+      - name: isolate-infected-pod
+        script:
+          image: bitnami/kubectl:latest
+          command: [bash]
+          source: |
+            kubectl patch pod {{workflow.parameters.pod_name}} \
+              -n {{workflow.parameters.namespace}} \
+              -p '{"metadata":{"labels":{"security.orion.com/quarantine":"true"}}}'
+            
+            kubectl apply -f - <<EOF
+            apiVersion: networking.k8s.io/v1
+            kind: NetworkPolicy
+            metadata:
+              name: quarantine-{{workflow.parameters.pod_name}}
+              namespace: {{workflow.parameters.namespace}}
+            spec:
+              podSelector:
+                matchLabels:
+                  security.orion.com/quarantine: "true"
+              policyTypes:
+              - Ingress
+              - Egress
+            EOF
+      
+      - name: collect-forensic-evidence
+        script:
+          image: orion-registry.company.com/forensic-collector:v1.0.0
+          command: [python3]
+          source: |
+            import subprocess
+            import json
+            
+            # Collect pod logs
+            logs = subprocess.check_output([
+                'kubectl', 'logs', 
+                '{{workflow.parameters.pod_name}}',
+                '-n', '{{workflow.parameters.namespace}}',
+                '--previous'
+            ])
+            
+            # Collect pod description
+            pod_desc = subprocess.check_output([
+                'kubectl', 'describe', 'pod',
+                '{{workflow.parameters.pod_name}}',
+                '-n', '{{workflow.parameters.namespace}}'
+            ])
+            
+            # Save evidence
+            evidence = {
+                'timestamp': '{{workflow.creationTimestamp}}',
+                'pod_name': '{{workflow.parameters.pod_name}}',
+                'namespace': '{{workflow.parameters.namespace}}',
+                'logs': logs.decode('utf-8'),
+                'description': pod_desc.decode('utf-8')
+            }
+            
+            with open('/evidence/malware_evidence.json', 'w') as f:
+                json.dump(evidence, f, indent=2)
+
+  data_exfiltration.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: WorkflowTemplate
+    metadata:
+      name: data-exfiltration-response
+    spec:
+      entrypoint: exfiltration-response
+      templates:
+      - name: exfiltration-response
+        steps:
+        - - name: block-traffic
+            template: block-suspicious-traffic
+        - - name: isolate-source
+            template: isolate-source-system
+        - - name: analyze-data-flow
+            template: analyze-data-transfer
+        - - name: assess-impact
+            template: assess-data-impact
+        - - name: notify-stakeholders
+            template: notify-data-breach-team
+      
+      - name: block-suspicious-traffic
+        script:
+          image: bitnami/kubectl:latest
+          command: [bash]
+          source: |
+            # Create Istio AuthorizationPolicy to block traffic
+            kubectl apply -f - <<EOF
+            apiVersion: security.istio.io/v1beta1
+            kind: AuthorizationPolicy
+            metadata:
+              name: block-exfiltration-{{workflow.uid}}
+              namespace: {{workflow.parameters.namespace}}
+            spec:
+              selector:
+                matchLabels:
+                  app: {{workflow.parameters.source_app}}
+              rules:
+              - to:
+                - operation:
+                    hosts: ["{{workflow.parameters.destination_host}}"]
+                when:
+                - key: source.ip
+                  values: ["{{workflow.parameters.source_ip}}"]
+              action: DENY
+            EOF
+
+---
+# Threat Hunting Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: threat-hunting-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-hunting-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # Threat Hunting Configuration
+    hunting:
+      interval: "1h"
+      lookback_period: "24h"
+      concurrent_hunts: 5
+      timeout: "30m"
+    
+    data_sources:
+      - name: "kubernetes_logs"
+        type: "elasticsearch"
+        url: "http://elasticsearch.logging.svc.cluster.local:9200"
+        index_pattern: "kubernetes-*"
+      
+      - name: "istio_telemetry"
+        type: "prometheus"
+        url: "http://prometheus.monitoring.svc.cluster.local:9090"
+        metrics: ["istio_requests_total", "istio_tcp_connections_opened_total"]
+      
+      - name: "security_events"
+        type: "kafka"
+        brokers: ["kafka.threat-detection.svc.cluster.local:9092"]
+        topics: ["security-events", "anomaly-detections"]
+    
+    hunting_techniques:
+      - name: "lateral_movement_detection"
+        description: "Detect lateral movement patterns"
+        query_type: "elasticsearch"
+        enabled: true
+        frequency: "1h"
+      
+      - name: "privilege_escalation_hunt"
+        description: "Hunt for privilege escalation attempts"
+        query_type: "elasticsearch"
+        enabled: true
+        frequency: "30m"
+      
+      - name: "c2_communication_hunt"
+        description: "Hunt for C2 communication patterns"
+        query_type: "prometheus"
+        enabled: true
+        frequency: "15m"
+
+---
+# Storage for Forensics and Evidence
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: forensics-data-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: forensics-data-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: evidence-storage-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: evidence-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: archive-storage
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: threat-intel-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-intel-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast-ssd
+
+---
+# SOAR Engine Service Account with RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: soar-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: soar-engine
+    app.kubernetes.io/component: service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: soar-engine
+  labels:
+    app.kubernetes.io/name: soar-engine
+    app.kubernetes.io/component: rbac
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "update", "patch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["security.istio.io"]
+  resources: ["authorizationpolicies", "peerauthentications"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["argoproj.io"]
+  resources: ["workflows", "workflowtemplates"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: soar-engine
+  labels:
+    app.kubernetes.io/name: soar-engine
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: soar-engine
+subjects:
+- kind: ServiceAccount
+  name: soar-engine
+  namespace: threat-detection
+
+---
+# Services for Incident Response Components
+apiVersion: v1
+kind: Service
+metadata:
+  name: soar-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: soar-engine
+    app.kubernetes.io/component: incident-response-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: soar-engine
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: threat-hunting-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: threat-hunting-engine
+    app.kubernetes.io/component: threat-hunting-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: threat-hunting-engine
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forensic-analysis-engine
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: forensic-analysis-engine
+    app.kubernetes.io/component: forensics-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: forensic-analysis-engine

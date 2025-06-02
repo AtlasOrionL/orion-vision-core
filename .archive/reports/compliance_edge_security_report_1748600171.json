@@ -1,0 +1,373 @@
+{
+  "report_info": {
+    "generated_at": "2025-05-30T12:16:11.628729",
+    "demo_duration": 19.09,
+    "compliance_frameworks": 5,
+    "edge_nodes": 4,
+    "quantum_algorithms": 5,
+    "ml_models": 4
+  },
+  "compliance_automation": {
+    "timestamp": "2025-05-30T12:15:52.542350",
+    "frameworks": {
+      "SOC2": {
+        "total_controls": 23,
+        "compliant_controls": 21,
+        "compliance_score": 91.3,
+        "assessment_duration": 1515.8816015942114,
+        "evidence_collected": 126,
+        "violations": 2,
+        "last_assessment": "2025-05-30T12:15:53.244206"
+      },
+      "ISO27001": {
+        "total_controls": 30,
+        "compliant_controls": 30,
+        "compliance_score": 100.0,
+        "assessment_duration": 947.2743025307809,
+        "evidence_collected": 64,
+        "violations": 0,
+        "last_assessment": "2025-05-30T12:15:53.946163"
+      },
+      "NIST": {
+        "total_controls": 16,
+        "compliant_controls": 16,
+        "compliance_score": 100.0,
+        "assessment_duration": 653.3374223422543,
+        "evidence_collected": 76,
+        "violations": 0,
+        "last_assessment": "2025-05-30T12:15:54.648121"
+      },
+      "GDPR": {
+        "total_controls": 32,
+        "compliant_controls": 30,
+        "compliance_score": 93.8,
+        "assessment_duration": 509.3085877874616,
+        "evidence_collected": 74,
+        "violations": 2,
+        "last_assessment": "2025-05-30T12:15:55.352208"
+      }
+    },
+    "overall_compliance": 96.3,
+    "controls_assessed": 101,
+    "violations_detected": 4,
+    "auto_remediations": 3,
+    "remediation_actions": [
+      "Encryption enablement",
+      "RBAC permission correction",
+      "Network policy enforcement"
+    ]
+  },
+  "edge_security": {
+    "timestamp": "2025-05-30T12:15:57.764033",
+    "nodes": {
+      "edge-node-1": {
+        "status": "active",
+        "agent_version": "v1.0.0",
+        "cpu_usage": 0.29983177437917097,
+        "memory_usage": 0.22563581416518064,
+        "disk_usage": 0.4984263868966765,
+        "network_connectivity": "offline",
+        "threats_detected": 4,
+        "last_sync": "2025-05-30T12:15:58.367190"
+      },
+      "edge-node-2": {
+        "status": "active",
+        "agent_version": "v1.0.0",
+        "cpu_usage": 0.21019611726240545,
+        "memory_usage": 0.32837764278777826,
+        "disk_usage": 0.4066366330169886,
+        "network_connectivity": "intermittent",
+        "threats_detected": 4,
+        "last_sync": "2025-05-30T12:15:58.367203"
+      },
+      "edge-node-3": {
+        "status": "active",
+        "agent_version": "v1.0.0",
+        "cpu_usage": 0.22773796553672515,
+        "memory_usage": 0.23075204294125604,
+        "disk_usage": 0.3671153386854289,
+        "network_connectivity": "intermittent",
+        "threats_detected": 1,
+        "last_sync": "2025-05-30T12:15:58.367207"
+      },
+      "edge-node-4": {
+        "status": "active",
+        "agent_version": "v1.0.0",
+        "cpu_usage": 0.16168829544643734,
+        "memory_usage": 0.23959540013689987,
+        "disk_usage": 0.223715535499746,
+        "network_connectivity": "intermittent",
+        "threats_detected": 3,
+        "last_sync": "2025-05-30T12:15:58.367210"
+      }
+    },
+    "threats_detected": 5,
+    "offline_operations": 2,
+    "sync_events": 7,
+    "resource_efficiency": 0.76
+  },
+  "quantum_safe_cryptography": {
+    "timestamp": "2025-05-30T12:16:02.383841",
+    "algorithms": {
+      "CRYSTALS-Kyber": {
+        "key_size": 768,
+        "security_level": 192,
+        "performance_ms": 0.98,
+        "standardized": true
+      },
+      "CRYSTALS-Dilithium": {
+        "key_size": 5,
+        "security_level": 256,
+        "performance_ms": 2.62,
+        "standardized": true
+      },
+      "FALCON": {
+        "key_size": 1024,
+        "security_level": 256,
+        "performance_ms": 0.84,
+        "standardized": true
+      },
+      "SPHINCS+": {
+        "key_size": 1557,
+        "security_level": 192,
+        "performance_ms": 2.49,
+        "standardized": true
+      },
+      "NTRU": {
+        "key_size": 822,
+        "security_level": 192,
+        "performance_ms": 2.89,
+        "standardized": false
+      }
+    },
+    "hybrid_deployments": 4,
+    "qkd_sessions": 12,
+    "migration_readiness": 0.782,
+    "performance_impact": 691.7,
+    "hybrid_configurations": [
+      "RSA-2048 + Kyber-768",
+      "ECDSA-P256 + Dilithium3",
+      "AES-256 + Kyber-1024",
+      "ECDH-P256 + Kyber-512"
+    ],
+    "qkd_metrics": {
+      "key_generation_rate": 3285.1,
+      "quantum_error_rate": 0.0228,
+      "security_parameter": 128,
+      "protocol": "BB84"
+    },
+    "migration_scenarios": 4,
+    "successful_migrations": 3,
+    "agility_score": 0.75,
+    "performance_comparison": {
+      "classical": 1.0,
+      "post_quantum": 7.92,
+      "hybrid": 1.72
+    },
+    "readiness_factors": {
+      "algorithm_inventory": 0.832,
+      "migration_planning": 0.879,
+      "implementation_readiness": 0.696,
+      "performance_acceptance": 0.558,
+      "compliance_alignment": 0.945
+    }
+  },
+  "ai_model_security": {
+    "timestamp": "2025-05-30T12:16:07.006633",
+    "models_protected": 4,
+    "attacks_defended": 49,
+    "robustness_scores": {
+      "anomaly-detection": 0.73,
+      "threat-classification": 0.72,
+      "behavioral-analysis": 0.792,
+      "image-recognition": 0.762
+    },
+    "explainability_scores": {
+      "anomaly-detection": {
+        "methods": {
+          "LIME": 0.621,
+          "SHAP": 0.738,
+          "Integrated_Gradients": 0.794,
+          "GradCAM": 0.63,
+          "TCAV": 0.73
+        },
+        "average_score": 0.703
+      },
+      "threat-classification": {
+        "methods": {
+          "LIME": 0.865,
+          "SHAP": 0.648,
+          "Integrated_Gradients": 0.868,
+          "GradCAM": 0.676,
+          "TCAV": 0.602
+        },
+        "average_score": 0.732
+      },
+      "behavioral-analysis": {
+        "methods": {
+          "LIME": 0.793,
+          "SHAP": 0.629,
+          "Integrated_Gradients": 0.854,
+          "GradCAM": 0.872,
+          "TCAV": 0.644
+        },
+        "average_score": 0.758
+      },
+      "image-recognition": {
+        "methods": {
+          "LIME": 0.754,
+          "SHAP": 0.671,
+          "Integrated_Gradients": 0.766,
+          "GradCAM": 0.786,
+          "TCAV": 0.74
+        },
+        "average_score": 0.743
+      }
+    },
+    "bias_metrics": {
+      "anomaly-detection": {
+        "bias_scores": {
+          "Demographic_Parity": 0.066,
+          "Equalized_Odds": 0.055,
+          "Calibration": 0.074,
+          "Individual_Fairness": 0.132
+        },
+        "fairness_score": 0.918,
+        "protected_attributes": [
+          "gender",
+          "race",
+          "age",
+          "location"
+        ]
+      },
+      "threat-classification": {
+        "bias_scores": {
+          "Demographic_Parity": 0.219,
+          "Equalized_Odds": 0.17,
+          "Calibration": 0.17,
+          "Individual_Fairness": 0.225
+        },
+        "fairness_score": 0.804,
+        "protected_attributes": [
+          "gender",
+          "race",
+          "age",
+          "location"
+        ]
+      },
+      "behavioral-analysis": {
+        "bias_scores": {
+          "Demographic_Parity": 0.087,
+          "Equalized_Odds": 0.144,
+          "Calibration": 0.127,
+          "Individual_Fairness": 0.22
+        },
+        "fairness_score": 0.856,
+        "protected_attributes": [
+          "gender",
+          "race",
+          "age",
+          "location"
+        ]
+      },
+      "image-recognition": {
+        "bias_scores": {
+          "Demographic_Parity": 0.162,
+          "Equalized_Odds": 0.163,
+          "Calibration": 0.224,
+          "Individual_Fairness": 0.225
+        },
+        "fairness_score": 0.806,
+        "protected_attributes": [
+          "gender",
+          "race",
+          "age",
+          "location"
+        ]
+      }
+    },
+    "governance_compliance": 0.846,
+    "total_attacks_tested": 80,
+    "defense_success_rate": 0.613,
+    "integrity_results": {
+      "anomaly-detection": {
+        "checks": {
+          "hash_valid": true,
+          "signature_valid": true,
+          "behavior_consistent": false,
+          "weights_unchanged": false,
+          "architecture_intact": true
+        },
+        "integrity_score": 0.6
+      },
+      "threat-classification": {
+        "checks": {
+          "hash_valid": true,
+          "signature_valid": false,
+          "behavior_consistent": false,
+          "weights_unchanged": true,
+          "architecture_intact": true
+        },
+        "integrity_score": 0.6
+      },
+      "behavioral-analysis": {
+        "checks": {
+          "hash_valid": true,
+          "signature_valid": true,
+          "behavior_consistent": true,
+          "weights_unchanged": true,
+          "architecture_intact": true
+        },
+        "integrity_score": 1.0
+      },
+      "image-recognition": {
+        "checks": {
+          "hash_valid": true,
+          "signature_valid": true,
+          "behavior_consistent": false,
+          "weights_unchanged": true,
+          "architecture_intact": true
+        },
+        "integrity_score": 0.8
+      }
+    },
+    "federated_learning": {
+      "participants": 10,
+      "byzantine_participants": 1,
+      "privacy_preserved": true,
+      "aggregation_secure": true,
+      "byzantine_detected": true,
+      "privacy_budget_epsilon": 1.2489251070689225,
+      "communication_encrypted": true
+    },
+    "governance_components": {
+      "model_registry": 0.769,
+      "lifecycle_management": 0.933,
+      "version_control": 0.833,
+      "approval_workflow": 0.908,
+      "monitoring_dashboard": 0.74,
+      "compliance_reporting": 0.842,
+      "risk_assessment": 0.837,
+      "documentation_management": 0.903
+    }
+  },
+  "overall_security_posture": {
+    "compliance_score": 0.963,
+    "edge_security_score": 0.76,
+    "quantum_readiness_score": 0.782,
+    "ai_security_score": 0.846,
+    "overall_score": 0.838
+  },
+  "risk_assessment": {
+    "compliance_risk": "low",
+    "edge_security_risk": "medium",
+    "quantum_threat_risk": "medium",
+    "ai_security_risk": "medium"
+  },
+  "recommendations": [
+    "Optimize edge security resource utilization",
+    "Accelerate post-quantum cryptography migration planning",
+    "Strengthen AI/ML model governance and security controls",
+    "Optimize post-quantum algorithm performance"
+  ]
+}

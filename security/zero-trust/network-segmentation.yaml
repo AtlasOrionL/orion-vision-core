@@ -1,0 +1,342 @@
+# Zero Trust Network Segmentation Configuration
+# Sprint 6.1 - Epic 1: Zero Trust Architecture Foundation
+# Story 1.1: Zero Trust Network Segmentation
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zero-trust-network
+  labels:
+    security.orion.io/zone: "zero-trust"
+    security.orion.io/level: "high"
+    istio-injection: enabled
+---
+# Micro-segmentation Network Policies
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zero-trust-default-deny
+  namespace: zero-trust-network
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  # Default deny all traffic - explicit allow required
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: agent-communication-policy
+  namespace: zero-trust-network
+spec:
+  podSelector:
+    matchLabels:
+      app: orion-agent
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: orion-agent
+    - podSelector:
+        matchLabels:
+          app: orion-dashboard
+    ports:
+    - protocol: TCP
+      port: 8002
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: orion-agent
+    ports:
+    - protocol: TCP
+      port: 8002
+  - to:
+    - podSelector:
+        matchLabels:
+          app: rabbitmq
+    ports:
+    - protocol: TCP
+      port: 5672
+  - to:
+    - podSelector:
+        matchLabels:
+          app: ollama
+    ports:
+    - protocol: TCP
+      port: 11434
+---
+# Istio Security Policies for Zero Trust
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: zero-trust-mtls
+  namespace: zero-trust-network
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: zero-trust-authz
+  namespace: zero-trust-network
+spec:
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/zero-trust-network/sa/orion-agent"]
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+    when:
+    - key: source.labels[app]
+      values: ["orion-agent", "orion-dashboard"]
+---
+# Software Defined Perimeter (SDP) Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sdp-config
+  namespace: zero-trust-network
+data:
+  sdp.yaml: |
+    sdp:
+      controller:
+        enabled: true
+        port: 8443
+        tls:
+          cert: /etc/certs/tls.crt
+          key: /etc/certs/tls.key
+      gateway:
+        enabled: true
+        port: 8444
+        authentication:
+          method: "certificate"
+          ca: /etc/certs/ca.crt
+      policies:
+        - name: "agent-access"
+          source: "orion-agent"
+          destination: "orion-services"
+          action: "allow"
+          conditions:
+            - "authenticated"
+            - "device_trusted"
+        - name: "dashboard-access"
+          source: "orion-dashboard"
+          destination: "orion-agents"
+          action: "allow"
+          conditions:
+            - "authenticated"
+            - "session_valid"
+---
+# Network Access Control (NAC) Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nac-config
+  namespace: zero-trust-network
+data:
+  nac.yaml: |
+    nac:
+      enforcement_points:
+        - name: "agent-ep"
+          interface: "eth0"
+          policies:
+            - "device_compliance"
+            - "identity_verification"
+            - "risk_assessment"
+      device_compliance:
+        required_attributes:
+          - "device_id"
+          - "device_fingerprint"
+          - "security_posture"
+          - "patch_level"
+        compliance_checks:
+          - name: "antivirus_status"
+            required: true
+          - name: "firewall_enabled"
+            required: true
+          - name: "encryption_enabled"
+            required: true
+      identity_verification:
+        methods:
+          - "certificate"
+          - "token"
+          - "biometric"
+        multi_factor:
+          enabled: true
+          required_factors: 2
+---
+# Zero Trust Service Mesh Configuration
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: zero-trust-mesh
+  namespace: zero-trust-network
+spec:
+  values:
+    global:
+      meshID: zero-trust-mesh
+      network: zero-trust-network
+      trustDomain: cluster.local
+    pilot:
+      env:
+        EXTERNAL_ISTIOD: false
+        PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
+        PILOT_ENABLE_CROSS_CLUSTER_WORKLOAD_ENTRY: true
+  components:
+    pilot:
+      k8s:
+        env:
+          - name: PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION
+            value: "true"
+          - name: PILOT_ENABLE_CROSS_CLUSTER_WORKLOAD_ENTRY
+            value: "true"
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        service:
+          type: LoadBalancer
+        env:
+          - name: ISTIO_META_ROUTER_MODE
+            value: "sni-dnat"
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: true
+      k8s:
+        env:
+          - name: ISTIO_META_ROUTER_MODE
+            value: "sni-dnat"
+---
+# Zero Trust Gateway Configuration
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: zero-trust-gateway
+  namespace: zero-trust-network
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: MUTUAL
+      credentialName: zero-trust-certs
+    hosts:
+    - "orion.zero-trust.local"
+  - port:
+      number: 8002
+      name: agent-api
+      protocol: HTTPS
+    tls:
+      mode: MUTUAL
+      credentialName: agent-api-certs
+    hosts:
+    - "agents.orion.zero-trust.local"
+---
+# Virtual Service for Zero Trust Routing
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: zero-trust-routing
+  namespace: zero-trust-network
+spec:
+  hosts:
+  - "orion.zero-trust.local"
+  - "agents.orion.zero-trust.local"
+  gateways:
+  - zero-trust-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/api/agents"
+    route:
+    - destination:
+        host: orion-agent-service
+        port:
+          number: 8002
+    headers:
+      request:
+        add:
+          x-zero-trust-verified: "true"
+  - match:
+    - uri:
+        prefix: "/dashboard"
+    route:
+    - destination:
+        host: orion-dashboard-service
+        port:
+          number: 8080
+    headers:
+      request:
+        add:
+          x-zero-trust-verified: "true"
+---
+# Destination Rules for Zero Trust
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: zero-trust-destinations
+  namespace: zero-trust-network
+spec:
+  host: "*.zero-trust-network.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutiveErrors: 3
+      interval: 30s
+      baseEjectionTime: 30s
+---
+# Security Monitoring and Logging
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: security-monitoring
+  namespace: zero-trust-network
+data:
+  monitoring.yaml: |
+    monitoring:
+      metrics:
+        - name: "zero_trust_policy_violations"
+          type: "counter"
+          labels: ["source", "destination", "policy"]
+        - name: "network_segmentation_breaches"
+          type: "counter"
+          labels: ["segment", "severity"]
+        - name: "mtls_handshake_failures"
+          type: "counter"
+          labels: ["source", "destination"]
+      alerts:
+        - name: "UnauthorizedNetworkAccess"
+          condition: "zero_trust_policy_violations > 0"
+          severity: "critical"
+          action: "block_and_alert"
+        - name: "SegmentationBreach"
+          condition: "network_segmentation_breaches > 0"
+          severity: "high"
+          action: "isolate_and_investigate"
+      logging:
+        level: "info"
+        format: "json"
+        destinations:
+          - "elasticsearch"
+          - "splunk"
+          - "siem"

@@ -1,0 +1,5 @@
+2025-06-01 14:09:25,836 - Agent.test_logger - DEBUG - debug:119 - Debug message
+2025-06-01 14:09:25,836 - Agent.test_logger - INFO - info:123 - Info message
+2025-06-01 14:09:25,836 - Agent.test_logger - WARNING - warning:127 - Warning message
+2025-06-01 14:09:25,836 - Agent.test_logger - ERROR - error:131 - Error message
+2025-06-01 14:09:25,836 - Agent.test_logger - CRITICAL - critical:135 - Critical message

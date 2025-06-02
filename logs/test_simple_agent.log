@@ -1,0 +1,31 @@
+2025-05-29 16:25:50,216 - Agent.test_simple_agent - INFO - info:123 - Agent initialized: test_simple_agent (simple_agent)
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Capability added: simple_processing
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Capability added: task_counting
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Capability added: random_work
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Starting agent: test_simple_agent
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Initializing Simple Agent...
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Work interval: 2.0s
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Max tasks: 10
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Simple Agent initialization completed
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Simple Agent main loop started
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Task 1: computing (duration: 0.28s)
+2025-05-29 16:25:50,217 - Agent.test_simple_agent - INFO - info:123 - Agent started successfully: test_simple_agent
+2025-05-29 16:25:50,495 - Agent.test_simple_agent - INFO - info:123 - Task 1 completed successfully
+2025-05-29 16:25:52,496 - Agent.test_simple_agent - INFO - info:123 - Task 2: calculating (duration: 0.18s)
+2025-05-29 16:25:52,676 - Agent.test_simple_agent - INFO - info:123 - Task 2 completed successfully
+2025-05-29 16:25:54,676 - Agent.test_simple_agent - INFO - info:123 - Task 3: calculating (duration: 0.30s)
+2025-05-29 16:25:54,975 - Agent.test_simple_agent - INFO - info:123 - Task 3 completed successfully
+2025-05-29 16:25:56,975 - Agent.test_simple_agent - INFO - info:123 - Task 4: calculating (duration: 0.11s)
+2025-05-29 16:25:57,088 - Agent.test_simple_agent - WARNING - warning:127 - Task 4 failed
+2025-05-29 16:25:59,088 - Agent.test_simple_agent - INFO - info:123 - Task 5: computing (duration: 0.29s)
+2025-05-29 16:25:59,380 - Agent.test_simple_agent - INFO - info:123 - Task 5 completed successfully
+2025-05-29 16:26:01,380 - Agent.test_simple_agent - INFO - info:123 - Task 6: analyzing (duration: 0.18s)
+2025-05-29 16:26:01,562 - Agent.test_simple_agent - INFO - info:123 - Task 6 completed successfully
+2025-05-29 16:26:03,563 - Agent.test_simple_agent - INFO - info:123 - Task 7: computing (duration: 0.41s)
+2025-05-29 16:26:03,980 - Agent.test_simple_agent - INFO - info:123 - Task 7 completed successfully
+2025-05-29 16:26:05,232 - Agent.test_simple_agent - INFO - info:123 - Stopping agent: test_simple_agent
+2025-05-29 16:26:05,232 - Agent.test_simple_agent - INFO - info:123 - Simple Agent main loop ended
+2025-05-29 16:26:05,232 - Agent.test_simple_agent - INFO - info:123 - Cleaning up Simple Agent...
+2025-05-29 16:26:05,232 - Agent.test_simple_agent - INFO - info:123 - Total tasks completed: 7
+2025-05-29 16:26:05,232 - Agent.test_simple_agent - INFO - info:123 - Simple Agent cleanup completed
+2025-05-29 16:26:05,232 - Agent.test_simple_agent - INFO - info:123 - Agent stopped successfully: test_simple_agent

@@ -1,0 +1,17 @@
+// VS Code Extension Configuration Fix
+// Add this to VS Code settings.json
+
+{
+    "orion.ai.enabled": true,
+    "orion.ai.model": "gpt-4",
+    "orion.server.host": "localhost",
+    "orion.server.port": 8000,
+    "orion.ai.retryAttempts": 3,
+    "orion.ai.connectionTimeout": 5000,
+    "orion.ai.autoReconnect": true,
+    "orion.logging.level": "debug",
+    "orion.codeCompletion.enabled": true,
+    "orion.mobile.previewEnabled": true,
+    "orion.networking.debugEnabled": true,
+    "orion.performance.monitoringEnabled": true
+}

@@ -1,0 +1,149 @@
+{
+  "report_info": {
+    "generated_at": "2025-05-30T10:55:05.110208",
+    "demo_duration": 40.39,
+    "mesh_type": "istio",
+    "mtls_mode": "STRICT"
+  },
+  "service_mesh": {
+    "mtls_status": {
+      "timestamp": "2025-05-30T10:54:36.165074",
+      "mode": "STRICT",
+      "services": {
+        "orion-core": {
+          "mtls_enabled": true,
+          "mode": "STRICT",
+          "certificate_status": "valid",
+          "last_rotation": "2025-05-30T10:54:39.782763"
+        },
+        "orion-discovery": {
+          "mtls_enabled": true,
+          "mode": "STRICT",
+          "certificate_status": "valid",
+          "last_rotation": "2025-05-30T10:54:39.782773"
+        },
+        "orion-orchestration": {
+          "mtls_enabled": true,
+          "mode": "STRICT",
+          "certificate_status": "valid",
+          "last_rotation": "2025-05-30T10:54:39.782775"
+        },
+        "redis": {
+          "mtls_enabled": true,
+          "mode": "STRICT",
+          "certificate_status": "valid",
+          "last_rotation": "2025-05-30T10:54:39.782777"
+        },
+        "istio-proxy": {
+          "mtls_enabled": true,
+          "mode": "STRICT",
+          "certificate_status": "valid",
+          "last_rotation": "2025-05-30T10:54:39.782778"
+        }
+      },
+      "certificates": {
+        "certificate_management": {
+          "issued": "2025-05-30T10:54:38.576475",
+          "expires": "2025-08-29T00:00:00Z",
+          "algorithm": "RSA-2048",
+          "status": "valid"
+        }
+      },
+      "trust_domain": "cluster.local"
+    },
+    "security_policies": {
+      "timestamp": "2025-05-30T10:54:40.787950",
+      "total_policies": 4,
+      "active_policies": 4,
+      "violations": 0,
+      "policies": {
+        "orion-core-authz": {
+          "type": "AuthorizationPolicy",
+          "status": "ACTIVE",
+          "rules_count": 3,
+          "violations": 0
+        },
+        "redis-authz": {
+          "type": "AuthorizationPolicy",
+          "status": "ACTIVE",
+          "rules_count": 2,
+          "violations": 2
+        },
+        "jwt-authentication": {
+          "type": "RequestAuthentication",
+          "status": "ACTIVE",
+          "rules_count": 3,
+          "violations": 1
+        },
+        "egress-restrictions": {
+          "type": "AuthorizationPolicy",
+          "status": "ACTIVE",
+          "rules_count": 3,
+          "violations": 2
+        }
+      }
+    },
+    "services_count": 5,
+    "mesh_health": "healthy"
+  },
+  "zero_trust": {
+    "timestamp": "2025-05-30T10:54:53.250214",
+    "components": {
+      "network_segmentation": {
+        "status": "active",
+        "description": "Micro-segmentation with NetworkPolicies"
+      },
+      "identity_verification": {
+        "status": "active",
+        "description": "Service identity and authentication"
+      },
+      "least_privilege_access": {
+        "status": "active",
+        "description": "Minimal required permissions"
+      },
+      "continuous_monitoring": {
+        "status": "active",
+        "description": "Real-time security monitoring"
+      },
+      "policy_enforcement": {
+        "status": "active",
+        "description": "Automated policy compliance"
+      },
+      "threat_detection": {
+        "status": "active",
+        "description": "Anomaly and intrusion detection"
+      }
+    },
+    "policies_enforced": 5,
+    "threats_detected": 3,
+    "compliance_score": 100.0
+  },
+  "security_scanning": {
+    "timestamp": "2025-05-30T10:54:57.870205",
+    "scans_completed": 6,
+    "vulnerabilities": {
+      "critical": 1,
+      "high": 3,
+      "medium": 9,
+      "low": 12
+    },
+    "compliance": {
+      "cis_score": 88.6
+    },
+    "threats": {
+      "suspicious_processes": 1,
+      "network_anomalies": 0,
+      "file_modifications": 1
+    }
+  },
+  "compliance": {
+    "mtls_compliance": 100.0,
+    "policy_compliance": 95.0,
+    "zero_trust_score": 100.0,
+    "overall_score": 98.3
+  },
+  "recommendations": [
+    "High vulnerability count detected - prioritize patching",
+    "Runtime threats detected - investigate and remediate"
+  ]
+}

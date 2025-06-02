@@ -1,0 +1,34 @@
+2025-05-29 23:25:43,043 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Agent initialized: file_monitor_agent_dynamic_001 (file_monitor_agent)
+2025-05-29 23:25:43,044 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Agent registered to global registry: file_monitor_agent_dynamic_001
+2025-05-29 23:25:43,044 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File Monitor Agent initialized with 4 paths
+2025-05-29 23:25:43,045 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Starting agent: file_monitor_agent_dynamic_001
+2025-05-29 23:25:43,045 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Initializing File Monitor Agent...
+2025-05-29 23:25:43,045 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Monitoring path: /home/orionprojesi/Masaüstü/Orion_C/Atlas/data
+2025-05-29 23:25:43,045 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Monitoring path: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs
+2025-05-29 23:25:43,045 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Monitoring path: /home/orionprojesi/Masaüstü/Orion_C/Atlas/config/agents
+2025-05-29 23:25:43,046 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Monitoring path: /home/orionprojesi/Masaüstü/Orion_C/Atlas/agents/dynamic
+2025-05-29 23:25:43,046 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File Monitor Agent initialization completed - 29 files registered
+2025-05-29 23:25:43,046 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File Monitor Agent main loop started
+2025-05-29 23:25:43,046 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/data/agent_registry.json
+2025-05-29 23:25:43,047 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Agent started successfully: file_monitor_agent_dynamic_001
+2025-05-29 23:25:43,047 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/file_monitor_agent_dynamic_001.log
+2025-05-29 23:25:43,047 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/DynamicAgentLoader.log
+2025-05-29 23:25:43,048 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Detected 3 file changes
+2025-05-29 23:25:48,048 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/file_monitor_agent_dynamic_001.log
+2025-05-29 23:25:48,048 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/calculator_agent_dynamic_001.log
+2025-05-29 23:25:48,049 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Detected 2 file changes
+2025-05-29 23:25:53,049 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/file_monitor_agent_dynamic_001.log
+2025-05-29 23:25:53,050 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/calculator_agent_dynamic_001.log
+2025-05-29 23:25:53,050 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Detected 2 file changes
+2025-05-29 23:25:58,051 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/file_monitor_agent_dynamic_001.log
+2025-05-29 23:25:58,051 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File modified: /home/orionprojesi/Masaüstü/Orion_C/Atlas/logs/calculator_agent_dynamic_001.log
+2025-05-29 23:25:58,051 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Detected 2 file changes
+2025-05-29 23:25:58,058 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Stopping agent: file_monitor_agent_dynamic_001
+2025-05-29 23:25:58,058 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File Monitor Agent main loop ended
+2025-05-29 23:25:58,058 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Cleaning up File Monitor Agent...
+2025-05-29 23:25:58,058 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Total changes detected: 9
+2025-05-29 23:25:58,058 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Files monitored: 29
+2025-05-29 23:25:58,058 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Paths monitored: 4
+2025-05-29 23:25:58,058 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - File Monitor Agent cleanup completed
+2025-05-29 23:25:58,059 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Agent unregistered from registry: file_monitor_agent_dynamic_001
+2025-05-29 23:25:58,059 - Agent.file_monitor_agent_dynamic_001 - INFO - info:123 - Agent stopped successfully: file_monitor_agent_dynamic_001

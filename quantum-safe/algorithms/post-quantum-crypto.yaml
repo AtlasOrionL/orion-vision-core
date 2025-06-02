@@ -1,0 +1,631 @@
+# Orion Vision Core - Post-Quantum Cryptography Implementation
+# Sprint 5.3 - Compliance Automation & Edge Security
+
+# Post-Quantum Cryptography Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-quantum-crypto-service
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: post-quantum-crypto-service
+    app.kubernetes.io/component: quantum-cryptography
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: post-quantum-crypto-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: post-quantum-crypto-service
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      serviceAccountName: quantum-crypto-service
+      containers:
+      - name: pq-crypto-service
+        image: orion-registry.company.com/post-quantum-crypto:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        - containerPort: 8443
+          name: https
+        env:
+        - name: PQ_ALGORITHMS_ENABLED
+          value: "kyber,dilithium,falcon,sphincs"
+        - name: HYBRID_MODE_ENABLED
+          value: "true"
+        - name: CLASSICAL_FALLBACK
+          value: "true"
+        - name: KEY_ROTATION_INTERVAL
+          value: "24h"
+        - name: HSM_INTEGRATION
+          value: "true"
+        - name: FIPS_COMPLIANCE
+          value: "true"
+        volumeMounts:
+        - name: pq-config
+          mountPath: /etc/pq-crypto
+        - name: key-storage
+          mountPath: /data/keys
+        - name: hsm-config
+          mountPath: /etc/hsm
+        - name: certificates
+          mountPath: /etc/certs
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: pq-config
+        configMap:
+          name: post-quantum-config
+      - name: key-storage
+        persistentVolumeClaim:
+          claimName: quantum-keys-pvc
+      - name: hsm-config
+        secret:
+          secretName: hsm-config
+      - name: certificates
+        secret:
+          secretName: pq-certificates
+
+---
+# Post-Quantum Cryptography Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: post-quantum-config
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: post-quantum-config
+    app.kubernetes.io/component: configuration
+data:
+  pq-algorithms.yaml: |
+    # NIST Post-Quantum Cryptography Standards
+    algorithms:
+      key_encapsulation:
+        - name: "CRYSTALS-Kyber"
+          nist_level: 3
+          key_size: 1568  # bytes
+          ciphertext_size: 1568
+          performance: "high"
+          security_level: 128
+          standardized: true
+          
+        - name: "CRYSTALS-Kyber-512"
+          nist_level: 1
+          key_size: 800
+          ciphertext_size: 768
+          performance: "very_high"
+          security_level: 128
+          standardized: true
+          
+        - name: "CRYSTALS-Kyber-1024"
+          nist_level: 5
+          key_size: 1632
+          ciphertext_size: 1568
+          performance: "medium"
+          security_level: 256
+          standardized: true
+      
+      digital_signatures:
+        - name: "CRYSTALS-Dilithium"
+          nist_level: 3
+          public_key_size: 1952
+          signature_size: 3293
+          performance: "high"
+          security_level: 128
+          standardized: true
+          
+        - name: "FALCON-512"
+          nist_level: 1
+          public_key_size: 897
+          signature_size: 690
+          performance: "very_high"
+          security_level: 128
+          standardized: true
+          
+        - name: "SPHINCS+-SHA256-128s"
+          nist_level: 1
+          public_key_size: 32
+          signature_size: 7856
+          performance: "low"
+          security_level: 128
+          standardized: true
+          stateless: true
+      
+      hash_functions:
+        - name: "SHA3-256"
+          output_size: 256
+          quantum_resistant: true
+          performance: "high"
+          
+        - name: "SHAKE256"
+          output_size: "variable"
+          quantum_resistant: true
+          performance: "high"
+          extendable: true
+
+  hybrid-crypto.yaml: |
+    # Hybrid Classical + Post-Quantum Cryptography
+    hybrid_configurations:
+      tls_handshake:
+        classical_kex: "ECDH-P256"
+        pq_kex: "Kyber-768"
+        classical_auth: "ECDSA-P256"
+        pq_auth: "Dilithium3"
+        combination_method: "concatenation"
+        
+      data_encryption:
+        classical_cipher: "AES-256-GCM"
+        pq_kek: "Kyber-1024"
+        key_derivation: "HKDF-SHA256"
+        
+      digital_signatures:
+        classical_sig: "ECDSA-P256"
+        pq_sig: "Dilithium3"
+        combination_method: "dual_signature"
+        verification_policy: "both_required"
+    
+    migration_strategy:
+      phase1:
+        description: "Hybrid deployment"
+        classical_enabled: true
+        pq_enabled: true
+        default_preference: "classical"
+        
+      phase2:
+        description: "PQ preference"
+        classical_enabled: true
+        pq_enabled: true
+        default_preference: "post_quantum"
+        
+      phase3:
+        description: "PQ only"
+        classical_enabled: false
+        pq_enabled: true
+        default_preference: "post_quantum"
+    
+    compatibility:
+      legacy_support: true
+      graceful_degradation: true
+      algorithm_negotiation: true
+      version_tolerance: true
+
+  crypto-agility.yaml: |
+    # Cryptographic Agility Framework
+    agility:
+      algorithm_registry:
+        enabled: true
+        dynamic_loading: true
+        runtime_switching: true
+        
+      key_management:
+        multi_algorithm_support: true
+        algorithm_migration: true
+        key_versioning: true
+        rollback_capability: true
+        
+      protocol_adaptation:
+        tls_extension_support: true
+        custom_cipher_suites: true
+        algorithm_negotiation: true
+        
+      performance_optimization:
+        algorithm_selection_criteria:
+          - security_level
+          - performance_requirements
+          - compatibility_needs
+          - resource_constraints
+        
+        caching:
+          key_cache: true
+          signature_cache: true
+          verification_cache: true
+          
+        hardware_acceleration:
+          aes_ni: true
+          avx2: true
+          specialized_pq_hardware: true
+    
+    monitoring:
+      algorithm_usage_tracking: true
+      performance_metrics: true
+      security_event_logging: true
+      compliance_reporting: true
+
+  quantum-readiness.yaml: |
+    # Quantum Readiness Assessment
+    assessment:
+      current_algorithms:
+        - algorithm: "RSA-2048"
+          quantum_vulnerable: true
+          replacement: "Kyber-768 + Dilithium3"
+          migration_priority: "high"
+          
+        - algorithm: "ECDSA-P256"
+          quantum_vulnerable: true
+          replacement: "Dilithium3"
+          migration_priority: "high"
+          
+        - algorithm: "ECDH-P256"
+          quantum_vulnerable: true
+          replacement: "Kyber-768"
+          migration_priority: "high"
+          
+        - algorithm: "AES-256"
+          quantum_vulnerable: false
+          replacement: "none_required"
+          migration_priority: "low"
+          
+        - algorithm: "SHA-256"
+          quantum_vulnerable: false
+          replacement: "SHA3-256 (recommended)"
+          migration_priority: "medium"
+    
+    timeline:
+      immediate: "Hybrid deployment"
+      short_term: "PQ preference (1-2 years)"
+      medium_term: "PQ mandatory (3-5 years)"
+      long_term: "Classical deprecation (5+ years)"
+    
+    risk_assessment:
+      cryptographically_relevant_quantum_computer:
+        probability_2030: 0.1
+        probability_2035: 0.3
+        probability_2040: 0.6
+        
+      impact_levels:
+        data_confidentiality: "critical"
+        authentication: "critical"
+        integrity: "high"
+        non_repudiation: "high"
+
+---
+# Quantum Key Distribution Simulator
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantum-key-distribution
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: quantum-key-distribution
+    app.kubernetes.io/component: qkd-simulator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: quantum-key-distribution
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: quantum-key-distribution
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: qkd-simulator
+        image: orion-registry.company.com/qkd-simulator:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: QKD_PROTOCOL
+          value: "BB84"
+        - name: KEY_GENERATION_RATE
+          value: "1000"  # bits per second
+        - name: QUANTUM_ERROR_RATE
+          value: "0.01"
+        - name: SECURITY_PARAMETER
+          value: "128"
+        volumeMounts:
+        - name: qkd-config
+          mountPath: /etc/qkd
+        - name: quantum-keys
+          mountPath: /data/quantum-keys
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+      volumes:
+      - name: qkd-config
+        configMap:
+          name: qkd-config
+      - name: quantum-keys
+        persistentVolumeClaim:
+          claimName: quantum-keys-pvc
+
+---
+# QKD Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qkd-config
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: qkd-config
+    app.kubernetes.io/component: configuration
+data:
+  qkd-protocols.yaml: |
+    # Quantum Key Distribution Protocols
+    protocols:
+      bb84:
+        name: "Bennett-Brassard 1984"
+        description: "First QKD protocol using polarized photons"
+        security_proof: "information_theoretic"
+        key_rate: "high"
+        implementation_complexity: "medium"
+        
+      e91:
+        name: "Ekert 1991"
+        description: "Entanglement-based QKD protocol"
+        security_proof: "bell_inequality"
+        key_rate: "medium"
+        implementation_complexity: "high"
+        
+      sarg04:
+        name: "Scarani-Acin-Ribordy-Gisin 2004"
+        description: "Four-state protocol with improved security"
+        security_proof: "information_theoretic"
+        key_rate: "medium"
+        implementation_complexity: "medium"
+    
+    simulation_parameters:
+      channel_loss: 0.2  # 20% photon loss
+      detector_efficiency: 0.8  # 80% detection efficiency
+      dark_count_rate: 1e-6  # Dark counts per second
+      quantum_bit_error_rate: 0.01  # 1% QBER
+      
+    security_analysis:
+      privacy_amplification: true
+      error_correction: "cascade"
+      authentication: "universal_hashing"
+      key_distillation_rate: 0.5
+
+---
+# Post-Quantum Certificate Authority
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pq-certificate-authority
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: pq-certificate-authority
+    app.kubernetes.io/component: pq-ca
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pq-certificate-authority
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pq-certificate-authority
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: pq-ca
+        image: orion-registry.company.com/pq-ca:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: https
+        env:
+        - name: CA_ALGORITHM
+          value: "Dilithium3"
+        - name: CERT_VALIDITY_PERIOD
+          value: "365d"
+        - name: KEY_SIZE
+          value: "3"  # Dilithium security level
+        - name: HSM_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: ca-config
+          mountPath: /etc/ca
+        - name: ca-keys
+          mountPath: /data/ca-keys
+        - name: certificates
+          mountPath: /data/certificates
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: ca-config
+        configMap:
+          name: pq-ca-config
+      - name: ca-keys
+        persistentVolumeClaim:
+          claimName: pq-ca-keys-pvc
+      - name: certificates
+        persistentVolumeClaim:
+          claimName: pq-certificates-pvc
+
+---
+# Storage for Quantum-Safe Keys and Certificates
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: quantum-keys-pvc
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: quantum-keys-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: encrypted-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pq-ca-keys-pvc
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: pq-ca-keys-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: encrypted-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pq-certificates-pvc
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: pq-certificates-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: fast-ssd
+
+---
+# Quantum-Safe RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: quantum-crypto-service
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: quantum-crypto-service
+    app.kubernetes.io/component: service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: quantum-crypto-service
+  labels:
+    app.kubernetes.io/name: quantum-crypto-service
+    app.kubernetes.io/component: rbac
+rules:
+- apiGroups: [""]
+  resources: ["secrets", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["certificates.k8s.io"]
+  resources: ["certificatesigningrequests"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: quantum-crypto-service
+  labels:
+    app.kubernetes.io/name: quantum-crypto-service
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: quantum-crypto-service
+subjects:
+- kind: ServiceAccount
+  name: quantum-crypto-service
+  namespace: quantum-safe
+
+---
+# Quantum-Safe Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-quantum-crypto-service
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: post-quantum-crypto-service
+    app.kubernetes.io/component: pq-crypto-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  - port: 8443
+    targetPort: 8443
+    name: https
+  selector:
+    app.kubernetes.io/name: post-quantum-crypto-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quantum-key-distribution
+  namespace: quantum-safe
+  labels:
+    app.kubernetes.io/name: quantum-key-distribution
+    app.kubernetes.io/component: qkd-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: quantum-key-distribution

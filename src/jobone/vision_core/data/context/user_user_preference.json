@@ -1,0 +1,56 @@
+[
+  {
+    "context_id": "user_preference_1748736102_5bc51353",
+    "context_type": "user_preference",
+    "scope": "user",
+    "content": "User prefers detailed technical explanations",
+    "metadata": {},
+    "relevance_score": 1.0,
+    "created_at": "2025-06-01T02:01:42.398432",
+    "last_accessed": "2025-06-01T02:01:42.398433",
+    "access_count": 0,
+    "expires_at": null
+  },
+  {
+    "context_id": "user_preference_1748736102_3fa8f037",
+    "context_type": "user_preference",
+    "scope": "user",
+    "content": "explanation_style: detailed",
+    "metadata": {
+      "key": "explanation_style",
+      "value": "detailed"
+    },
+    "relevance_score": 1.0,
+    "created_at": "2025-06-01T02:01:42.398977",
+    "last_accessed": "2025-06-01T02:01:42.398977",
+    "access_count": 0,
+    "expires_at": null
+  },
+  {
+    "context_id": "user_preference_1748766499_5bc51353",
+    "context_type": "user_preference",
+    "scope": "user",
+    "content": "User prefers detailed technical explanations",
+    "metadata": {},
+    "relevance_score": 1.0,
+    "created_at": "2025-06-01T10:28:19.231750",
+    "last_accessed": "2025-06-01T10:28:19.231751",
+    "access_count": 0,
+    "expires_at": null
+  },
+  {
+    "context_id": "user_preference_1748766499_3fa8f037",
+    "context_type": "user_preference",
+    "scope": "user",
+    "content": "explanation_style: detailed",
+    "metadata": {
+      "key": "explanation_style",
+      "value": "detailed"
+    },
+    "relevance_score": 1.0,
+    "created_at": "2025-06-01T10:28:19.232854",
+    "last_accessed": "2025-06-01T10:28:19.232855",
+    "access_count": 0,
+    "expires_at": null
+  }
+]

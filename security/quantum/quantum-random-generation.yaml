@@ -1,0 +1,547 @@
+# Quantum Random Number Generation (QRNG) System
+# Sprint 7.1 - Epic 3: Quantum Random Number Generation
+# True Quantum Randomness for Cryptographic Applications
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quantum-rng
+  labels:
+    security.orion.io/zone: "quantum-rng"
+    security.orion.io/level: "critical"
+    quantum.orion.io/rng-enabled: "true"
+    istio-injection: enabled
+---
+# Quantum Random Number Generator Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qrng-service
+  namespace: quantum-rng
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: qrng-service
+  template:
+    metadata:
+      labels:
+        app: qrng-service
+        quantum.orion.io/component: "qrng"
+    spec:
+      serviceAccountName: qrng-service
+      containers:
+      - name: qrng-server
+        image: orion/qrng-server:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: https
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: QRNG_SOURCES_ENABLED
+          value: "vacuum_fluctuation,photon_arrival,quantum_tunneling"
+        - name: ENTROPY_RATE
+          value: "1000000"  # 1 Mbps
+        - name: RANDOMNESS_EXTRACTION
+          value: "von_neumann,toeplitz"
+        - name: STATISTICAL_TESTING
+          value: "nist_sp800_22"
+        - name: CONTINUOUS_MONITORING
+          value: "true"
+        volumeMounts:
+        - name: qrng-config
+          mountPath: /etc/qrng
+          readOnly: true
+        - name: entropy-pool
+          mountPath: /var/lib/entropy
+        - name: qrng-certs
+          mountPath: /etc/certs
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: qrng-config
+        configMap:
+          name: qrng-config
+      - name: entropy-pool
+        persistentVolumeClaim:
+          claimName: entropy-pool-storage
+      - name: qrng-certs
+        secret:
+          secretName: qrng-tls-certs
+---
+# Vacuum Fluctuation QRNG
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vacuum-fluctuation-qrng
+  namespace: quantum-rng
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vacuum-fluctuation-qrng
+  template:
+    metadata:
+      labels:
+        app: vacuum-fluctuation-qrng
+        quantum.orion.io/component: "vacuum-qrng"
+    spec:
+      serviceAccountName: vacuum-fluctuation-qrng
+      containers:
+      - name: vacuum-qrng
+        image: orion/vacuum-qrng:v1.0.0
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 9091
+          name: metrics
+        env:
+        - name: VACUUM_SOURCE_TYPE
+          value: "quantum_vacuum"
+        - name: MEASUREMENT_BASIS
+          value: "quadrature"
+        - name: SAMPLING_RATE
+          value: "1000000"  # 1 MHz
+        - name: HOMODYNE_DETECTION
+          value: "true"
+        volumeMounts:
+        - name: vacuum-config
+          mountPath: /etc/vacuum-qrng
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: vacuum-config
+        configMap:
+          name: vacuum-qrng-config
+---
+# Photon Arrival Time QRNG
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: photon-arrival-qrng
+  namespace: quantum-rng
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: photon-arrival-qrng
+  template:
+    metadata:
+      labels:
+        app: photon-arrival-qrng
+        quantum.orion.io/component: "photon-qrng"
+    spec:
+      serviceAccountName: photon-arrival-qrng
+      containers:
+      - name: photon-qrng
+        image: orion/photon-qrng:v1.0.0
+        ports:
+        - containerPort: 8082
+          name: http
+        - containerPort: 9092
+          name: metrics
+        env:
+        - name: PHOTON_SOURCE
+          value: "led_attenuated"
+        - name: DETECTION_METHOD
+          value: "single_photon_avalanche_diode"
+        - name: TIMING_RESOLUTION
+          value: "100ps"
+        - name: DEAD_TIME_CORRECTION
+          value: "true"
+        volumeMounts:
+        - name: photon-config
+          mountPath: /etc/photon-qrng
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: photon-config
+        configMap:
+          name: photon-qrng-config
+---
+# Quantum Tunneling QRNG
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantum-tunneling-qrng
+  namespace: quantum-rng
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quantum-tunneling-qrng
+  template:
+    metadata:
+      labels:
+        app: quantum-tunneling-qrng
+        quantum.orion.io/component: "tunneling-qrng"
+    spec:
+      serviceAccountName: quantum-tunneling-qrng
+      containers:
+      - name: tunneling-qrng
+        image: orion/tunneling-qrng:v1.0.0
+        ports:
+        - containerPort: 8083
+          name: http
+        - containerPort: 9093
+          name: metrics
+        env:
+        - name: TUNNELING_JUNCTION_TYPE
+          value: "josephson_junction"
+        - name: BIAS_VOLTAGE
+          value: "2.5mV"
+        - name: TEMPERATURE
+          value: "4K"
+        - name: MEASUREMENT_FREQUENCY
+          value: "10MHz"
+        volumeMounts:
+        - name: tunneling-config
+          mountPath: /etc/tunneling-qrng
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: tunneling-config
+        configMap:
+          name: tunneling-qrng-config
+---
+# Randomness Extraction Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: randomness-extractor
+  namespace: quantum-rng
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: randomness-extractor
+  template:
+    metadata:
+      labels:
+        app: randomness-extractor
+        quantum.orion.io/component: "extractor"
+    spec:
+      serviceAccountName: randomness-extractor
+      containers:
+      - name: extractor
+        image: orion/randomness-extractor:v1.0.0
+        ports:
+        - containerPort: 8084
+          name: http
+        - containerPort: 9094
+          name: metrics
+        env:
+        - name: EXTRACTION_METHODS
+          value: "von_neumann,toeplitz,trevisan"
+        - name: MIN_ENTROPY_RATE
+          value: "0.8"
+        - name: OUTPUT_RATE
+          value: "800000"  # 800 kbps
+        - name: HEALTH_TESTING
+          value: "continuous"
+        volumeMounts:
+        - name: extractor-config
+          mountPath: /etc/extractor
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "300m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: extractor-config
+        configMap:
+          name: extractor-config
+---
+# QRNG Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qrng-config
+  namespace: quantum-rng
+data:
+  qrng-config.yaml: |
+    qrng:
+      enabled: true
+      entropy_sources:
+        vacuum_fluctuation:
+          enabled: true
+          description: "Quantum vacuum fluctuations"
+          entropy_rate: "1.0"  # bits per sample
+          source_type: "continuous_variable"
+          measurement: "homodyne_detection"
+        
+        photon_arrival:
+          enabled: true
+          description: "Single photon arrival times"
+          entropy_rate: "0.9"  # bits per sample
+          source_type: "discrete_variable"
+          measurement: "time_tagging"
+        
+        quantum_tunneling:
+          enabled: true
+          description: "Quantum tunneling events"
+          entropy_rate: "0.8"  # bits per sample
+          source_type: "discrete_variable"
+          measurement: "current_fluctuations"
+      
+      randomness_extraction:
+        methods:
+          von_neumann:
+            enabled: true
+            description: "Von Neumann extractor"
+            efficiency: "0.5"
+            bias_tolerance: "high"
+          
+          toeplitz:
+            enabled: true
+            description: "Toeplitz matrix extractor"
+            efficiency: "0.8"
+            seed_length: "1024"
+          
+          trevisan:
+            enabled: true
+            description: "Trevisan extractor"
+            efficiency: "0.9"
+            weak_design: true
+      
+      statistical_testing:
+        nist_sp800_22:
+          enabled: true
+          tests:
+            - "frequency"
+            - "block_frequency"
+            - "cumulative_sums"
+            - "runs"
+            - "longest_run"
+            - "rank"
+            - "dft"
+            - "non_overlapping_template"
+            - "overlapping_template"
+            - "universal"
+            - "approximate_entropy"
+            - "random_excursions"
+            - "random_excursions_variant"
+            - "serial"
+            - "linear_complexity"
+        
+        continuous_monitoring:
+          enabled: true
+          window_size: "1000000"  # 1M bits
+          alert_threshold: "0.01"  # p-value
+          shutdown_threshold: "0.001"  # p-value
+      
+      output_formats:
+        - name: "raw_binary"
+          format: "binary"
+          rate: "1Mbps"
+        - name: "hex_encoded"
+          format: "hexadecimal"
+          rate: "500kbps"
+        - name: "base64_encoded"
+          format: "base64"
+          rate: "750kbps"
+      
+      api_endpoints:
+        - path: "/api/v1/random/bytes"
+          method: "GET"
+          parameters: ["length"]
+          rate_limit: "1000/minute"
+        - path: "/api/v1/random/stream"
+          method: "GET"
+          parameters: ["duration", "rate"]
+          rate_limit: "10/minute"
+        - path: "/api/v1/entropy/status"
+          method: "GET"
+          parameters: []
+          rate_limit: "100/minute"
+---
+# Vacuum QRNG Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vacuum-qrng-config
+  namespace: quantum-rng
+data:
+  vacuum-qrng.yaml: |
+    vacuum_qrng:
+      quantum_source:
+        type: "vacuum_state"
+        description: "Quantum vacuum fluctuations"
+        theoretical_entropy: "1.0"  # bits per measurement
+      
+      measurement_setup:
+        detection_method: "homodyne"
+        local_oscillator_power: "1mW"
+        detection_efficiency: "0.95"
+        electronic_noise: "10dB"
+        quantum_efficiency: "0.8"
+      
+      signal_processing:
+        sampling_rate: "1MHz"
+        adc_resolution: "16bit"
+        anti_aliasing_filter: "butterworth_8th_order"
+        cutoff_frequency: "400kHz"
+      
+      calibration:
+        shot_noise_calibration: true
+        electronic_noise_subtraction: true
+        gain_calibration_interval: "1hour"
+        offset_calibration_interval: "10minutes"
+---
+# Photon QRNG Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: photon-qrng-config
+  namespace: quantum-rng
+data:
+  photon-qrng.yaml: |
+    photon_qrng:
+      photon_source:
+        type: "attenuated_laser"
+        wavelength: "850nm"
+        mean_photon_number: "0.1"
+        pulse_rate: "1MHz"
+      
+      detection_system:
+        detector_type: "spad"  # Single Photon Avalanche Diode
+        detection_efficiency: "0.7"
+        dark_count_rate: "100Hz"
+        dead_time: "50ns"
+        timing_jitter: "100ps"
+      
+      timing_measurement:
+        time_tagger_resolution: "1ps"
+        measurement_window: "1us"
+        coincidence_window: "1ns"
+        time_bin_size: "100ps"
+      
+      randomness_source:
+        arrival_time_uncertainty: true
+        detection_randomness: true
+        quantum_timing_jitter: true
+---
+# Entropy Pool Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: entropy-pool-storage
+  namespace: quantum-rng
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: high-iops-ssd
+---
+# QRNG Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: qrng-service
+  namespace: quantum-rng
+spec:
+  selector:
+    app: qrng-service
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: https
+    port: 8443
+    targetPort: 8443
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vacuum-fluctuation-qrng
+  namespace: quantum-rng
+spec:
+  selector:
+    app: vacuum-fluctuation-qrng
+  ports:
+  - name: http
+    port: 8081
+    targetPort: 8081
+  - name: metrics
+    port: 9091
+    targetPort: 9091
+  type: ClusterIP
+---
+# Service Accounts
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: qrng-service
+  namespace: quantum-rng
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vacuum-fluctuation-qrng
+  namespace: quantum-rng
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: photon-arrival-qrng
+  namespace: quantum-rng
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: quantum-tunneling-qrng
+  namespace: quantum-rng
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: randomness-extractor
+  namespace: quantum-rng

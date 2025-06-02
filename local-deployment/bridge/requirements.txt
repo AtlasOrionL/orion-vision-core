@@ -1,0 +1,35 @@
+# Orion Hybrid Bridge Requirements
+# Phase 3: Python ↔ Kubernetes Integration
+
+# Web framework
+aiohttp==3.9.1
+aiofiles==23.2.0
+
+# HTTP client
+httpx==0.25.2
+requests==2.31.0
+
+# Message queue
+pika==1.3.2
+
+# Kubernetes client
+kubernetes==28.1.0
+
+# Async support
+asyncio==3.4.3
+
+# JSON handling
+orjson==3.9.10
+
+# Logging
+structlog==23.2.0
+
+# Configuration
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# Monitoring
+prometheus-client==0.19.0
+
+# Utilities
+click==8.1.7

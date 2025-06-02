@@ -1,0 +1,175 @@
+# Orion Vision Core - Kubernetes ConfigMap
+# Sprint 4.3 - Production Deployment & Advanced Monitoring
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orion-config
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: orion-platform
+data:
+  # Application Configuration
+  ORION_ENV: "production"
+  ORION_LOG_LEVEL: "INFO"
+  ORION_HOST: "0.0.0.0"
+  ORION_PORT: "8000"
+  ORION_WORKERS: "4"
+  
+  # Service Discovery Configuration
+  ORION_DISCOVERY_ENABLED: "true"
+  ORION_DISCOVERY_HOST: "0.0.0.0"
+  ORION_DISCOVERY_PORT: "8001"
+  
+  # Task Orchestration Configuration
+  ORION_ORCHESTRATION_ENABLED: "true"
+  ORION_ORCHESTRATION_HOST: "0.0.0.0"
+  ORION_ORCHESTRATION_PORT: "8002"
+  
+  # Monitoring Configuration
+  ORION_METRICS_ENABLED: "true"
+  ORION_METRICS_PORT: "9090"
+  ORION_HEALTH_CHECK_PORT: "9091"
+  
+  # Database Configuration
+  ORION_DB_TYPE: "sqlite"
+  ORION_DB_PATH: "/app/data/orion.db"
+  
+  # Redis Configuration
+  ORION_REDIS_ENABLED: "true"
+  ORION_REDIS_HOST: "orion-redis"
+  ORION_REDIS_PORT: "6379"
+  
+  # Paths Configuration
+  ORION_CONFIG_PATH: "/app/config"
+  ORION_DATA_PATH: "/app/data"
+  ORION_LOG_PATH: "/app/logs"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orion-logging-config
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: logging
+    app.kubernetes.io/part-of: orion-platform
+data:
+  logging.conf: |
+    [loggers]
+    keys=root,orion
+
+    [handlers]
+    keys=consoleHandler,fileHandler
+
+    [formatters]
+    keys=jsonFormatter,simpleFormatter
+
+    [logger_root]
+    level=INFO
+    handlers=consoleHandler
+
+    [logger_orion]
+    level=INFO
+    handlers=consoleHandler,fileHandler
+    qualname=orion
+    propagate=0
+
+    [handler_consoleHandler]
+    class=StreamHandler
+    level=INFO
+    formatter=jsonFormatter
+    args=(sys.stdout,)
+
+    [handler_fileHandler]
+    class=FileHandler
+    level=INFO
+    formatter=jsonFormatter
+    args=('/app/logs/orion.log',)
+
+    [formatter_jsonFormatter]
+    format={"timestamp": "%(asctime)s", "level": "%(levelname)s", "logger": "%(name)s", "message": "%(message)s", "module": "%(module)s", "function": "%(funcName)s", "line": %(lineno)d}
+
+    [formatter_simpleFormatter]
+    format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orion-agent-configs
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: agent-config
+    app.kubernetes.io/part-of: orion-platform
+data:
+  default_agent.json: |
+    {
+      "agent_id": "default_agent",
+      "agent_name": "Default Agent",
+      "agent_type": "generic",
+      "capabilities": ["basic", "health_check"],
+      "max_concurrent_tasks": 5,
+      "timeout": 300,
+      "retry_count": 3,
+      "health_check_interval": 30,
+      "metadata": {
+        "version": "1.0.0",
+        "environment": "production"
+      }
+    }
+  
+  calculation_agent.json: |
+    {
+      "agent_id": "calculation_agent",
+      "agent_name": "Calculation Agent",
+      "agent_type": "calculation",
+      "capabilities": ["math", "statistics", "calculation"],
+      "max_concurrent_tasks": 10,
+      "timeout": 120,
+      "retry_count": 2,
+      "health_check_interval": 15,
+      "metadata": {
+        "version": "1.0.0",
+        "environment": "production",
+        "specialization": "mathematical_operations"
+      }
+    }
+  
+  data_processing_agent.json: |
+    {
+      "agent_id": "data_processing_agent",
+      "agent_name": "Data Processing Agent",
+      "agent_type": "data_processing",
+      "capabilities": ["data_processing", "analytics", "etl"],
+      "max_concurrent_tasks": 8,
+      "timeout": 600,
+      "retry_count": 3,
+      "health_check_interval": 20,
+      "metadata": {
+        "version": "1.0.0",
+        "environment": "production",
+        "specialization": "data_operations"
+      }
+    }
+  
+  ml_agent.json: |
+    {
+      "agent_id": "ml_agent",
+      "agent_name": "Machine Learning Agent",
+      "agent_type": "machine_learning",
+      "capabilities": ["machine_learning", "prediction", "classification", "training"],
+      "max_concurrent_tasks": 3,
+      "timeout": 1800,
+      "retry_count": 2,
+      "health_check_interval": 60,
+      "metadata": {
+        "version": "1.0.0",
+        "environment": "production",
+        "specialization": "ai_operations"
+      }
+    }

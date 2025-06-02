@@ -1,0 +1,2 @@
+2025-06-01 18:04:32,003 - orion.agent.plugin.test_plugin - INFO - {"timestamp": "2025-06-01T18:04:32.003692", "level": "INFO", "agent_id": "plugin.test_plugin", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 18:04:32,003 - orion.agent.plugin.test_plugin - INFO - {"timestamp": "2025-06-01T18:04:32.003854", "level": "INFO", "agent_id": "plugin.test_plugin", "message": "Plugin initialized", "context": {"plugin_name": "test_plugin", "version": "1.0.0", "capabilities": 1}}

@@ -1,0 +1,504 @@
+# Orion Vision Core - Falco Runtime Security Rules
+# Sprint 5.1 - Service Mesh & Advanced Security
+
+# Falco Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-config
+  namespace: falco-system
+data:
+  falco.yaml: |
+    # Falco configuration for Orion Platform
+    rules_file:
+      - /etc/falco/falco_rules.yaml
+      - /etc/falco/falco_rules.local.yaml
+      - /etc/falco/orion_rules.yaml
+    
+    # Output configuration
+    json_output: true
+    json_include_output_property: true
+    json_include_tags_property: true
+    
+    # Logging
+    log_stderr: true
+    log_syslog: true
+    log_level: info
+    
+    # Outputs
+    stdout_output:
+      enabled: true
+    
+    file_output:
+      enabled: true
+      keep_alive: false
+      filename: /var/log/falco/events.log
+    
+    syslog_output:
+      enabled: true
+    
+    http_output:
+      enabled: true
+      url: "http://falco-exporter:9376/events"
+    
+    # gRPC output for Falco Sidekick
+    grpc_output:
+      enabled: true
+      bind_address: "0.0.0.0:5060"
+      threadiness: 8
+    
+    # Metrics
+    metrics:
+      enabled: true
+      interval: 30s
+      output_rule: true
+      rules_counters_enabled: true
+      resource_utilization_enabled: true
+      state_counters_enabled: true
+      kernel_event_counters_enabled: true
+      libbpf_stats_enabled: true
+    
+    # Performance tuning
+    syscall_event_drops:
+      actions:
+        - log
+        - alert
+      rate: 0.03333
+      max_burst: 1000
+    
+    # Base syscalls
+    base_syscalls:
+      custom_set: []
+      repair: false
+    
+    # Modern BPF
+    modern_bpf:
+      cpus_for_each_syscall_buffer: 2
+    
+    # Engine configuration
+    engine:
+      kind: modern_bpf
+      modern_bpf:
+        cpus_for_each_syscall_buffer: 2
+      kmod:
+        split_captures: true
+      ebpf:
+        probe: ""
+
+  orion_rules.yaml: |
+    # Orion Platform Specific Falco Rules
+    
+    # Macro definitions
+    - macro: orion_containers
+      condition: >
+        (container.image.repository startswith "orion-registry.company.com" or
+         k8s.ns.name = "orion-system")
+    
+    - macro: orion_sensitive_files
+      condition: >
+        (fd.name startswith "/app/config/" or
+         fd.name startswith "/app/data/" or
+         fd.name startswith "/etc/ssl/" or
+         fd.name startswith "/var/run/secrets/")
+    
+    - macro: orion_network_tools
+      condition: >
+        (proc.name in (nc, ncat, netcat, nmap, dig, nslookup, tcpdump, tshark, wireshark))
+    
+    - macro: orion_shell_binaries
+      condition: >
+        (proc.name in (ash, bash, csh, ksh, sh, tcsh, zsh, dash))
+    
+    # Rules for Orion Platform
+    
+    # Rule: Detect shell access in Orion containers
+    - rule: Shell Spawned in Orion Container
+      desc: Detect shell spawned in Orion containers
+      condition: >
+        spawned_process and
+        orion_containers and
+        orion_shell_binaries and
+        not proc.pname in (systemd, systemctl, service)
+      output: >
+        Shell spawned in Orion container
+        (user=%user.name user_loginuid=%user.loginuid command=%proc.cmdline
+         pid=%proc.pid ppid=%proc.ppid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: WARNING
+      tags: [orion, shell, container]
+    
+    # Rule: Detect sensitive file access
+    - rule: Sensitive File Access in Orion
+      desc: Detect access to sensitive files in Orion containers
+      condition: >
+        open_read and
+        orion_containers and
+        orion_sensitive_files and
+        not proc.name in (orion-core, redis-server, prometheus, grafana-server)
+      output: >
+        Sensitive file accessed in Orion container
+        (user=%user.name command=%proc.cmdline file=%fd.name
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: WARNING
+      tags: [orion, file, sensitive]
+    
+    # Rule: Detect network tools usage
+    - rule: Network Tool Launched in Orion Container
+      desc: Detect network reconnaissance tools in Orion containers
+      condition: >
+        spawned_process and
+        orion_containers and
+        orion_network_tools
+      output: >
+        Network tool launched in Orion container
+        (user=%user.name command=%proc.cmdline tool=%proc.name
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: WARNING
+      tags: [orion, network, tool]
+    
+    # Rule: Detect privilege escalation
+    - rule: Privilege Escalation in Orion Container
+      desc: Detect privilege escalation attempts in Orion containers
+      condition: >
+        spawned_process and
+        orion_containers and
+        proc.name in (sudo, su, doas) and
+        not user.name = root
+      output: >
+        Privilege escalation attempt in Orion container
+        (user=%user.name command=%proc.cmdline target_user=%proc.aname[1]
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: HIGH
+      tags: [orion, privilege, escalation]
+    
+    # Rule: Detect unexpected network connections
+    - rule: Unexpected Outbound Connection from Orion
+      desc: Detect unexpected outbound network connections from Orion containers
+      condition: >
+        outbound and
+        orion_containers and
+        not fd.sport in (80, 443, 53, 6379, 8000, 8001, 8002, 9090, 15010, 15011) and
+        not fd.sip in (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
+      output: >
+        Unexpected outbound connection from Orion container
+        (user=%user.name command=%proc.cmdline connection=%fd.name
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: WARNING
+      tags: [orion, network, outbound]
+    
+    # Rule: Detect file system modifications
+    - rule: File System Modification in Orion Container
+      desc: Detect unexpected file system modifications in Orion containers
+      condition: >
+        modify and
+        orion_containers and
+        fd.name startswith "/app/" and
+        not fd.name startswith "/app/logs/" and
+        not fd.name startswith "/app/data/cache/" and
+        not proc.name in (orion-core, redis-server)
+      output: >
+        File system modification in Orion container
+        (user=%user.name command=%proc.cmdline file=%fd.name
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: WARNING
+      tags: [orion, filesystem, modification]
+    
+    # Rule: Detect container escape attempts
+    - rule: Container Escape Attempt in Orion
+      desc: Detect potential container escape attempts in Orion containers
+      condition: >
+        spawned_process and
+        orion_containers and
+        (proc.name in (docker, kubectl, crictl, runc, ctr) or
+         proc.cmdline contains "nsenter" or
+         proc.cmdline contains "chroot" or
+         proc.cmdline contains "/proc/1/root")
+      output: >
+        Container escape attempt detected in Orion container
+        (user=%user.name command=%proc.cmdline
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: CRITICAL
+      tags: [orion, container, escape]
+    
+    # Rule: Detect crypto mining
+    - rule: Crypto Mining in Orion Container
+      desc: Detect potential crypto mining activities in Orion containers
+      condition: >
+        spawned_process and
+        orion_containers and
+        (proc.name in (xmrig, cpuminer, cgminer, bfgminer, sgminer) or
+         proc.cmdline contains "stratum" or
+         proc.cmdline contains "mining" or
+         proc.cmdline contains "cryptonight")
+      output: >
+        Crypto mining detected in Orion container
+        (user=%user.name command=%proc.cmdline
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: CRITICAL
+      tags: [orion, crypto, mining]
+    
+    # Rule: Detect suspicious DNS queries
+    - rule: Suspicious DNS Query from Orion
+      desc: Detect suspicious DNS queries from Orion containers
+      condition: >
+        outbound and
+        orion_containers and
+        fd.sport = 53 and
+        (fd.name contains ".onion" or
+         fd.name contains "dga-" or
+         fd.name contains "malware" or
+         fd.name contains "botnet")
+      output: >
+        Suspicious DNS query from Orion container
+        (user=%user.name command=%proc.cmdline query=%fd.name
+         pid=%proc.pid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: HIGH
+      tags: [orion, dns, suspicious]
+    
+    # Rule: Detect unauthorized process execution
+    - rule: Unauthorized Process in Orion Container
+      desc: Detect unauthorized processes in Orion containers
+      condition: >
+        spawned_process and
+        orion_containers and
+        not proc.name in (orion-core, redis-server, prometheus, grafana-server, 
+                         node_exporter, cadvisor, jaeger, elasticsearch, kibana,
+                         pilot-agent, envoy, istio-proxy) and
+        not proc.pname in (systemd, init, kthreadd)
+      output: >
+        Unauthorized process in Orion container
+        (user=%user.name command=%proc.cmdline process=%proc.name
+         pid=%proc.pid ppid=%proc.ppid container_id=%container.id
+         container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: WARNING
+      tags: [orion, process, unauthorized]
+
+---
+# Falco DaemonSet
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: falco
+  namespace: falco-system
+  labels:
+    app.kubernetes.io/name: falco
+    app.kubernetes.io/component: security
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: falco
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: falco
+        app.kubernetes.io/component: security
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8765"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: falco
+      hostNetwork: true
+      hostPID: true
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+        operator: Exists
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      containers:
+      - name: falco
+        image: falcosecurity/falco-no-driver:0.36.2
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 200m
+            memory: 1Gi
+        securityContext:
+          privileged: true
+        args:
+        - /usr/bin/falco
+        - --cri
+        - /run/containerd/containerd.sock
+        - --cri
+        - /run/crio/crio.sock
+        - -K
+        - /var/run/secrets/kubernetes.io/serviceaccount/token
+        - -k
+        - https://kubernetes.default
+        - -pk
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-socket
+        - mountPath: /run/containerd/containerd.sock
+          name: containerd-socket
+        - mountPath: /run/crio/crio.sock
+          name: crio-socket
+        - mountPath: /host/var/run/docker.sock
+          name: docker-socket
+        - mountPath: /host/dev
+          name: dev-fs
+          readOnly: true
+        - mountPath: /host/proc
+          name: proc-fs
+          readOnly: true
+        - mountPath: /host/boot
+          name: boot-fs
+          readOnly: true
+        - mountPath: /host/lib/modules
+          name: lib-modules
+        - mountPath: /host/usr
+          name: usr-fs
+          readOnly: true
+        - mountPath: /host/etc
+          name: etc-fs
+          readOnly: true
+        - mountPath: /etc/falco
+          name: falco-config
+        - mountPath: /var/log/falco
+          name: falco-logs
+        env:
+        - name: FALCO_K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: FALCO_BPF_PROBE
+          value: ""
+      initContainers:
+      - name: falco-driver-loader
+        image: falcosecurity/falco-driver-loader:0.36.2
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /root/.falco
+          name: falco-driver
+        - mountPath: /host/proc
+          name: proc-fs
+          readOnly: true
+        - mountPath: /host/boot
+          name: boot-fs
+          readOnly: true
+        - mountPath: /host/lib/modules
+          name: lib-modules
+        - mountPath: /host/usr
+          name: usr-fs
+          readOnly: true
+        - mountPath: /host/etc
+          name: etc-fs
+          readOnly: true
+        env:
+        - name: FALCO_VERSION
+          value: "0.36.2"
+      volumes:
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: containerd-socket
+        hostPath:
+          path: /run/containerd/containerd.sock
+      - name: crio-socket
+        hostPath:
+          path: /run/crio/crio.sock
+      - name: dev-fs
+        hostPath:
+          path: /dev
+      - name: proc-fs
+        hostPath:
+          path: /proc
+      - name: boot-fs
+        hostPath:
+          path: /boot
+      - name: lib-modules
+        hostPath:
+          path: /lib/modules
+      - name: usr-fs
+        hostPath:
+          path: /usr
+      - name: etc-fs
+        hostPath:
+          path: /etc
+      - name: falco-driver
+        emptyDir: {}
+      - name: falco-config
+        configMap:
+          name: falco-config
+      - name: falco-logs
+        hostPath:
+          path: /var/log/falco
+          type: DirectoryOrCreate
+
+---
+# Falco ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: falco
+  namespace: falco-system
+
+---
+# Falco ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: falco
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "namespaces", "pods", "replicationcontrollers", "services"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["daemonsets", "deployments", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["extensions"]
+  resources: ["daemonsets", "deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+
+---
+# Falco ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: falco
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: falco
+subjects:
+- kind: ServiceAccount
+  name: falco
+  namespace: falco-system
+
+---
+# Falco Service for Metrics
+apiVersion: v1
+kind: Service
+metadata:
+  name: falco-metrics
+  namespace: falco-system
+  labels:
+    app.kubernetes.io/name: falco
+    app.kubernetes.io/component: metrics
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8765"
+    prometheus.io/path: "/metrics"
+spec:
+  ports:
+  - name: metrics
+    port: 8765
+    targetPort: 8765
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: falco

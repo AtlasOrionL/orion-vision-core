@@ -1,0 +1,259 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-05-29T15:30:00Z",
+  "description": "Communication profiles for RAG-enhanced agent interactions",
+  
+  "agent_profiles": {
+    "orion_brain": {
+      "communication_style": {
+        "formality": "professional",
+        "verbosity": "concise",
+        "tone": "analytical",
+        "response_pattern": "structured"
+      },
+      "preferred_formats": [
+        "json_structured",
+        "bullet_points",
+        "decision_trees"
+      ],
+      "interaction_patterns": {
+        "request_handling": "immediate_analysis",
+        "response_time": "fast",
+        "follow_up": "detailed_explanation"
+      },
+      "context_requirements": [
+        "task_priority",
+        "resource_availability",
+        "system_state",
+        "user_preferences"
+      ]
+    },
+    
+    "communication_agent": {
+      "communication_style": {
+        "formality": "neutral",
+        "verbosity": "moderate",
+        "tone": "helpful",
+        "response_pattern": "protocol_focused"
+      },
+      "preferred_formats": [
+        "status_reports",
+        "protocol_messages",
+        "routing_information"
+      ],
+      "interaction_patterns": {
+        "request_handling": "protocol_validation",
+        "response_time": "immediate",
+        "follow_up": "confirmation_required"
+      },
+      "context_requirements": [
+        "message_routing",
+        "agent_availability",
+        "protocol_compliance",
+        "error_handling"
+      ]
+    },
+    
+    "memory_agent": {
+      "communication_style": {
+        "formality": "technical",
+        "verbosity": "detailed",
+        "tone": "informative",
+        "response_pattern": "data_focused"
+      },
+      "preferred_formats": [
+        "data_structures",
+        "query_results",
+        "memory_maps"
+      ],
+      "interaction_patterns": {
+        "request_handling": "data_validation",
+        "response_time": "variable",
+        "follow_up": "data_integrity_check"
+      },
+      "context_requirements": [
+        "data_type",
+        "storage_location",
+        "access_permissions",
+        "retention_policy"
+      ]
+    },
+    
+    "screen_agent": {
+      "communication_style": {
+        "formality": "technical",
+        "verbosity": "moderate",
+        "tone": "descriptive",
+        "response_pattern": "visual_focused"
+      },
+      "preferred_formats": [
+        "image_descriptions",
+        "coordinate_data",
+        "ocr_results"
+      ],
+      "interaction_patterns": {
+        "request_handling": "image_processing",
+        "response_time": "moderate",
+        "follow_up": "accuracy_confirmation"
+      },
+      "context_requirements": [
+        "screen_resolution",
+        "target_application",
+        "ocr_language",
+        "processing_quality"
+      ]
+    },
+    
+    "speech_agent": {
+      "communication_style": {
+        "formality": "conversational",
+        "verbosity": "adaptive",
+        "tone": "responsive",
+        "response_pattern": "audio_focused"
+      },
+      "preferred_formats": [
+        "transcription_text",
+        "audio_metadata",
+        "confidence_scores"
+      ],
+      "interaction_patterns": {
+        "request_handling": "audio_processing",
+        "response_time": "real_time",
+        "follow_up": "transcription_verification"
+      },
+      "context_requirements": [
+        "audio_quality",
+        "language_model",
+        "noise_level",
+        "speaker_identification"
+      ]
+    },
+    
+    "voice_agent": {
+      "communication_style": {
+        "formality": "expressive",
+        "verbosity": "natural",
+        "tone": "engaging",
+        "response_pattern": "speech_optimized"
+      },
+      "preferred_formats": [
+        "speech_text",
+        "voice_parameters",
+        "audio_output"
+      ],
+      "interaction_patterns": {
+        "request_handling": "text_processing",
+        "response_time": "real_time",
+        "follow_up": "audio_confirmation"
+      },
+      "context_requirements": [
+        "voice_model",
+        "speech_rate",
+        "emotional_tone",
+        "output_device"
+      ]
+    }
+  },
+  
+  "communication_protocols": {
+    "standard_request": {
+      "format": "json",
+      "required_fields": [
+        "message_type",
+        "content",
+        "sender_id",
+        "timestamp"
+      ],
+      "optional_fields": [
+        "priority",
+        "target_agent",
+        "correlation_id",
+        "metadata"
+      ]
+    },
+    
+    "task_delegation": {
+      "format": "structured",
+      "workflow": [
+        "task_analysis",
+        "capability_matching",
+        "resource_allocation",
+        "execution_monitoring",
+        "result_validation"
+      ],
+      "escalation_rules": [
+        "timeout_exceeded",
+        "capability_insufficient",
+        "resource_unavailable",
+        "error_threshold_reached"
+      ]
+    },
+    
+    "error_reporting": {
+      "format": "standardized",
+      "severity_levels": [
+        "info",
+        "warning",
+        "error",
+        "critical"
+      ],
+      "required_context": [
+        "error_code",
+        "error_message",
+        "stack_trace",
+        "system_state"
+      ]
+    }
+  },
+  
+  "learning_patterns": {
+    "successful_interactions": {
+      "pattern_recognition": true,
+      "optimization_targets": [
+        "response_time",
+        "accuracy",
+        "user_satisfaction",
+        "resource_efficiency"
+      ],
+      "feedback_integration": "continuous"
+    },
+    
+    "failure_analysis": {
+      "error_categorization": true,
+      "root_cause_analysis": true,
+      "prevention_strategies": "adaptive",
+      "recovery_procedures": "automated"
+    },
+    
+    "adaptation_mechanisms": {
+      "context_learning": true,
+      "preference_tracking": true,
+      "performance_optimization": true,
+      "protocol_evolution": "gradual"
+    }
+  },
+  
+  "rag_enhancement": {
+    "knowledge_sources": [
+      "interaction_history",
+      "agent_capabilities",
+      "system_documentation",
+      "user_preferences",
+      "performance_metrics"
+    ],
+    
+    "retrieval_strategies": {
+      "similarity_search": "semantic",
+      "context_matching": "weighted",
+      "relevance_scoring": "multi_factor",
+      "result_ranking": "priority_based"
+    },
+    
+    "augmentation_methods": {
+      "context_injection": "dynamic",
+      "response_enhancement": "intelligent",
+      "knowledge_synthesis": "automated",
+      "continuous_learning": "enabled"
+    }
+  }
+}

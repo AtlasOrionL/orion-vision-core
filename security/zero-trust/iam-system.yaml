@@ -1,0 +1,394 @@
+# Zero Trust Identity and Access Management (IAM) System
+# Sprint 6.1 - Epic 1: Zero Trust Architecture Foundation
+# Story 1.2: Identity and Access Management (IAM)
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zero-trust-iam
+  labels:
+    security.orion.io/zone: "identity"
+    security.orion.io/level: "critical"
+    istio-injection: enabled
+---
+# OAuth2/OIDC Identity Provider Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oidc-provider-config
+  namespace: zero-trust-iam
+data:
+  config.yaml: |
+    oidc:
+      issuer: "https://iam.orion.zero-trust.local"
+      authorization_endpoint: "https://iam.orion.zero-trust.local/auth"
+      token_endpoint: "https://iam.orion.zero-trust.local/token"
+      userinfo_endpoint: "https://iam.orion.zero-trust.local/userinfo"
+      jwks_uri: "https://iam.orion.zero-trust.local/.well-known/jwks.json"
+      scopes_supported:
+        - "openid"
+        - "profile"
+        - "email"
+        - "orion:agent:read"
+        - "orion:agent:write"
+        - "orion:admin"
+      response_types_supported:
+        - "code"
+        - "token"
+        - "id_token"
+      grant_types_supported:
+        - "authorization_code"
+        - "client_credentials"
+        - "refresh_token"
+      token_endpoint_auth_methods_supported:
+        - "client_secret_basic"
+        - "client_secret_post"
+        - "private_key_jwt"
+      claims_supported:
+        - "sub"
+        - "iss"
+        - "aud"
+        - "exp"
+        - "iat"
+        - "auth_time"
+        - "nonce"
+        - "email"
+        - "email_verified"
+        - "name"
+        - "groups"
+        - "roles"
+---
+# Multi-Factor Authentication (MFA) Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mfa-config
+  namespace: zero-trust-iam
+data:
+  mfa.yaml: |
+    mfa:
+      enabled: true
+      required_factors: 2
+      factors:
+        - name: "password"
+          type: "knowledge"
+          required: true
+          policy:
+            min_length: 12
+            complexity: "high"
+            expiry_days: 90
+        - name: "totp"
+          type: "possession"
+          required: true
+          policy:
+            algorithm: "SHA256"
+            digits: 6
+            period: 30
+        - name: "webauthn"
+          type: "inherence"
+          required: false
+          policy:
+            user_verification: "required"
+            attestation: "direct"
+        - name: "sms"
+          type: "possession"
+          required: false
+          policy:
+            rate_limit: 5
+            expiry_minutes: 5
+      adaptive:
+        enabled: true
+        risk_factors:
+          - "location"
+          - "device"
+          - "behavior"
+          - "time"
+        risk_thresholds:
+          low: 0.3
+          medium: 0.6
+          high: 0.8
+---
+# Role-Based Access Control (RBAC) Configuration
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: orion-admin
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: orion-agent-operator
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["security.orion.io"]
+  resources: ["agents", "policies"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: orion-agent-viewer
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["security.orion.io"]
+  resources: ["agents"]
+  verbs: ["get", "list", "watch"]
+---
+# Privileged Access Management (PAM) Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pam-config
+  namespace: zero-trust-iam
+data:
+  pam.yaml: |
+    pam:
+      privileged_accounts:
+        - name: "orion-admin"
+          type: "service_account"
+          privileges:
+            - "cluster_admin"
+            - "security_admin"
+          access_controls:
+            - "just_in_time"
+            - "approval_required"
+            - "session_recording"
+        - name: "agent-operator"
+          type: "service_account"
+          privileges:
+            - "agent_management"
+            - "policy_management"
+          access_controls:
+            - "time_limited"
+            - "activity_monitoring"
+      just_in_time:
+        enabled: true
+        max_duration: "4h"
+        approval_required: true
+        approvers:
+          - "security-team"
+          - "platform-team"
+      session_management:
+        recording: true
+        monitoring: true
+        timeout: "30m"
+        idle_timeout: "15m"
+---
+# Identity Verification System
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-verifier
+  namespace: zero-trust-iam
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: identity-verifier
+  template:
+    metadata:
+      labels:
+        app: identity-verifier
+        security.orion.io/component: "identity"
+    spec:
+      serviceAccountName: identity-verifier
+      containers:
+      - name: identity-verifier
+        image: orion/identity-verifier:v1.0.0
+        ports:
+        - containerPort: 8443
+          name: https
+        env:
+        - name: OIDC_ISSUER
+          value: "https://iam.orion.zero-trust.local"
+        - name: MFA_ENABLED
+          value: "true"
+        - name: RISK_ENGINE_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: tls-certs
+          mountPath: /etc/certs
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: tls-certs
+        secret:
+          secretName: identity-verifier-certs
+      - name: config
+        configMap:
+          name: oidc-provider-config
+---
+# Service Account for Identity Verifier
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: identity-verifier
+  namespace: zero-trust-iam
+---
+# ClusterRoleBinding for Identity Verifier
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: identity-verifier
+subjects:
+- kind: ServiceAccount
+  name: identity-verifier
+  namespace: zero-trust-iam
+roleRef:
+  kind: ClusterRole
+  name: orion-agent-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+# Service for Identity Verifier
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-verifier
+  namespace: zero-trust-iam
+spec:
+  selector:
+    app: identity-verifier
+  ports:
+  - name: https
+    port: 8443
+    targetPort: 8443
+    protocol: TCP
+  type: ClusterIP
+---
+# Risk-Based Authentication Engine
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: risk-engine-config
+  namespace: zero-trust-iam
+data:
+  risk-engine.yaml: |
+    risk_engine:
+      enabled: true
+      factors:
+        location:
+          weight: 0.3
+          known_locations:
+            - "office_network"
+            - "home_network"
+          suspicious_indicators:
+            - "tor_exit_node"
+            - "vpn_service"
+            - "high_risk_country"
+        device:
+          weight: 0.25
+          device_fingerprinting: true
+          trusted_devices: true
+          suspicious_indicators:
+            - "new_device"
+            - "rooted_device"
+            - "outdated_os"
+        behavior:
+          weight: 0.3
+          baseline_learning: true
+          anomaly_detection: true
+          suspicious_indicators:
+            - "unusual_access_time"
+            - "rapid_location_change"
+            - "unusual_access_pattern"
+        time:
+          weight: 0.15
+          business_hours: "09:00-17:00"
+          timezone: "UTC"
+          suspicious_indicators:
+            - "off_hours_access"
+            - "weekend_access"
+      scoring:
+        algorithm: "weighted_sum"
+        thresholds:
+          allow: 0.0-0.3
+          challenge: 0.3-0.7
+          deny: 0.7-1.0
+      actions:
+        low_risk:
+          - "allow"
+        medium_risk:
+          - "require_mfa"
+          - "increase_monitoring"
+        high_risk:
+          - "deny"
+          - "alert_security_team"
+          - "require_approval"
+---
+# Context-Aware Access Control
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: context-aware-config
+  namespace: zero-trust-iam
+data:
+  context-aware.yaml: |
+    context_aware_access:
+      enabled: true
+      contexts:
+        - name: "high_security_zone"
+          conditions:
+            - "resource.labels['security.orion.io/level'] == 'critical'"
+          requirements:
+            - "mfa_required"
+            - "device_compliance"
+            - "risk_score < 0.2"
+        - name: "agent_management"
+          conditions:
+            - "request.path.startsWith('/api/agents')"
+          requirements:
+            - "role == 'agent-operator' || role == 'admin'"
+            - "mfa_required"
+        - name: "administrative_access"
+          conditions:
+            - "request.method in ['DELETE', 'PUT', 'PATCH']"
+          requirements:
+            - "role == 'admin'"
+            - "approval_required"
+            - "session_recording"
+      policies:
+        - name: "default_deny"
+          priority: 1000
+          condition: "true"
+          action: "deny"
+        - name: "authenticated_users"
+          priority: 100
+          condition: "user.authenticated == true"
+          action: "evaluate_context"
+        - name: "emergency_access"
+          priority: 1
+          condition: "emergency_mode == true"
+          action: "allow"
+          requirements:
+            - "audit_log"
+            - "time_limited"

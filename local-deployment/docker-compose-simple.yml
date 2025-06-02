@@ -1,0 +1,61 @@
+# Orion Vision Core - Simple Local Deployment
+version: '3.8'
+
+services:
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: orion-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: orion
+      RABBITMQ_DEFAULT_PASS: orion123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - orion-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Simple Python Test Service
+  python-test:
+    image: python:3.11-slim
+    container_name: orion-python-test
+    ports:
+      - "8001:8000"
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=orion
+      - RABBITMQ_PASS=orion123
+    volumes:
+      - ./python-core:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+    working_dir: /app
+    command: >
+      bash -c "
+        pip install fastapi uvicorn pika requests &&
+        python test_service.py
+      "
+    networks:
+      - orion-network
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+# Networks
+networks:
+  orion-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  rabbitmq_data:
+    driver: local

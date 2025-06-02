@@ -1,0 +1,43 @@
+2025-05-29 16:26:05,233 - Agent.AgentManager - INFO - info:123 - Agent registered: managed_agent_1
+2025-05-29 16:26:05,233 - Agent.AgentManager - INFO - info:123 - Agent registered: managed_agent_2
+2025-05-29 16:26:05,234 - Agent.AgentManager - INFO - info:123 - Agent registered: managed_agent_3
+2025-05-29 16:27:41,016 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-05-29 16:27:41,016 - Agent.AgentManager - WARNING - warning:127 - Agent already registered: test_agent_0
+2025-05-29 16:27:41,016 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-05-29 16:27:41,017 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-05-29 16:27:41,017 - Agent.AgentManager - INFO - info:123 - Agent unregistered: test_agent_0
+2025-05-29 16:27:41,017 - Agent.AgentManager - WARNING - warning:127 - Agent not found: nonexistent
+2025-05-29 16:27:41,017 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-05-29 16:27:41,017 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_1
+2025-05-29 16:27:41,017 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_2
+2025-05-29 16:27:41,119 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:07:54,038 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:07:54,038 - Agent.AgentManager - WARNING - warning:127 - Agent already registered: test_agent_0
+2025-06-02 16:07:54,038 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:07:54,039 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:07:54,039 - Agent.AgentManager - INFO - info:123 - Agent unregistered: test_agent_0
+2025-06-02 16:07:54,039 - Agent.AgentManager - WARNING - warning:127 - Agent not found: nonexistent
+2025-06-02 16:07:54,039 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:07:54,039 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_1
+2025-06-02 16:07:54,039 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_2
+2025-06-02 16:07:54,141 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:08:21,306 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:08:21,306 - Agent.AgentManager - WARNING - warning:127 - Agent already registered: test_agent_0
+2025-06-02 16:08:21,307 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:08:21,307 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:08:21,307 - Agent.AgentManager - INFO - info:123 - Agent unregistered: test_agent_0
+2025-06-02 16:08:21,307 - Agent.AgentManager - WARNING - warning:127 - Agent not found: nonexistent
+2025-06-02 16:08:21,307 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:08:21,307 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_1
+2025-06-02 16:08:21,307 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_2
+2025-06-02 16:08:21,409 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:43,910 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:43,910 - Agent.AgentManager - WARNING - warning:127 - Agent already registered: test_agent_0
+2025-06-02 16:18:44,020 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:44,032 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:44,032 - Agent.AgentManager - INFO - info:123 - Agent unregistered: test_agent_0
+2025-06-02 16:18:44,032 - Agent.AgentManager - WARNING - warning:127 - Agent not found: nonexistent
+2025-06-02 16:18:44,033 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0
+2025-06-02 16:18:44,033 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_1
+2025-06-02 16:18:44,033 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_2
+2025-06-02 16:18:44,137 - Agent.AgentManager - INFO - info:123 - Agent registered: test_agent_0

@@ -1,0 +1,68 @@
+{
+  "agent_id": "file_monitor_agent_dynamic_001",
+  "agent_name": "Dynamic File Monitor Agent",
+  "agent_type": "file_monitor_agent",
+  "priority": 7,
+  "auto_start": false,
+  "max_retries": 5,
+  "retry_delay": 2.0,
+  "heartbeat_interval": 15.0,
+  "timeout": 300.0,
+  "capabilities": [
+    "file_monitoring",
+    "change_detection",
+    "directory_scanning",
+    "file_hashing",
+    "dynamic_loading"
+  ],
+  "dependencies": [],
+  "config_file": "config/agents/file_monitor_agent_dynamic.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Dynamically loaded file monitor agent for file system change detection",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "module_info": {
+      "module_name": "file_monitor_agent",
+      "module_path": "agents/dynamic/file_monitor_agent.py",
+      "class_name": "FileMonitorAgent"
+    },
+    "monitor_settings": {
+      "default_monitored_paths": [
+        "config/agents",
+        "agents/dynamic",
+        "data",
+        "logs"
+      ],
+      "scan_interval": 5.0,
+      "max_file_size": 10485760,
+      "hash_algorithm": "md5",
+      "recursive_scanning": true
+    },
+    "detection_settings": {
+      "detect_new_files": true,
+      "detect_modified_files": true,
+      "detect_deleted_files": true,
+      "detect_directory_changes": true,
+      "ignore_patterns": [
+        "*.tmp",
+        "*.log",
+        "__pycache__",
+        ".git"
+      ]
+    },
+    "performance_settings": {
+      "max_files_per_scan": 1000,
+      "enable_file_hashing": true,
+      "cache_file_info": true
+    },
+    "monitoring": {
+      "enable_metrics": true,
+      "metrics_interval": 45,
+      "health_check_interval": 20,
+      "track_scan_performance": true
+    }
+  }
+}

@@ -1,0 +1,304 @@
+# Orion Vision Core - Prometheus Alerting Rules
+# Sprint 4.3 - Production Deployment & Advanced Monitoring
+
+groups:
+  - name: orion.core.alerts
+    interval: 30s
+    rules:
+      # High-level service availability alerts
+      - alert: OrionCoreDown
+        expr: up{job="orion-core"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: orion-core
+          team: platform
+        annotations:
+          summary: "Orion Core service is down"
+          description: "Orion Core service has been down for more than 1 minute. Instance: {{ $labels.instance }}"
+          runbook_url: "https://docs.orion-platform.com/runbooks/core-down"
+
+      - alert: OrionCoreHighErrorRate
+        expr: rate(orion_http_requests_total{status=~"5.."}[5m]) / rate(orion_http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          service: orion-core
+          team: platform
+        annotations:
+          summary: "High error rate in Orion Core"
+          description: "Error rate is {{ $value | humanizePercentage }} for instance {{ $labels.instance }}"
+
+      - alert: OrionCoreHighLatency
+        expr: histogram_quantile(0.95, rate(orion_http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: orion-core
+          team: platform
+        annotations:
+          summary: "High latency in Orion Core"
+          description: "95th percentile latency is {{ $value }}s for instance {{ $labels.instance }}"
+
+  - name: orion.discovery.alerts
+    interval: 30s
+    rules:
+      - alert: OrionDiscoveryServiceDown
+        expr: up{job="orion-discovery"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: orion-discovery
+          team: platform
+        annotations:
+          summary: "Orion Service Discovery is down"
+          description: "Service Discovery has been down for more than 1 minute"
+
+      - alert: OrionDiscoveryHighAgentChurn
+        expr: rate(orion_discovery_agent_registrations_total[5m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+          service: orion-discovery
+          team: platform
+        annotations:
+          summary: "High agent churn rate in Service Discovery"
+          description: "Agent registration rate is {{ $value }} registrations/sec"
+
+      - alert: OrionDiscoveryLowAgentCount
+        expr: orion_discovery_active_agents < 3
+        for: 5m
+        labels:
+          severity: warning
+          service: orion-discovery
+          team: platform
+        annotations:
+          summary: "Low number of active agents"
+          description: "Only {{ $value }} agents are currently active"
+
+  - name: orion.orchestration.alerts
+    interval: 30s
+    rules:
+      - alert: OrionOrchestrationDown
+        expr: up{job="orion-orchestration"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: orion-orchestration
+          team: platform
+        annotations:
+          summary: "Orion Task Orchestration is down"
+          description: "Task Orchestration service has been down for more than 1 minute"
+
+      - alert: OrionHighTaskFailureRate
+        expr: rate(orion_tasks_failed_total[5m]) / rate(orion_tasks_total[5m]) > 0.1
+        for: 3m
+        labels:
+          severity: warning
+          service: orion-orchestration
+          team: platform
+        annotations:
+          summary: "High task failure rate"
+          description: "Task failure rate is {{ $value | humanizePercentage }}"
+
+      - alert: OrionTaskQueueBacklog
+        expr: orion_task_queue_size > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: orion-orchestration
+          team: platform
+        annotations:
+          summary: "Large task queue backlog"
+          description: "Task queue has {{ $value }} pending tasks"
+
+      - alert: OrionConsensusTimeout
+        expr: rate(orion_consensus_timeouts_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: orion-orchestration
+          team: platform
+        annotations:
+          summary: "High consensus timeout rate"
+          description: "Consensus timeout rate is {{ $value }} timeouts/sec"
+
+  - name: orion.resources.alerts
+    interval: 30s
+    rules:
+      - alert: OrionHighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{pod=~"orion-core-.*"}[5m]) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: orion-core
+          team: platform
+        annotations:
+          summary: "High CPU usage in Orion Core"
+          description: "CPU usage is {{ $value }}% for pod {{ $labels.pod }}"
+
+      - alert: OrionHighMemoryUsage
+        expr: container_memory_usage_bytes{pod=~"orion-core-.*"} / container_spec_memory_limit_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: orion-core
+          team: platform
+        annotations:
+          summary: "High memory usage in Orion Core"
+          description: "Memory usage is {{ $value }}% for pod {{ $labels.pod }}"
+
+      - alert: OrionDiskSpaceLow
+        expr: (node_filesystem_avail_bytes{mountpoint="/app/data"} / node_filesystem_size_bytes{mountpoint="/app/data"}) * 100 < 20
+        for: 5m
+        labels:
+          severity: warning
+          service: orion-core
+          team: platform
+        annotations:
+          summary: "Low disk space for Orion data"
+          description: "Only {{ $value }}% disk space remaining"
+
+  - name: orion.redis.alerts
+    interval: 30s
+    rules:
+      - alert: OrionRedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: redis
+          team: platform
+        annotations:
+          summary: "Redis is down"
+          description: "Redis cache service is unavailable"
+
+      - alert: OrionRedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+          team: platform
+        annotations:
+          summary: "Redis high memory usage"
+          description: "Redis memory usage is {{ $value }}%"
+
+      - alert: OrionRedisHighConnectionCount
+        expr: redis_connected_clients > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+          team: platform
+        annotations:
+          summary: "High Redis connection count"
+          description: "Redis has {{ $value }} connected clients"
+
+  - name: orion.kubernetes.alerts
+    interval: 30s
+    rules:
+      - alert: OrionPodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total{namespace="orion-system"}[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: kubernetes
+          team: platform
+        annotations:
+          summary: "Pod is crash looping"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping"
+
+      - alert: OrionPodNotReady
+        expr: kube_pod_status_ready{namespace="orion-system", condition="false"} == 1
+        for: 5m
+        labels:
+          severity: warning
+          service: kubernetes
+          team: platform
+        annotations:
+          summary: "Pod is not ready"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not ready"
+
+      - alert: OrionDeploymentReplicasMismatch
+        expr: kube_deployment_status_replicas{namespace="orion-system"} != kube_deployment_status_replicas_available{namespace="orion-system"}
+        for: 10m
+        labels:
+          severity: warning
+          service: kubernetes
+          team: platform
+        annotations:
+          summary: "Deployment replicas mismatch"
+          description: "Deployment {{ $labels.deployment }} has {{ $value }} unavailable replicas"
+
+  - name: orion.business.alerts
+    interval: 60s
+    rules:
+      - alert: OrionLowAgentUtilization
+        expr: avg(orion_agent_utilization_percent) < 30
+        for: 10m
+        labels:
+          severity: info
+          service: orion-orchestration
+          team: business
+        annotations:
+          summary: "Low agent utilization"
+          description: "Average agent utilization is {{ $value }}%"
+
+      - alert: OrionHighTaskLatency
+        expr: histogram_quantile(0.95, rate(orion_task_duration_seconds_bucket[10m])) > 300
+        for: 5m
+        labels:
+          severity: warning
+          service: orion-orchestration
+          team: business
+        annotations:
+          summary: "High task execution latency"
+          description: "95th percentile task latency is {{ $value }}s"
+
+      - alert: OrionConsensusEfficiencyLow
+        expr: orion_consensus_success_rate < 0.9
+        for: 10m
+        labels:
+          severity: warning
+          service: orion-orchestration
+          team: business
+        annotations:
+          summary: "Low consensus efficiency"
+          description: "Consensus success rate is {{ $value | humanizePercentage }}"
+
+  - name: orion.security.alerts
+    interval: 30s
+    rules:
+      - alert: OrionUnauthorizedAccess
+        expr: rate(orion_http_requests_total{status="401"}[5m]) > 1
+        for: 2m
+        labels:
+          severity: warning
+          service: orion-core
+          team: security
+        annotations:
+          summary: "High rate of unauthorized access attempts"
+          description: "{{ $value }} unauthorized requests per second"
+
+      - alert: OrionSuspiciousActivity
+        expr: rate(orion_http_requests_total{status="403"}[5m]) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+          service: orion-core
+          team: security
+        annotations:
+          summary: "Suspicious activity detected"
+          description: "{{ $value }} forbidden requests per second"
+
+      - alert: OrionCertificateExpiring
+        expr: (orion_tls_certificate_expiry_timestamp - time()) / 86400 < 30
+        for: 1h
+        labels:
+          severity: warning
+          service: orion-core
+          team: security
+        annotations:
+          summary: "TLS certificate expiring soon"
+          description: "Certificate expires in {{ $value }} days"

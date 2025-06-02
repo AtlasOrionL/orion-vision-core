@@ -1,0 +1,52 @@
+const fs = require('fs');
+const path = require('path');
+
+// Ensure the images directory exists
+const imagesDir = path.join(__dirname, 'images');
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir, { recursive: true });
+}
+
+// Base64 encoded PNG image data for a 128x128 dark-themed icon with "O" symbol
+// This represents a simple dark blue square with a stylized "O" for Orion
+const base64Icon = `
+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
+RK5CYII=
+`;
+
+// Remove whitespace and decode the base64 data
+const iconData = Buffer.from(base64Icon.replace(/\s/g, ''), 'base64');
+
+// Write the decoded data to the icon file
+const iconPath = path.join(imagesDir, 'orion-icon.png');
+fs.writeFileSync(iconPath, iconData);
+
+console.log(`Icon created successfully at ${iconPath}`);
+

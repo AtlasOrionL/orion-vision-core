@@ -1,0 +1,511 @@
+# Orion Vision Core - Behavioral Analysis Engine
+# Sprint 5.2.2 - Advanced Threat Detection
+
+# User Behavior Analytics (UBA) Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-behavior-analytics
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: user-behavior-analytics
+    app.kubernetes.io/component: behavioral-analysis
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: user-behavior-analytics
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: user-behavior-analytics
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: uba-engine
+        image: orion-registry.company.com/uba-engine:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: ANALYSIS_WINDOW
+          value: "24h"
+        - name: BASELINE_PERIOD
+          value: "7d"
+        - name: ANOMALY_THRESHOLD
+          value: "0.8"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch.logging.svc.cluster.local:9200"
+        - name: REDIS_URL
+          value: "redis://redis.threat-detection.svc.cluster.local:6379"
+        volumeMounts:
+        - name: uba-config
+          mountPath: /etc/uba
+        - name: behavioral-models
+          mountPath: /models
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: uba-config
+        configMap:
+          name: uba-config
+      - name: behavioral-models
+        persistentVolumeClaim:
+          claimName: behavioral-models-pvc
+
+---
+# Entity Behavior Analytics (EBA) Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: entity-behavior-analytics
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: entity-behavior-analytics
+    app.kubernetes.io/component: behavioral-analysis
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: entity-behavior-analytics
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: entity-behavior-analytics
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: eba-engine
+        image: orion-registry.company.com/eba-engine:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: ENTITY_TYPES
+          value: "service,pod,node,user"
+        - name: LEARNING_PERIOD
+          value: "14d"
+        - name: DETECTION_SENSITIVITY
+          value: "medium"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: PROMETHEUS_URL
+          value: "http://prometheus.monitoring.svc.cluster.local:9090"
+        volumeMounts:
+        - name: eba-config
+          mountPath: /etc/eba
+        - name: behavioral-models
+          mountPath: /models
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: eba-config
+        configMap:
+          name: eba-config
+      - name: behavioral-models
+        persistentVolumeClaim:
+          claimName: behavioral-models-pvc
+
+---
+# Network Behavior Analysis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: network-behavior-analysis
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: network-behavior-analysis
+    app.kubernetes.io/component: behavioral-analysis
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: network-behavior-analysis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: network-behavior-analysis
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: nba-engine
+        image: orion-registry.company.com/nba-engine:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: FLOW_ANALYSIS_WINDOW
+          value: "5m"
+        - name: PATTERN_DETECTION_THRESHOLD
+          value: "0.75"
+        - name: DGA_DETECTION_ENABLED
+          value: "true"
+        - name: C2_DETECTION_ENABLED
+          value: "true"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: ISTIO_TELEMETRY_URL
+          value: "http://istio-telemetry.istio-system.svc.cluster.local:15014"
+        volumeMounts:
+        - name: nba-config
+          mountPath: /etc/nba
+        - name: network-models
+          mountPath: /models
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: nba-config
+        configMap:
+          name: nba-config
+      - name: network-models
+        persistentVolumeClaim:
+          claimName: behavioral-models-pvc
+
+---
+# UBA Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uba-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: uba-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # User Behavior Analytics Configuration
+    analysis:
+      window: "24h"
+      baseline_period: "7d"
+      update_interval: "1h"
+      anomaly_threshold: 0.8
+    
+    behavioral_patterns:
+      - name: "login_frequency"
+        type: "temporal"
+        features: ["login_count", "login_time", "login_source"]
+        threshold: 0.7
+      - name: "access_patterns"
+        type: "sequential"
+        features: ["resource_access", "permission_usage", "data_access"]
+        threshold: 0.8
+      - name: "network_activity"
+        type: "volumetric"
+        features: ["bytes_transferred", "connection_count", "protocol_usage"]
+        threshold: 0.75
+    
+    risk_scoring:
+      weights:
+        temporal_anomaly: 0.3
+        behavioral_anomaly: 0.4
+        access_anomaly: 0.3
+      thresholds:
+        low: 0.3
+        medium: 0.6
+        high: 0.8
+        critical: 0.9
+    
+    data_sources:
+      authentication_logs: "auth-logs"
+      access_logs: "access-logs"
+      network_flows: "network-flows"
+      application_logs: "app-logs"
+
+---
+# EBA Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eba-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: eba-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # Entity Behavior Analytics Configuration
+    entities:
+      service:
+        metrics: ["request_rate", "error_rate", "latency", "cpu_usage", "memory_usage"]
+        baseline_period: "14d"
+        detection_window: "1h"
+        sensitivity: "medium"
+      pod:
+        metrics: ["cpu_usage", "memory_usage", "network_io", "disk_io", "restart_count"]
+        baseline_period: "7d"
+        detection_window: "30m"
+        sensitivity: "high"
+      node:
+        metrics: ["cpu_usage", "memory_usage", "disk_usage", "network_io", "pod_count"]
+        baseline_period: "30d"
+        detection_window: "5m"
+        sensitivity: "low"
+      user:
+        metrics: ["api_calls", "resource_access", "permission_usage", "session_duration"]
+        baseline_period: "14d"
+        detection_window: "1h"
+        sensitivity: "high"
+    
+    anomaly_detection:
+      algorithms:
+        - name: "statistical"
+          type: "z_score"
+          threshold: 3.0
+        - name: "ml_based"
+          type: "isolation_forest"
+          contamination: 0.1
+        - name: "time_series"
+          type: "arima"
+          seasonal_periods: [24, 168]  # hourly, weekly
+    
+    alerting:
+      severity_mapping:
+        low: "info"
+        medium: "warning"
+        high: "error"
+        critical: "critical"
+      notification_channels:
+        - slack
+        - email
+        - webhook
+
+---
+# NBA Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nba-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: nba-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # Network Behavior Analysis Configuration
+    flow_analysis:
+      window_size: "5m"
+      overlap: "1m"
+      min_flows: 10
+      max_flows: 10000
+    
+    detection_algorithms:
+      dga_detection:
+        enabled: true
+        model_type: "lstm"
+        threshold: 0.8
+        features: ["domain_length", "entropy", "vowel_ratio", "digit_ratio"]
+      
+      c2_detection:
+        enabled: true
+        model_type: "random_forest"
+        threshold: 0.75
+        features: ["beacon_interval", "jitter", "payload_size", "protocol_anomaly"]
+      
+      lateral_movement:
+        enabled: true
+        model_type: "graph_analysis"
+        threshold: 0.7
+        features: ["connection_graph", "privilege_escalation", "unusual_paths"]
+      
+      data_exfiltration:
+        enabled: true
+        model_type: "volumetric_analysis"
+        threshold: 0.8
+        features: ["transfer_volume", "transfer_rate", "destination_anomaly"]
+    
+    baseline_learning:
+      period: "30d"
+      update_frequency: "1d"
+      min_samples: 1000
+    
+    threat_indicators:
+      - name: "suspicious_domains"
+        type: "blacklist"
+        source: "threat_intelligence"
+      - name: "known_bad_ips"
+        type: "blacklist"
+        source: "threat_feeds"
+      - name: "malware_signatures"
+        type: "pattern_matching"
+        source: "signature_db"
+
+---
+# Behavioral Models PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: behavioral-models-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: behavioral-models-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: fast-ssd
+
+---
+# Behavioral Analysis Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-behavior-analytics
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: user-behavior-analytics
+    app.kubernetes.io/component: behavioral-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: user-behavior-analytics
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: entity-behavior-analytics
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: entity-behavior-analytics
+    app.kubernetes.io/component: behavioral-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: entity-behavior-analytics
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: network-behavior-analysis
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: network-behavior-analysis
+    app.kubernetes.io/component: behavioral-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+  selector:
+    app.kubernetes.io/name: network-behavior-analysis
+
+---
+# Behavioral Analysis HPA
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: behavioral-analysis-hpa
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: behavioral-analysis-hpa
+    app.kubernetes.io/component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: network-behavior-analysis
+  minReplicas: 3
+  maxReplicas: 15
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

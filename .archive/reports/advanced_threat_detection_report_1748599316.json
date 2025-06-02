@@ -1,0 +1,532 @@
+{
+  "report_info": {
+    "generated_at": "2025-05-30T12:01:56.048690",
+    "demo_duration": 24.32,
+    "detection_engines": 5,
+    "ml_models": 4,
+    "threat_intel_sources": 5
+  },
+  "ml_anomaly_detection": {
+    "timestamp": "2025-05-30T12:01:31.726767",
+    "models": {
+      "isolation_forest": {
+        "status": "trained",
+        "accuracy": 0.92,
+        "false_positive_rate": 0.05,
+        "training_time_seconds": 50.7,
+        "features_used": 11,
+        "training_samples": 24733
+      },
+      "lstm_network": {
+        "status": "trained",
+        "accuracy": 0.89,
+        "false_positive_rate": 0.08,
+        "training_time_seconds": 42.5,
+        "features_used": 12,
+        "training_samples": 27572
+      },
+      "random_forest": {
+        "status": "trained",
+        "accuracy": 0.87,
+        "false_positive_rate": 0.06,
+        "training_time_seconds": 82.4,
+        "features_used": 10,
+        "training_samples": 49995
+      },
+      "svm_classifier": {
+        "status": "trained",
+        "accuracy": 0.85,
+        "false_positive_rate": 0.09,
+        "training_time_seconds": 113.5,
+        "features_used": 10,
+        "training_samples": 42348
+      }
+    },
+    "detections": [
+      {
+        "entity": "node_worker-1",
+        "type": "pattern",
+        "score": 0.811,
+        "model": "ensemble"
+      },
+      {
+        "entity": "node_worker-1",
+        "type": "volumetric",
+        "score": 0.912,
+        "model": "ensemble"
+      },
+      {
+        "entity": "service_orion-core",
+        "type": "temporal",
+        "score": 0.705,
+        "model": "ensemble"
+      },
+      {
+        "entity": "pod_redis-0",
+        "type": "volumetric",
+        "score": 0.922,
+        "model": "ensemble"
+      },
+      {
+        "entity": "node_worker-1",
+        "type": "behavioral",
+        "score": 0.723,
+        "model": "ensemble"
+      },
+      {
+        "entity": "service_orion-core",
+        "type": "volumetric",
+        "score": 0.728,
+        "model": "ensemble"
+      },
+      {
+        "entity": "service_orion-core",
+        "type": "pattern",
+        "score": 0.77,
+        "model": "ensemble"
+      },
+      {
+        "entity": "service_orion-core",
+        "type": "temporal",
+        "score": 0.871,
+        "model": "ensemble"
+      },
+      {
+        "entity": "user_123",
+        "type": "pattern",
+        "score": 0.77,
+        "model": "ensemble"
+      },
+      {
+        "entity": "node_worker-1",
+        "type": "pattern",
+        "score": 0.713,
+        "model": "ensemble"
+      },
+      {
+        "entity": "service_orion-core",
+        "type": "temporal",
+        "score": 0.828,
+        "model": "ensemble"
+      },
+      {
+        "entity": "service_orion-core",
+        "type": "volumetric",
+        "score": 0.781,
+        "model": "ensemble"
+      },
+      {
+        "entity": "pod_redis-0",
+        "type": "volumetric",
+        "score": 0.756,
+        "model": "ensemble"
+      },
+      {
+        "entity": "service_orion-core",
+        "type": "pattern",
+        "score": 0.881,
+        "model": "ensemble"
+      }
+    ],
+    "performance": {
+      "overall_accuracy": 0.883,
+      "overall_fp_rate": 0.07,
+      "detection_latency_ms": 144.5528469102888,
+      "throughput_events_per_second": 3538,
+      "model_ensemble_score": 0.838
+    },
+    "alerts_generated": 14
+  },
+  "behavioral_analysis": {
+    "timestamp": "2025-05-30T12:01:36.950186",
+    "analytics": {
+      "uba": {
+        "users_analyzed": 196,
+        "anomalous_users": 7,
+        "login_anomalies": 5,
+        "access_anomalies": 4,
+        "baseline_period": "7d",
+        "detection_accuracy": 0.9403210835733673
+      },
+      "eba": {
+        "entities_monitored": 48,
+        "services_analyzed": 15,
+        "pods_analyzed": 28,
+        "behavioral_deviations": 8,
+        "performance_anomalies": 5,
+        "detection_sensitivity": "medium"
+      },
+      "nba": {
+        "flows_analyzed": 49095,
+        "dga_detections": 0,
+        "c2_detections": 0,
+        "lateral_movement": 0,
+        "data_exfiltration": 0,
+        "analysis_window": "5m"
+      },
+      "temporal": {
+        "time_series_analyzed": 25,
+        "seasonal_patterns": 9,
+        "trend_anomalies": 7,
+        "cyclical_deviations": 3,
+        "forecast_accuracy": 0.8141352281746714
+      },
+      "baseline": {
+        "learning_period": "14d",
+        "entities_baselined": 55,
+        "patterns_learned": 287,
+        "confidence_level": 0.9318313995631367,
+        "update_frequency": "1d"
+      }
+    },
+    "risk_scores": {
+      "user_admin": {
+        "score": 0.323,
+        "level": "medium",
+        "factors": [
+          "behavioral_anomaly",
+          "access_pattern",
+          "temporal_deviation"
+        ]
+      },
+      "service_orion-core": {
+        "score": 0.698,
+        "level": "high",
+        "factors": [
+          "behavioral_anomaly",
+          "access_pattern",
+          "temporal_deviation"
+        ]
+      },
+      "pod_suspicious": {
+        "score": 0.369,
+        "level": "medium",
+        "factors": [
+          "behavioral_anomaly",
+          "access_pattern",
+          "temporal_deviation"
+        ]
+      },
+      "node_worker-2": {
+        "score": 0.758,
+        "level": "high",
+        "factors": [
+          "behavioral_anomaly",
+          "access_pattern",
+          "temporal_deviation"
+        ]
+      }
+    },
+    "behavioral_alerts": 0,
+    "patterns_learned": 296
+  },
+  "threat_intelligence": {
+    "timestamp": "2025-05-30T12:01:41.570214",
+    "feeds": {
+      "misp": {
+        "status": "active",
+        "last_update": "2025-05-30T12:01:42.173723",
+        "iocs_collected": 384,
+        "confidence_score": 0.7836119001083263,
+        "categories": [
+          "botnet",
+          "malware",
+          "phishing",
+          "c2"
+        ]
+      },
+      "otx_alienvault": {
+        "status": "active",
+        "last_update": "2025-05-30T12:01:42.173778",
+        "iocs_collected": 955,
+        "confidence_score": 0.7272048527649762,
+        "categories": [
+          "botnet",
+          "apt",
+          "malware",
+          "c2"
+        ]
+      },
+      "virustotal": {
+        "status": "active",
+        "last_update": "2025-05-30T12:01:42.173787",
+        "iocs_collected": 727,
+        "confidence_score": 0.7268502975421957,
+        "categories": [
+          "c2",
+          "botnet",
+          "malware",
+          "phishing"
+        ]
+      },
+      "threatcrowd": {
+        "status": "active",
+        "last_update": "2025-05-30T12:01:42.173794",
+        "iocs_collected": 387,
+        "confidence_score": 0.7947690487098275,
+        "categories": [
+          "malware",
+          "phishing",
+          "c2",
+          "apt"
+        ]
+      },
+      "abuse.ch": {
+        "status": "active",
+        "last_update": "2025-05-30T12:01:42.173800",
+        "iocs_collected": 141,
+        "confidence_score": 0.7553849204164828,
+        "categories": [
+          "apt",
+          "phishing",
+          "c2"
+        ]
+      }
+    },
+    "iocs": {
+      "ip_addresses": {
+        "detections": 6,
+        "high_confidence": 3,
+        "medium_confidence": 3,
+        "low_confidence": 2
+      },
+      "domains": {
+        "detections": 24,
+        "high_confidence": 9,
+        "medium_confidence": 5,
+        "low_confidence": 4
+      },
+      "file_hashes": {
+        "detections": 23,
+        "high_confidence": 11,
+        "medium_confidence": 8,
+        "low_confidence": 1
+      },
+      "urls": {
+        "detections": 15,
+        "high_confidence": 3,
+        "medium_confidence": 1,
+        "low_confidence": 5
+      },
+      "email_addresses": {
+        "detections": 6,
+        "high_confidence": 2,
+        "medium_confidence": 1,
+        "low_confidence": 0
+      }
+    },
+    "correlations": [
+      {
+        "name": "lateral_movement",
+        "events": 3,
+        "confidence": 0.7609330644570799
+      },
+      {
+        "name": "data_exfiltration",
+        "events": 5,
+        "confidence": 0.7278684215933937
+      },
+      {
+        "name": "privilege_escalation",
+        "events": 2,
+        "confidence": 0.8106867320859832
+      }
+    ],
+    "campaigns": [
+      {
+        "name": "Operation CloudStrike",
+        "start_date": "2025-05-20",
+        "targets": 5,
+        "success_rate": 0.4
+      },
+      {
+        "name": "Phishing Wave 2025-05",
+        "start_date": "2025-05-25",
+        "targets": 12,
+        "success_rate": 0.2
+      }
+    ],
+    "hunting_results": {
+      "queries_executed": 15,
+      "threats_found": 2,
+      "false_positives": 5,
+      "hunting_efficiency": 0.133
+    },
+    "attribution": [
+      {
+        "name": "APT29",
+        "confidence": 0.7957442101247496,
+        "techniques": [
+          "T1078",
+          "T1055",
+          "T1083"
+        ]
+      },
+      {
+        "name": "Lazarus Group",
+        "confidence": 0.6920760140536851,
+        "techniques": [
+          "T1566",
+          "T1059",
+          "T1105"
+        ]
+      },
+      {
+        "name": "Unknown Actor",
+        "confidence": 0.5255180840745162,
+        "techniques": [
+          "T1190",
+          "T1027"
+        ]
+      }
+    ]
+  },
+  "incident_response": {
+    "timestamp": "2025-05-30T12:01:46.194416",
+    "incidents": [
+      {
+        "scenario": "Malware Detection Response",
+        "severity": "critical",
+        "response_time": 55.4,
+        "actions_count": 5,
+        "effectiveness": 0.937,
+        "status": "completed"
+      },
+      {
+        "scenario": "Data Exfiltration Response",
+        "severity": "critical",
+        "response_time": 67.3,
+        "actions_count": 5,
+        "effectiveness": 0.93,
+        "status": "completed"
+      },
+      {
+        "scenario": "Lateral Movement Response",
+        "severity": "high",
+        "response_time": 268.7,
+        "actions_count": 5,
+        "effectiveness": 0.826,
+        "status": "completed"
+      },
+      {
+        "scenario": "Privilege Escalation Response",
+        "severity": "high",
+        "response_time": 140.6,
+        "actions_count": 5,
+        "effectiveness": 0.831,
+        "status": "completed"
+      },
+      {
+        "scenario": "Phishing Attack Response",
+        "severity": "medium",
+        "response_time": 131.7,
+        "actions_count": 5,
+        "effectiveness": 0.753,
+        "status": "partially_successful"
+      },
+      {
+        "scenario": "Suspicious Activity Response",
+        "severity": "low",
+        "response_time": 220.6,
+        "actions_count": 4,
+        "effectiveness": 0.775,
+        "status": "partially_successful"
+      }
+    ],
+    "playbooks_executed": 6,
+    "response_times": [
+      55.36871081860939,
+      67.25827208079184,
+      268.74824366898923,
+      140.61467912155808,
+      131.6917956742854,
+      220.55374791411302
+    ],
+    "success_rate": 0.6666666666666666,
+    "automation_coverage": 1.0,
+    "average_response_time": 147.4
+  },
+  "forensic_analysis": {
+    "timestamp": "2025-05-30T12:01:51.426430",
+    "operations": {
+      "evidence_collection": {
+        "system_logs": 1194,
+        "network_captures": 125,
+        "memory_dumps": 12,
+        "file_artifacts": 495,
+        "registry_entries": 686
+      },
+      "timeline_analysis": {
+        "events_processed": 2662,
+        "timeline_span": "72h",
+        "key_events_identified": 36,
+        "attack_phases": [
+          "reconnaissance",
+          "initial_access",
+          "persistence",
+          "lateral_movement"
+        ],
+        "confidence_score": 0.8145040848784105
+      },
+      "malware_analysis": {
+        "samples_analyzed": 8,
+        "static_analysis": true,
+        "dynamic_analysis": true,
+        "sandbox_execution": true,
+        "iocs_extracted": 40,
+        "family_classification": "Backdoor",
+        "threat_score": 0.8765498336014395
+      },
+      "network_forensics": {
+        "packets_analyzed": 387908,
+        "flows_reconstructed": 1732,
+        "protocols_identified": [
+          "HTTP",
+          "HTTPS",
+          "DNS",
+          "TCP",
+          "UDP"
+        ],
+        "suspicious_connections": 6,
+        "data_exfiltration_detected": true,
+        "c2_communication": false
+      },
+      "memory_forensics": {
+        "memory_dumps_analyzed": 4,
+        "processes_extracted": 73,
+        "network_connections": 52,
+        "injected_code_detected": true,
+        "rootkit_artifacts": false,
+        "encryption_keys_found": 3
+      },
+      "fingerprinting": {
+        "file_hashes_computed": 568,
+        "digital_signatures_verified": 188,
+        "metadata_extracted": 121,
+        "attribution_indicators": 13,
+        "unique_artifacts": 14
+      }
+    },
+    "evidence_collected": 2512,
+    "artifacts_analyzed": 12,
+    "timeline_events": 2662,
+    "analysis_confidence": 0.846
+  },
+  "overall_metrics": {
+    "total_detections": 88,
+    "detection_accuracy": 0.883,
+    "response_effectiveness": 0.667,
+    "threat_coverage": 1.0,
+    "automation_level": 1.0
+  },
+  "security_posture": {
+    "threat_level": "high",
+    "detection_maturity": "developing",
+    "response_capability": "automated",
+    "intelligence_coverage": "comprehensive"
+  },
+  "recommendations": [
+    "Improve ML model training with additional data sources",
+    "Optimize incident response playbooks for better effectiveness"
+  ]
+}

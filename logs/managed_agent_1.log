@@ -1,0 +1,29 @@
+2025-05-29 16:26:05,233 - Agent.managed_agent_1 - INFO - info:123 - Agent initialized: managed_agent_1 (simple_agent)
+2025-05-29 16:26:05,233 - Agent.managed_agent_1 - INFO - info:123 - Capability added: simple_processing
+2025-05-29 16:26:05,233 - Agent.managed_agent_1 - INFO - info:123 - Capability added: task_counting
+2025-05-29 16:26:05,233 - Agent.managed_agent_1 - INFO - info:123 - Capability added: random_work
+2025-05-29 16:26:05,233 - Agent.managed_agent_1 - INFO - info:123 - Max tasks updated: 5
+2025-05-29 16:26:05,233 - Agent.managed_agent_1 - INFO - info:123 - Work interval updated: 1.0s
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Starting agent: managed_agent_1
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Initializing Simple Agent...
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Work interval: 1.0s
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Max tasks: 5
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Simple Agent initialization completed
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Simple Agent main loop started
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Task 1: computing (duration: 0.50s)
+2025-05-29 16:26:05,234 - Agent.managed_agent_1 - INFO - info:123 - Agent started successfully: managed_agent_1
+2025-05-29 16:26:05,736 - Agent.managed_agent_1 - INFO - info:123 - Task 1 completed successfully
+2025-05-29 16:26:06,736 - Agent.managed_agent_1 - INFO - info:123 - Task 2: analyzing (duration: 0.11s)
+2025-05-29 16:26:06,847 - Agent.managed_agent_1 - INFO - info:123 - Task 2 completed successfully
+2025-05-29 16:26:07,847 - Agent.managed_agent_1 - INFO - info:123 - Task 3: processing (duration: 0.29s)
+2025-05-29 16:26:08,137 - Agent.managed_agent_1 - INFO - info:123 - Task 3 completed successfully
+2025-05-29 16:26:09,137 - Agent.managed_agent_1 - INFO - info:123 - Task 4: processing (duration: 0.47s)
+2025-05-29 16:26:09,614 - Agent.managed_agent_1 - INFO - info:123 - Task 4 completed successfully
+2025-05-29 16:26:10,614 - Agent.managed_agent_1 - INFO - info:123 - Task 5: calculating (duration: 0.17s)
+2025-05-29 16:26:10,781 - Agent.managed_agent_1 - INFO - info:123 - Task 5 completed successfully
+2025-05-29 16:26:11,781 - Agent.managed_agent_1 - INFO - info:123 - Simple Agent main loop ended
+2025-05-29 16:26:15,285 - Agent.managed_agent_1 - INFO - info:123 - Stopping agent: managed_agent_1
+2025-05-29 16:26:15,285 - Agent.managed_agent_1 - INFO - info:123 - Cleaning up Simple Agent...
+2025-05-29 16:26:15,285 - Agent.managed_agent_1 - INFO - info:123 - Total tasks completed: 5
+2025-05-29 16:26:15,286 - Agent.managed_agent_1 - INFO - info:123 - Simple Agent cleanup completed
+2025-05-29 16:26:15,286 - Agent.managed_agent_1 - INFO - info:123 - Agent stopped successfully: managed_agent_1

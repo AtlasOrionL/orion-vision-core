@@ -1,0 +1,494 @@
+# Zero Trust Device Trust and Compliance System
+# Sprint 6.1 - Epic 1: Zero Trust Architecture Foundation
+# Story 1.3: Device Trust and Compliance
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zero-trust-devices
+  labels:
+    security.orion.io/zone: "device-trust"
+    security.orion.io/level: "high"
+    istio-injection: enabled
+---
+# Device Fingerprinting Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: device-fingerprinting-config
+  namespace: zero-trust-devices
+data:
+  fingerprinting.yaml: |
+    device_fingerprinting:
+      enabled: true
+      collection_methods:
+        - "hardware_fingerprint"
+        - "software_fingerprint"
+        - "network_fingerprint"
+        - "behavioral_fingerprint"
+      hardware_attributes:
+        - "cpu_info"
+        - "memory_info"
+        - "disk_info"
+        - "network_interfaces"
+        - "usb_devices"
+        - "display_info"
+      software_attributes:
+        - "operating_system"
+        - "browser_info"
+        - "installed_software"
+        - "running_processes"
+        - "system_services"
+        - "security_software"
+      network_attributes:
+        - "ip_address"
+        - "mac_address"
+        - "network_topology"
+        - "dns_settings"
+        - "proxy_settings"
+        - "vpn_status"
+      behavioral_attributes:
+        - "typing_patterns"
+        - "mouse_movements"
+        - "usage_patterns"
+        - "access_times"
+        - "application_usage"
+        - "network_behavior"
+      fingerprint_storage:
+        encryption: "AES-256-GCM"
+        retention_days: 90
+        anonymization: true
+---
+# Endpoint Detection and Response (EDR) Configuration
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: edr-agent
+  namespace: zero-trust-devices
+spec:
+  selector:
+    matchLabels:
+      app: edr-agent
+  template:
+    metadata:
+      labels:
+        app: edr-agent
+        security.orion.io/component: "edr"
+    spec:
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      serviceAccountName: edr-agent
+      containers:
+      - name: edr-agent
+        image: orion/edr-agent:v1.0.0
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: EDR_SERVER
+          value: "https://edr-server.zero-trust-devices.svc.cluster.local:8443"
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: sys
+          mountPath: /host/sys
+          readOnly: true
+        - name: root
+          mountPath: /host/root
+          readOnly: true
+        - name: var-log
+          mountPath: /host/var/log
+          readOnly: true
+        - name: dev
+          mountPath: /host/dev
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys
+      - name: root
+        hostPath:
+          path: /
+      - name: var-log
+        hostPath:
+          path: /var/log
+      - name: dev
+        hostPath:
+          path: /dev
+      tolerations:
+      - operator: Exists
+        effect: NoSchedule
+---
+# EDR Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edr-server
+  namespace: zero-trust-devices
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: edr-server
+  template:
+    metadata:
+      labels:
+        app: edr-server
+        security.orion.io/component: "edr-server"
+    spec:
+      serviceAccountName: edr-server
+      containers:
+      - name: edr-server
+        image: orion/edr-server:v1.0.0
+        ports:
+        - containerPort: 8443
+          name: https
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: edr-database
+              key: url
+        - name: THREAT_INTEL_API
+          valueFrom:
+            secretKeyRef:
+              name: threat-intel
+              key: api-key
+        volumeMounts:
+        - name: tls-certs
+          mountPath: /etc/certs
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: tls-certs
+        secret:
+          secretName: edr-server-certs
+      - name: config
+        configMap:
+          name: edr-config
+---
+# Device Compliance Policies
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: device-compliance-config
+  namespace: zero-trust-devices
+data:
+  compliance.yaml: |
+    device_compliance:
+      enabled: true
+      policies:
+        - name: "antivirus_required"
+          type: "security_software"
+          required: true
+          criteria:
+            - "antivirus_installed == true"
+            - "antivirus_enabled == true"
+            - "antivirus_updated == true"
+            - "real_time_protection == true"
+          remediation:
+            - "install_approved_antivirus"
+            - "enable_real_time_protection"
+            - "update_definitions"
+        - name: "firewall_enabled"
+          type: "network_security"
+          required: true
+          criteria:
+            - "firewall_enabled == true"
+            - "firewall_configured == true"
+            - "inbound_blocked == true"
+          remediation:
+            - "enable_firewall"
+            - "configure_rules"
+            - "block_unnecessary_ports"
+        - name: "encryption_enabled"
+          type: "data_protection"
+          required: true
+          criteria:
+            - "disk_encryption == true"
+            - "encryption_algorithm in ['AES-256', 'XTS-AES-256']"
+            - "key_management == 'secure'"
+          remediation:
+            - "enable_disk_encryption"
+            - "configure_key_management"
+            - "verify_encryption_strength"
+        - name: "patch_level_current"
+          type: "vulnerability_management"
+          required: true
+          criteria:
+            - "os_patches_current == true"
+            - "critical_patches_installed == true"
+            - "patch_age_days <= 30"
+          remediation:
+            - "install_os_patches"
+            - "install_security_updates"
+            - "schedule_automatic_updates"
+        - name: "secure_configuration"
+          type: "hardening"
+          required: true
+          criteria:
+            - "password_policy_enforced == true"
+            - "screen_lock_enabled == true"
+            - "auto_lock_timeout <= 15"
+            - "usb_autorun_disabled == true"
+          remediation:
+            - "enforce_password_policy"
+            - "enable_screen_lock"
+            - "configure_auto_lock"
+            - "disable_usb_autorun"
+      enforcement:
+        mode: "strict"
+        grace_period: "24h"
+        non_compliance_actions:
+          - "quarantine_device"
+          - "restrict_access"
+          - "notify_security_team"
+          - "initiate_remediation"
+---
+# Continuous Device Monitoring
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: device-monitoring-config
+  namespace: zero-trust-devices
+data:
+  monitoring.yaml: |
+    device_monitoring:
+      enabled: true
+      monitoring_intervals:
+        compliance_check: "1h"
+        security_scan: "4h"
+        behavioral_analysis: "15m"
+        threat_detection: "real-time"
+      data_collection:
+        system_events: true
+        network_traffic: true
+        process_execution: true
+        file_system_changes: true
+        registry_changes: true
+        user_activities: true
+      threat_detection:
+        malware_detection: true
+        anomaly_detection: true
+        behavioral_analysis: true
+        signature_based: true
+        heuristic_analysis: true
+        machine_learning: true
+      alerting:
+        channels:
+          - "siem"
+          - "security_team"
+          - "device_owner"
+        severity_levels:
+          - "critical"
+          - "high"
+          - "medium"
+          - "low"
+        escalation_rules:
+          critical: "immediate"
+          high: "15m"
+          medium: "1h"
+          low: "24h"
+---
+# Device Trust Scoring Engine
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: device-trust-engine
+  namespace: zero-trust-devices
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: device-trust-engine
+  template:
+    metadata:
+      labels:
+        app: device-trust-engine
+        security.orion.io/component: "trust-engine"
+    spec:
+      serviceAccountName: device-trust-engine
+      containers:
+      - name: trust-engine
+        image: orion/device-trust-engine:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: ML_MODEL_PATH
+          value: "/models/device-trust-model.pkl"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: url
+        volumeMounts:
+        - name: ml-models
+          mountPath: /models
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: ml-models
+        configMap:
+          name: ml-models
+      - name: config
+        configMap:
+          name: trust-engine-config
+---
+# Trust Scoring Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trust-engine-config
+  namespace: zero-trust-devices
+data:
+  trust-scoring.yaml: |
+    trust_scoring:
+      enabled: true
+      scoring_factors:
+        device_compliance:
+          weight: 0.4
+          factors:
+            - "antivirus_status"
+            - "firewall_status"
+            - "encryption_status"
+            - "patch_level"
+            - "configuration_hardening"
+        device_behavior:
+          weight: 0.3
+          factors:
+            - "access_patterns"
+            - "network_behavior"
+            - "application_usage"
+            - "anomaly_detection"
+        device_reputation:
+          weight: 0.2
+          factors:
+            - "threat_intelligence"
+            - "historical_incidents"
+            - "peer_reputation"
+            - "vendor_reputation"
+        device_identity:
+          weight: 0.1
+          factors:
+            - "certificate_validity"
+            - "identity_verification"
+            - "enrollment_status"
+            - "ownership_verification"
+      scoring_algorithm:
+        type: "weighted_ensemble"
+        models:
+          - "random_forest"
+          - "gradient_boosting"
+          - "neural_network"
+        ensemble_method: "voting"
+      trust_levels:
+        trusted: 0.8-1.0
+        conditional: 0.6-0.8
+        untrusted: 0.4-0.6
+        blocked: 0.0-0.4
+      actions:
+        trusted:
+          - "full_access"
+          - "minimal_monitoring"
+        conditional:
+          - "limited_access"
+          - "enhanced_monitoring"
+          - "periodic_verification"
+        untrusted:
+          - "restricted_access"
+          - "continuous_monitoring"
+          - "mandatory_remediation"
+        blocked:
+          - "no_access"
+          - "quarantine"
+          - "security_investigation"
+---
+# Service Accounts and RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: edr-agent
+  namespace: zero-trust-devices
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: edr-server
+  namespace: zero-trust-devices
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: device-trust-engine
+  namespace: zero-trust-devices
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: edr-agent
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["nodes", "pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: edr-agent
+subjects:
+- kind: ServiceAccount
+  name: edr-agent
+  namespace: zero-trust-devices
+roleRef:
+  kind: ClusterRole
+  name: edr-agent
+  apiGroup: rbac.authorization.k8s.io

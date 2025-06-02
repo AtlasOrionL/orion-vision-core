@@ -1,0 +1,12 @@
+virtualenv
+PyAutoGUI
+tesseract
+opencv-python
+python-dotenv
+transformers
+torch
+ollama
+openrouter
+bark
+openai-whisper
+pika

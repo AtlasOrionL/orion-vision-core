@@ -5,6 +5,83 @@ import json  # JSON verilerini daha güzel göstermek için
 # API'nin çalıştığı temel URL ve port (8001 olduğundan emin olun!)
 API_BASE_URL = "http://localhost:8001"
 
+
+class StreamlitApp:
+    """
+    Orion Vision Core Streamlit Application
+
+    This class provides a unified interface for the Streamlit web application
+    that serves as the main dashboard for Orion Vision Core.
+    """
+
+    def __init__(self):
+        """Initialize the Streamlit Application"""
+        self.initialized = False
+        self.api_base_url = API_BASE_URL
+
+    def initialize(self) -> bool:
+        """
+        Initialize the Streamlit application
+
+        Returns:
+            True if initialization successful, False otherwise
+        """
+        try:
+            # Set page configuration
+            st.set_page_config(
+                page_title="Orion Vision Core",
+                page_icon="🚀",
+                layout="wide",
+                initial_sidebar_state="expanded"
+            )
+
+            self.initialized = True
+            return True
+
+        except Exception as e:
+            print(f"❌ StreamlitApp initialization failed: {e}")
+            self.initialized = False
+            return False
+
+    def start(self) -> bool:
+        """Start the Streamlit application"""
+        if not self.initialized:
+            if not self.initialize():
+                return False
+
+        try:
+            # Run the main application
+            self.run_app()
+            return True
+
+        except Exception as e:
+            print(f"❌ StreamlitApp start failed: {e}")
+            return False
+
+    def stop(self):
+        """Stop the Streamlit application"""
+        # Streamlit doesn't have a direct stop method
+        # This is handled by the component coordinator
+        pass
+
+    def run_app(self):
+        """Run the main Streamlit application"""
+        # This will be called when the app is loaded
+        # The actual UI code is below in the global scope
+        pass
+
+    def get_status(self) -> dict:
+        """Get Streamlit application status"""
+        return {
+            'initialized': self.initialized,
+            'api_base_url': self.api_base_url,
+            'status': 'running' if self.initialized else 'stopped'
+        }
+
+    def health_check(self) -> bool:
+        """Health check for component coordinator"""
+        return self.initialized
+
 # --- API Çağrı Fonksiyonları ---
 
 def get_api_status(api_url=f"{API_BASE_URL}/"):

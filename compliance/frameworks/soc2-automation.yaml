@@ -1,0 +1,583 @@
+# Orion Vision Core - SOC2 Compliance Automation
+# Sprint 5.3 - Compliance Automation & Edge Security
+
+# SOC2 Compliance Controller
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soc2-compliance-controller
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: soc2-compliance-controller
+    app.kubernetes.io/component: compliance-automation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: soc2-compliance-controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: soc2-compliance-controller
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      serviceAccountName: soc2-compliance-controller
+      containers:
+      - name: compliance-controller
+        image: orion-registry.company.com/soc2-controller:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: COMPLIANCE_FRAMEWORK
+          value: "SOC2_TYPE_II"
+        - name: ASSESSMENT_INTERVAL
+          value: "1h"
+        - name: REMEDIATION_ENABLED
+          value: "true"
+        - name: AUDIT_RETENTION_DAYS
+          value: "2555"  # 7 years
+        - name: KAFKA_BROKERS
+          value: "kafka.compliance.svc.cluster.local:9092"
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch.logging.svc.cluster.local:9200"
+        volumeMounts:
+        - name: soc2-config
+          mountPath: /etc/soc2
+        - name: compliance-data
+          mountPath: /data/compliance
+        - name: audit-logs
+          mountPath: /data/audit
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: soc2-config
+        configMap:
+          name: soc2-compliance-config
+      - name: compliance-data
+        persistentVolumeClaim:
+          claimName: compliance-data-pvc
+      - name: audit-logs
+        persistentVolumeClaim:
+          claimName: audit-logs-pvc
+
+---
+# SOC2 Compliance Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soc2-compliance-config
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: soc2-compliance-config
+    app.kubernetes.io/component: configuration
+data:
+  soc2-controls.yaml: |
+    # SOC2 Trust Service Criteria Controls
+    security:
+      - control_id: "CC6.1"
+        name: "Logical and Physical Access Controls"
+        description: "Implements logical and physical access controls"
+        automated_checks:
+          - kubernetes_rbac_enabled
+          - network_policies_enforced
+          - pod_security_policies_active
+          - istio_authorization_policies
+        evidence_collection:
+          - rbac_configurations
+          - network_policy_definitions
+          - access_logs
+          - authentication_events
+        
+      - control_id: "CC6.2"
+        name: "System Access Monitoring"
+        description: "Monitors system access and usage"
+        automated_checks:
+          - access_logging_enabled
+          - failed_login_monitoring
+          - privilege_escalation_detection
+          - anomalous_access_detection
+        evidence_collection:
+          - access_logs
+          - security_events
+          - monitoring_dashboards
+          - alert_configurations
+      
+      - control_id: "CC6.3"
+        name: "Access Removal"
+        description: "Removes access when no longer required"
+        automated_checks:
+          - automated_access_review
+          - dormant_account_detection
+          - service_account_lifecycle
+          - certificate_expiration_monitoring
+        evidence_collection:
+          - access_review_reports
+          - account_lifecycle_logs
+          - certificate_management_logs
+    
+    availability:
+      - control_id: "A1.1"
+        name: "System Availability Monitoring"
+        description: "Monitors system availability and performance"
+        automated_checks:
+          - service_health_monitoring
+          - resource_utilization_tracking
+          - sla_compliance_monitoring
+          - disaster_recovery_testing
+        evidence_collection:
+          - uptime_reports
+          - performance_metrics
+          - incident_response_logs
+          - backup_verification_logs
+      
+      - control_id: "A1.2"
+        name: "Capacity Management"
+        description: "Manages system capacity and scaling"
+        automated_checks:
+          - auto_scaling_configured
+          - resource_limits_enforced
+          - capacity_planning_active
+          - performance_thresholds_set
+        evidence_collection:
+          - scaling_events
+          - resource_usage_reports
+          - capacity_planning_documents
+    
+    processing_integrity:
+      - control_id: "PI1.1"
+        name: "Data Processing Controls"
+        description: "Controls over data processing integrity"
+        automated_checks:
+          - data_validation_enabled
+          - processing_error_detection
+          - data_integrity_checks
+          - transaction_logging
+        evidence_collection:
+          - processing_logs
+          - error_reports
+          - data_validation_results
+          - integrity_check_reports
+    
+    confidentiality:
+      - control_id: "C1.1"
+        name: "Data Encryption"
+        description: "Encrypts confidential data"
+        automated_checks:
+          - encryption_at_rest_enabled
+          - encryption_in_transit_enabled
+          - key_management_active
+          - certificate_validation
+        evidence_collection:
+          - encryption_configurations
+          - key_management_logs
+          - certificate_inventories
+          - tls_configurations
+    
+    privacy:
+      - control_id: "P1.1"
+        name: "Privacy Notice"
+        description: "Provides privacy notices to data subjects"
+        automated_checks:
+          - privacy_policy_published
+          - consent_management_active
+          - data_subject_rights_implemented
+          - privacy_impact_assessments
+        evidence_collection:
+          - privacy_policies
+          - consent_records
+          - data_subject_requests
+          - privacy_training_records
+
+  assessment-schedule.yaml: |
+    # SOC2 Assessment Schedule
+    assessments:
+      continuous:
+        - name: "access_control_review"
+          frequency: "hourly"
+          controls: ["CC6.1", "CC6.2", "CC6.3"]
+          automated: true
+        
+        - name: "availability_monitoring"
+          frequency: "5m"
+          controls: ["A1.1", "A1.2"]
+          automated: true
+        
+        - name: "encryption_validation"
+          frequency: "daily"
+          controls: ["C1.1"]
+          automated: true
+      
+      periodic:
+        - name: "quarterly_review"
+          frequency: "quarterly"
+          controls: ["all"]
+          automated: false
+          requires_human_review: true
+        
+        - name: "annual_assessment"
+          frequency: "annually"
+          controls: ["all"]
+          automated: false
+          external_auditor_required: true
+    
+    reporting:
+      real_time_dashboard: true
+      daily_summary: true
+      weekly_executive_report: true
+      monthly_detailed_report: true
+      quarterly_compliance_report: true
+      annual_audit_report: true
+
+  remediation-actions.yaml: |
+    # SOC2 Automated Remediation Actions
+    remediation_rules:
+      - trigger: "rbac_misconfiguration_detected"
+        severity: "high"
+        actions:
+          - type: "kubernetes_patch"
+            resource: "rolebinding"
+            operation: "remove_excessive_permissions"
+          - type: "alert"
+            channels: ["security-team", "compliance-team"]
+          - type: "audit_log"
+            details: "RBAC misconfiguration automatically remediated"
+      
+      - trigger: "unencrypted_data_detected"
+        severity: "critical"
+        actions:
+          - type: "kubernetes_patch"
+            resource: "persistentvolume"
+            operation: "enable_encryption"
+          - type: "incident_creation"
+            priority: "P1"
+          - type: "notification"
+            channels: ["security-team", "dpo"]
+      
+      - trigger: "access_policy_violation"
+        severity: "medium"
+        actions:
+          - type: "istio_policy_update"
+            operation: "restrict_access"
+          - type: "user_notification"
+            message: "Access policy violation detected"
+          - type: "compliance_log"
+            control: "CC6.1"
+      
+      - trigger: "availability_threshold_breach"
+        severity: "high"
+        actions:
+          - type: "auto_scaling"
+            operation: "scale_up"
+          - type: "incident_creation"
+            priority: "P2"
+          - type: "stakeholder_notification"
+            channels: ["operations-team", "management"]
+
+---
+# SOC2 Compliance CRD
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: soc2assessments.compliance.orion.com
+  labels:
+    app.kubernetes.io/name: soc2-crd
+    app.kubernetes.io/component: compliance-automation
+spec:
+  group: compliance.orion.com
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              framework:
+                type: string
+                enum: ["SOC2_TYPE_I", "SOC2_TYPE_II"]
+              controls:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    control_id:
+                      type: string
+                    status:
+                      type: string
+                      enum: ["compliant", "non_compliant", "not_applicable"]
+                    evidence:
+                      type: array
+                      items:
+                        type: string
+                    last_assessed:
+                      type: string
+                      format: date-time
+          status:
+            type: object
+            properties:
+              overall_compliance:
+                type: string
+                enum: ["compliant", "non_compliant", "partial"]
+              compliance_score:
+                type: number
+                minimum: 0
+                maximum: 100
+              last_assessment:
+                type: string
+                format: date-time
+              next_assessment:
+                type: string
+                format: date-time
+  scope: Namespaced
+  names:
+    plural: soc2assessments
+    singular: soc2assessment
+    kind: SOC2Assessment
+
+---
+# SOC2 Assessment Instance
+apiVersion: compliance.orion.com/v1
+kind: SOC2Assessment
+metadata:
+  name: orion-soc2-assessment
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: orion-soc2-assessment
+    app.kubernetes.io/component: compliance-assessment
+spec:
+  framework: "SOC2_TYPE_II"
+  controls:
+  - control_id: "CC6.1"
+    status: "compliant"
+    evidence: ["rbac-config", "network-policies", "access-logs"]
+    last_assessed: "2025-05-29T10:00:00Z"
+  - control_id: "CC6.2"
+    status: "compliant"
+    evidence: ["monitoring-config", "alert-rules", "security-events"]
+    last_assessed: "2025-05-29T10:00:00Z"
+  - control_id: "A1.1"
+    status: "compliant"
+    evidence: ["uptime-reports", "monitoring-dashboards", "sla-metrics"]
+    last_assessed: "2025-05-29T10:00:00Z"
+
+---
+# SOC2 Compliance RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: soc2-compliance-controller
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: soc2-compliance-controller
+    app.kubernetes.io/component: service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: soc2-compliance-controller
+  labels:
+    app.kubernetes.io/name: soc2-compliance-controller
+    app.kubernetes.io/component: rbac
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets", "persistentvolumes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["security.istio.io"]
+  resources: ["authorizationpolicies", "peerauthentications"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["compliance.orion.com"]
+  resources: ["soc2assessments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["monitoring.coreos.com"]
+  resources: ["servicemonitors", "prometheusrules"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: soc2-compliance-controller
+  labels:
+    app.kubernetes.io/name: soc2-compliance-controller
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: soc2-compliance-controller
+subjects:
+- kind: ServiceAccount
+  name: soc2-compliance-controller
+  namespace: compliance
+
+---
+# SOC2 Compliance Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: soc2-compliance-controller
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: soc2-compliance-controller
+    app.kubernetes.io/component: compliance-service
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+    protocol: TCP
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: soc2-compliance-controller
+
+---
+# Compliance Data Storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: compliance-data-pvc
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: compliance-data-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audit-logs-pvc
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: audit-logs-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: archive-storage
+
+---
+# SOC2 Compliance Monitoring
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: soc2-compliance-metrics
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: soc2-compliance-metrics
+    app.kubernetes.io/component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: soc2-compliance-controller
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+    - compliance
+
+---
+# SOC2 Compliance Alerts
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: soc2-compliance-alerts
+  namespace: compliance
+  labels:
+    app.kubernetes.io/name: soc2-compliance-alerts
+    app.kubernetes.io/component: alerting
+spec:
+  groups:
+  - name: soc2-compliance
+    rules:
+    - alert: SOC2ComplianceViolation
+      expr: soc2_compliance_score < 95
+      for: 5m
+      labels:
+        severity: critical
+        compliance_framework: soc2
+      annotations:
+        summary: "SOC2 compliance score below threshold"
+        description: "SOC2 compliance score is {{ $value }}%, below the required 95%"
+    
+    - alert: SOC2ControlFailure
+      expr: soc2_control_status{status="non_compliant"} > 0
+      for: 1m
+      labels:
+        severity: warning
+        compliance_framework: soc2
+      annotations:
+        summary: "SOC2 control failure detected"
+        description: "SOC2 control {{ $labels.control_id }} is non-compliant"
+    
+    - alert: SOC2AuditLogMissing
+      expr: increase(soc2_audit_events_total[1h]) == 0
+      for: 30m
+      labels:
+        severity: warning
+        compliance_framework: soc2
+      annotations:
+        summary: "SOC2 audit logging not functioning"
+        description: "No SOC2 audit events recorded in the last hour"

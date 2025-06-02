@@ -1,0 +1,483 @@
+# Orion Vision Core - ML-based Anomaly Detection
+# Sprint 5.2.2 - Advanced Threat Detection
+
+# ML Model Training Job for Anomaly Detection
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: anomaly-detection-training
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: anomaly-detection
+    app.kubernetes.io/component: ml-training
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: anomaly-detection-training
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: ml-trainer
+        image: tensorflow/tensorflow:2.13.0-gpu
+        command: ["python3"]
+        args: ["/app/train_anomaly_model.py"]
+        env:
+        - name: MODEL_TYPE
+          value: "isolation_forest"
+        - name: TRAINING_DATA_PATH
+          value: "/data/security_logs"
+        - name: MODEL_OUTPUT_PATH
+          value: "/models/anomaly_detection"
+        - name: FEATURE_COLUMNS
+          value: "request_rate,error_rate,latency_p99,cpu_usage,memory_usage,network_io"
+        - name: CONTAMINATION_RATE
+          value: "0.1"
+        - name: N_ESTIMATORS
+          value: "100"
+        volumeMounts:
+        - name: training-data
+          mountPath: /data
+        - name: model-storage
+          mountPath: /models
+        - name: training-scripts
+          mountPath: /app
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 4Gi
+            nvidia.com/gpu: 1
+          limits:
+            cpu: 4000m
+            memory: 8Gi
+            nvidia.com/gpu: 1
+      volumes:
+      - name: training-data
+        persistentVolumeClaim:
+          claimName: security-data-pvc
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: ml-models-pvc
+      - name: training-scripts
+        configMap:
+          name: ml-training-scripts
+
+---
+# Anomaly Detection Model Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anomaly-detection-service
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: anomaly-detection-service
+    app.kubernetes.io/component: ml-inference
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: anomaly-detection-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: anomaly-detection-service
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: anomaly-detector
+        image: orion-registry.company.com/anomaly-detection:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: grpc
+        env:
+        - name: MODEL_PATH
+          value: "/models/anomaly_detection/model.pkl"
+        - name: THRESHOLD_SCORE
+          value: "0.7"
+        - name: BATCH_SIZE
+          value: "100"
+        - name: PREDICTION_INTERVAL
+          value: "30s"
+        - name: KAFKA_BROKERS
+          value: "kafka.threat-detection.svc.cluster.local:9092"
+        - name: REDIS_URL
+          value: "redis://redis.threat-detection.svc.cluster.local:6379"
+        volumeMounts:
+        - name: model-storage
+          mountPath: /models
+          readOnly: true
+        - name: config
+          mountPath: /etc/anomaly-detection
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: ml-models-pvc
+      - name: config
+        configMap:
+          name: anomaly-detection-config
+
+---
+# Anomaly Detection Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anomaly-detection-config
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: anomaly-detection-config
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    # Anomaly Detection Configuration
+    model:
+      type: "isolation_forest"
+      threshold: 0.7
+      batch_size: 100
+      prediction_interval: "30s"
+      retrain_interval: "24h"
+    
+    features:
+      - name: "request_rate"
+        type: "numeric"
+        normalization: "z_score"
+        window: "5m"
+      - name: "error_rate"
+        type: "numeric"
+        normalization: "min_max"
+        window: "5m"
+      - name: "latency_p99"
+        type: "numeric"
+        normalization: "z_score"
+        window: "5m"
+      - name: "cpu_usage"
+        type: "numeric"
+        normalization: "min_max"
+        window: "1m"
+      - name: "memory_usage"
+        type: "numeric"
+        normalization: "min_max"
+        window: "1m"
+      - name: "network_io"
+        type: "numeric"
+        normalization: "z_score"
+        window: "1m"
+    
+    thresholds:
+      low: 0.3
+      medium: 0.6
+      high: 0.8
+      critical: 0.9
+    
+    alerts:
+      enabled: true
+      webhook_url: "http://alert-manager.monitoring.svc.cluster.local:9093/api/v1/alerts"
+      slack_webhook: "https://hooks.slack.com/services/..."
+    
+    data_sources:
+      prometheus:
+        url: "http://prometheus.monitoring.svc.cluster.local:9090"
+        queries:
+          request_rate: 'rate(istio_requests_total[5m])'
+          error_rate: 'rate(istio_request_errors_total[5m])'
+          latency_p99: 'histogram_quantile(0.99, istio_request_duration_milliseconds_bucket)'
+      jaeger:
+        url: "http://jaeger-query.monitoring.svc.cluster.local:16686"
+      elasticsearch:
+        url: "http://elasticsearch.logging.svc.cluster.local:9200"
+
+  training_script.py: |
+    #!/usr/bin/env python3
+    """
+    Anomaly Detection Model Training Script
+    """
+    import os
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import IsolationForest
+    from sklearn.preprocessing import StandardScaler
+    import joblib
+    import logging
+    
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    
+    def load_training_data(data_path):
+        """Load training data from various sources"""
+        logger.info(f"Loading training data from {data_path}")
+        
+        # Load security metrics data
+        files = [
+            'prometheus_metrics.csv',
+            'jaeger_traces.csv', 
+            'security_logs.csv',
+            'network_flows.csv'
+        ]
+        
+        dataframes = []
+        for file in files:
+            file_path = os.path.join(data_path, file)
+            if os.path.exists(file_path):
+                df = pd.read_csv(file_path)
+                dataframes.append(df)
+                logger.info(f"Loaded {len(df)} records from {file}")
+        
+        if not dataframes:
+            raise ValueError("No training data found")
+        
+        # Combine all data
+        combined_df = pd.concat(dataframes, ignore_index=True)
+        logger.info(f"Combined dataset: {len(combined_df)} records")
+        
+        return combined_df
+    
+    def preprocess_features(df):
+        """Preprocess features for anomaly detection"""
+        logger.info("Preprocessing features")
+        
+        # Select relevant features
+        feature_columns = [
+            'request_rate', 'error_rate', 'latency_p99',
+            'cpu_usage', 'memory_usage', 'network_io'
+        ]
+        
+        # Handle missing values
+        df = df[feature_columns].fillna(df[feature_columns].median())
+        
+        # Remove outliers (beyond 3 standard deviations)
+        for col in feature_columns:
+            mean = df[col].mean()
+            std = df[col].std()
+            df = df[abs(df[col] - mean) <= 3 * std]
+        
+        logger.info(f"Preprocessed dataset: {len(df)} records")
+        return df
+    
+    def train_anomaly_model(X, contamination=0.1, n_estimators=100):
+        """Train Isolation Forest model"""
+        logger.info("Training Isolation Forest model")
+        
+        # Normalize features
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+        
+        # Train Isolation Forest
+        model = IsolationForest(
+            contamination=contamination,
+            n_estimators=n_estimators,
+            random_state=42,
+            n_jobs=-1
+        )
+        
+        model.fit(X_scaled)
+        
+        # Calculate anomaly scores
+        scores = model.decision_function(X_scaled)
+        predictions = model.predict(X_scaled)
+        
+        anomaly_rate = (predictions == -1).sum() / len(predictions)
+        logger.info(f"Training completed. Anomaly rate: {anomaly_rate:.3f}")
+        
+        return model, scaler
+    
+    def save_model(model, scaler, output_path):
+        """Save trained model and scaler"""
+        logger.info(f"Saving model to {output_path}")
+        
+        os.makedirs(output_path, exist_ok=True)
+        
+        # Save model and scaler
+        joblib.dump(model, os.path.join(output_path, 'model.pkl'))
+        joblib.dump(scaler, os.path.join(output_path, 'scaler.pkl'))
+        
+        # Save metadata
+        metadata = {
+            'model_type': 'isolation_forest',
+            'features': ['request_rate', 'error_rate', 'latency_p99', 
+                        'cpu_usage', 'memory_usage', 'network_io'],
+            'contamination': float(os.getenv('CONTAMINATION_RATE', '0.1')),
+            'n_estimators': int(os.getenv('N_ESTIMATORS', '100'))
+        }
+        
+        import json
+        with open(os.path.join(output_path, 'metadata.json'), 'w') as f:
+            json.dump(metadata, f, indent=2)
+        
+        logger.info("Model saved successfully")
+    
+    def main():
+        """Main training function"""
+        try:
+            # Get environment variables
+            data_path = os.getenv('TRAINING_DATA_PATH', '/data/security_logs')
+            output_path = os.getenv('MODEL_OUTPUT_PATH', '/models/anomaly_detection')
+            contamination = float(os.getenv('CONTAMINATION_RATE', '0.1'))
+            n_estimators = int(os.getenv('N_ESTIMATORS', '100'))
+            
+            # Load and preprocess data
+            df = load_training_data(data_path)
+            X = preprocess_features(df)
+            
+            # Train model
+            model, scaler = train_anomaly_model(X, contamination, n_estimators)
+            
+            # Save model
+            save_model(model, scaler, output_path)
+            
+            logger.info("Training completed successfully")
+            
+        except Exception as e:
+            logger.error(f"Training failed: {e}")
+            raise
+    
+    if __name__ == "__main__":
+        main()
+
+---
+# ML Training Scripts ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ml-training-scripts
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: ml-training-scripts
+    app.kubernetes.io/component: configuration
+data:
+  train_anomaly_model.py: |
+    #!/usr/bin/env python3
+    # Training script content from above config
+    exec(open('/etc/anomaly-detection/training_script.py').read())
+
+---
+# Anomaly Detection Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: anomaly-detection-service
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: anomaly-detection-service
+    app.kubernetes.io/component: ml-service
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+    protocol: TCP
+  - port: 9090
+    targetPort: 9090
+    name: grpc
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: anomaly-detection-service
+
+---
+# Persistent Volume Claims for ML Models and Data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ml-models-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: ml-models-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: security-data-pvc
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: security-data-storage
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: fast-ssd
+
+---
+# Anomaly Detection HPA
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: anomaly-detection-hpa
+  namespace: threat-detection
+  labels:
+    app.kubernetes.io/name: anomaly-detection-hpa
+    app.kubernetes.io/component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: anomaly-detection-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: anomaly_detection_queue_length
+      target:
+        type: AverageValue
+        averageValue: "100"

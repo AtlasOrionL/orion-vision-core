@@ -1,0 +1,589 @@
+# Orion Vision Core - Edge Security Lightweight Agent
+# Sprint 5.3 - Compliance Automation & Edge Security
+
+# Edge Security Agent DaemonSet
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: orion-edge-security-agent
+  namespace: edge-security
+  labels:
+    app.kubernetes.io/name: orion-edge-security-agent
+    app.kubernetes.io/component: edge-security
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-edge-security-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: orion-edge-security-agent
+      annotations:
+        sidecar.istio.io/inject: "false"  # Edge agents don't need service mesh
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      hostNetwork: true
+      hostPID: true
+      tolerations:
+      - key: node-role.kubernetes.io/edge
+        operator: Exists
+        effect: NoSchedule
+      - key: node.kubernetes.io/not-ready
+        operator: Exists
+        effect: NoExecute
+        tolerationSeconds: 300
+      nodeSelector:
+        node-role.kubernetes.io/edge: "true"
+      serviceAccountName: edge-security-agent
+      containers:
+      - name: edge-agent
+        image: orion-registry.company.com/edge-security-agent:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+          hostPort: 8080
+        - containerPort: 9090
+          name: grpc
+          hostPort: 9090
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: EDGE_MODE
+          value: "true"
+        - name: OFFLINE_CAPABLE
+          value: "true"
+        - name: SYNC_INTERVAL
+          value: "5m"
+        - name: THREAT_DETECTION_ENABLED
+          value: "true"
+        - name: RESOURCE_LIMIT_MODE
+          value: "conservative"
+        - name: CLOUD_ENDPOINT
+          value: "https://orion-cloud.company.com/edge-api"
+        volumeMounts:
+        - name: edge-config
+          mountPath: /etc/edge-security
+        - name: host-proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: host-sys
+          mountPath: /host/sys
+          readOnly: true
+        - name: host-var-log
+          mountPath: /host/var/log
+          readOnly: true
+        - name: edge-data
+          mountPath: /data/edge
+        - name: threat-signatures
+          mountPath: /data/signatures
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          privileged: true  # Required for host monitoring
+          runAsUser: 0
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: edge-config
+        configMap:
+          name: edge-security-config
+      - name: host-proc
+        hostPath:
+          path: /proc
+      - name: host-sys
+        hostPath:
+          path: /sys
+      - name: host-var-log
+        hostPath:
+          path: /var/log
+      - name: edge-data
+        hostPath:
+          path: /var/lib/orion-edge
+          type: DirectoryOrCreate
+      - name: threat-signatures
+        configMap:
+          name: edge-threat-signatures
+
+---
+# Edge Security Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edge-security-config
+  namespace: edge-security
+  labels:
+    app.kubernetes.io/name: edge-security-config
+    app.kubernetes.io/component: configuration
+data:
+  agent-config.yaml: |
+    # Edge Security Agent Configuration
+    agent:
+      mode: "edge"
+      node_role: "edge"
+      resource_constraints: true
+      offline_capable: true
+      sync_interval: "5m"
+      heartbeat_interval: "30s"
+    
+    detection:
+      enabled: true
+      lightweight_mode: true
+      cpu_threshold: 0.8
+      memory_threshold: 0.8
+      
+      modules:
+        - name: "process_monitor"
+          enabled: true
+          cpu_limit: "50m"
+          memory_limit: "64Mi"
+        
+        - name: "network_monitor"
+          enabled: true
+          cpu_limit: "30m"
+          memory_limit: "32Mi"
+        
+        - name: "file_monitor"
+          enabled: true
+          cpu_limit: "20m"
+          memory_limit: "32Mi"
+        
+        - name: "container_monitor"
+          enabled: true
+          cpu_limit: "40m"
+          memory_limit: "48Mi"
+    
+    threat_detection:
+      algorithms:
+        - name: "signature_based"
+          enabled: true
+          priority: "high"
+          resource_usage: "low"
+        
+        - name: "heuristic_analysis"
+          enabled: true
+          priority: "medium"
+          resource_usage: "medium"
+        
+        - name: "behavioral_analysis"
+          enabled: false  # Disabled for resource conservation
+          priority: "low"
+          resource_usage: "high"
+      
+      thresholds:
+        suspicious_activity: 0.7
+        malicious_activity: 0.8
+        critical_threat: 0.9
+    
+    communication:
+      cloud_sync:
+        enabled: true
+        endpoint: "https://orion-cloud.company.com/edge-api"
+        retry_attempts: 3
+        retry_interval: "30s"
+        timeout: "10s"
+        
+      peer_communication:
+        enabled: true
+        discovery_method: "mdns"
+        mesh_formation: true
+        
+      offline_mode:
+        enabled: true
+        cache_duration: "24h"
+        local_decision_making: true
+    
+    data_management:
+      local_storage:
+        enabled: true
+        max_size: "1Gi"
+        retention_period: "7d"
+        compression: true
+        
+      synchronization:
+        incremental_sync: true
+        conflict_resolution: "cloud_wins"
+        bandwidth_optimization: true
+    
+    security:
+      encryption:
+        at_rest: true
+        in_transit: true
+        algorithm: "AES-256-GCM"
+        
+      authentication:
+        method: "mutual_tls"
+        certificate_rotation: true
+        rotation_interval: "30d"
+        
+      integrity:
+        signature_verification: true
+        tamper_detection: true
+        secure_boot: true
+
+  offline-detection.yaml: |
+    # Offline Threat Detection Configuration
+    offline_detection:
+      enabled: true
+      fallback_mode: true
+      local_ml_models: true
+      
+      signature_database:
+        local_copy: true
+        update_frequency: "1h"
+        fallback_age_limit: "7d"
+        compression: true
+        
+      heuristic_rules:
+        - name: "suspicious_process_execution"
+          pattern: ".*\\.tmp/.*"
+          action: "alert"
+          confidence: 0.8
+          
+        - name: "unusual_network_connection"
+          pattern: "outbound_connection_to_unknown_ip"
+          action: "block"
+          confidence: 0.9
+          
+        - name: "privilege_escalation_attempt"
+          pattern: "sudo_without_tty"
+          action: "alert"
+          confidence: 0.7
+      
+      local_ml_inference:
+        enabled: true
+        models:
+          - name: "anomaly_detection_lite"
+            type: "isolation_forest"
+            size: "10MB"
+            accuracy: 0.85
+            
+          - name: "malware_classification_lite"
+            type: "random_forest"
+            size: "5MB"
+            accuracy: 0.82
+        
+        resource_limits:
+          cpu: "100m"
+          memory: "128Mi"
+          inference_timeout: "1s"
+      
+      decision_making:
+        autonomous_response: true
+        escalation_thresholds:
+          low: "log_only"
+          medium: "alert_and_log"
+          high: "block_and_alert"
+          critical: "isolate_and_escalate"
+        
+        local_policy_enforcement: true
+        emergency_lockdown: true
+
+  resource-optimization.yaml: |
+    # Resource Optimization Configuration
+    optimization:
+      enabled: true
+      adaptive_mode: true
+      
+      cpu_management:
+        nice_level: 10
+        cpu_affinity: "0-1"  # Use only first 2 cores
+        throttling_enabled: true
+        max_cpu_usage: 0.5
+        
+      memory_management:
+        memory_limit: "512Mi"
+        swap_usage: false
+        oom_score_adj: 100
+        garbage_collection: true
+        
+      disk_management:
+        io_priority: "idle"
+        max_disk_usage: "1Gi"
+        log_rotation: true
+        compression: true
+        
+      network_management:
+        bandwidth_limit: "10Mbps"
+        connection_pooling: true
+        compression: true
+        batching: true
+      
+      power_management:
+        low_power_mode: true
+        sleep_intervals: true
+        wake_on_threat: true
+        cpu_frequency_scaling: true
+      
+      adaptive_algorithms:
+        - metric: "cpu_usage"
+          threshold: 0.8
+          action: "reduce_detection_frequency"
+          
+        - metric: "memory_usage"
+          threshold: 0.9
+          action: "flush_caches"
+          
+        - metric: "battery_level"
+          threshold: 0.2
+          action: "enable_power_save_mode"
+          
+        - metric: "network_connectivity"
+          threshold: "disconnected"
+          action: "enable_offline_mode"
+
+---
+# Edge Threat Signatures
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edge-threat-signatures
+  namespace: edge-security
+  labels:
+    app.kubernetes.io/name: edge-threat-signatures
+    app.kubernetes.io/component: configuration
+data:
+  malware-signatures.yaml: |
+    # Lightweight Malware Signatures for Edge
+    signatures:
+      - id: "EDGE_MAL_001"
+        name: "Suspicious Binary Execution"
+        pattern: "^/tmp/.*\\.(sh|py|pl|exe)$"
+        type: "file_path"
+        severity: "medium"
+        action: "alert"
+        
+      - id: "EDGE_MAL_002"
+        name: "Cryptocurrency Miner"
+        pattern: "(xmrig|cpuminer|cgminer)"
+        type: "process_name"
+        severity: "high"
+        action: "block"
+        
+      - id: "EDGE_MAL_003"
+        name: "Reverse Shell"
+        pattern: "(nc|netcat).*-e.*/bin/(sh|bash)"
+        type: "command_line"
+        severity: "critical"
+        action: "isolate"
+  
+  network-signatures.yaml: |
+    # Network Threat Signatures
+    signatures:
+      - id: "EDGE_NET_001"
+        name: "Suspicious Outbound Connection"
+        pattern: "tcp_connection_to_tor_exit_node"
+        type: "network_connection"
+        severity: "high"
+        action: "block"
+        
+      - id: "EDGE_NET_002"
+        name: "DNS Tunneling"
+        pattern: "dns_query_length > 100"
+        type: "dns_query"
+        severity: "medium"
+        action: "alert"
+        
+      - id: "EDGE_NET_003"
+        name: "Port Scanning"
+        pattern: "tcp_syn_to_multiple_ports"
+        type: "network_behavior"
+        severity: "medium"
+        action: "alert"
+
+  behavioral-patterns.yaml: |
+    # Behavioral Analysis Patterns
+    patterns:
+      - id: "EDGE_BEH_001"
+        name: "Unusual Process Spawning"
+        description: "Process spawning at unusual times"
+        indicators:
+          - "process_creation_time between 02:00 and 05:00"
+          - "parent_process not in whitelist"
+        severity: "medium"
+        
+      - id: "EDGE_BEH_002"
+        name: "Privilege Escalation"
+        description: "Attempt to escalate privileges"
+        indicators:
+          - "setuid_execution"
+          - "sudo_without_password"
+          - "kernel_module_loading"
+        severity: "high"
+        
+      - id: "EDGE_BEH_003"
+        name: "Data Exfiltration"
+        description: "Large data transfer to external hosts"
+        indicators:
+          - "outbound_data_transfer > 100MB"
+          - "destination_ip not in whitelist"
+          - "encryption_detected"
+        severity: "critical"
+
+---
+# Edge Security RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: edge-security-agent
+  namespace: edge-security
+  labels:
+    app.kubernetes.io/name: edge-security-agent
+    app.kubernetes.io/component: service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: edge-security-agent
+  labels:
+    app.kubernetes.io/name: edge-security-agent
+    app.kubernetes.io/component: rbac
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "pods", "services"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "daemonsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+- apiGroups: ["security.openshift.io"]
+  resources: ["securitycontextconstraints"]
+  verbs: ["use"]
+  resourceNames: ["privileged"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: edge-security-agent
+  labels:
+    app.kubernetes.io/name: edge-security-agent
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edge-security-agent
+subjects:
+- kind: ServiceAccount
+  name: edge-security-agent
+  namespace: edge-security
+
+---
+# Edge Security Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: edge-security-agent
+  namespace: edge-security
+  labels:
+    app.kubernetes.io/name: edge-security-agent
+    app.kubernetes.io/component: edge-service
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/metrics"
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30080
+    name: http
+    protocol: TCP
+  - port: 9090
+    targetPort: 9090
+    nodePort: 30090
+    name: grpc
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: orion-edge-security-agent
+
+---
+# Edge Security Monitoring
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: edge-security-metrics
+  namespace: edge-security
+  labels:
+    app.kubernetes.io/name: edge-security-metrics
+    app.kubernetes.io/component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: edge-security-agent
+  endpoints:
+  - port: http
+    interval: 60s  # Longer interval for edge devices
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+    - edge-security
+
+---
+# Edge Security Alerts
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: edge-security-alerts
+  namespace: edge-security
+  labels:
+    app.kubernetes.io/name: edge-security-alerts
+    app.kubernetes.io/component: alerting
+spec:
+  groups:
+  - name: edge-security
+    rules:
+    - alert: EdgeAgentDown
+      expr: up{job="edge-security-agent"} == 0
+      for: 5m
+      labels:
+        severity: critical
+        component: edge-security
+      annotations:
+        summary: "Edge security agent is down"
+        description: "Edge security agent on node {{ $labels.instance }} has been down for more than 5 minutes"
+    
+    - alert: EdgeThreatDetected
+      expr: increase(edge_threats_detected_total[5m]) > 0
+      for: 1m
+      labels:
+        severity: warning
+        component: edge-security
+      annotations:
+        summary: "Threat detected on edge node"
+        description: "{{ $value }} threats detected on edge node {{ $labels.node }} in the last 5 minutes"
+    
+    - alert: EdgeResourceExhaustion
+      expr: edge_resource_usage_percent > 90
+      for: 10m
+      labels:
+        severity: warning
+        component: edge-security
+      annotations:
+        summary: "Edge node resource exhaustion"
+        description: "Edge node {{ $labels.node }} resource usage is {{ $value }}%"

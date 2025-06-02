@@ -1,0 +1,213 @@
+{
+  "agent_id": "event_driven_agent_dynamic_001",
+  "agent_name": "Dynamic Event-Driven Agent",
+  "agent_type": "event_driven_agent",
+  "priority": 9,
+  "auto_start": false,
+  "max_retries": 5,
+  "retry_delay": 2.0,
+  "heartbeat_interval": 30.0,
+  "timeout": 300.0,
+  "capabilities": [
+    "event_processing",
+    "task_management",
+    "adaptive_behavior",
+    "event_correlation",
+    "async_communication",
+    "multi_protocol_communication",
+    "event_sourcing",
+    "pub_sub_messaging"
+  ],
+  "dependencies": [],
+  "config_file": "config/agents/event_driven_agent_dynamic.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Advanced event-driven agent with async messaging and adaptive behavior",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "module_info": {
+      "module_name": "event_driven_agent",
+      "module_path": "agents/dynamic/event_driven_agent.py",
+      "class_name": "SmartEventDrivenAgent"
+    },
+    "event_driven_settings": {
+      "event_bus_enabled": true,
+      "event_store_enabled": true,
+      "event_history_size": 1000,
+      "async_processing": true,
+      "event_correlation": true,
+      "adaptive_behavior": true
+    },
+    "event_types": [
+      "agent_started",
+      "agent_stopped",
+      "agent_heartbeat",
+      "task_created",
+      "task_completed",
+      "task_failed",
+      "message_sent",
+      "message_received",
+      "protocol_connected",
+      "protocol_disconnected",
+      "system_alert",
+      "custom_event"
+    ],
+    "event_priorities": [
+      "critical",
+      "high",
+      "normal",
+      "low"
+    ],
+    "task_management": {
+      "max_active_tasks": 50,
+      "task_timeout": 300,
+      "auto_cleanup": true,
+      "task_history_size": 100,
+      "task_types": [
+        "generic",
+        "computation",
+        "communication",
+        "monitoring",
+        "emergency_response"
+      ]
+    },
+    "communication_settings": {
+      "multi_protocol_enabled": true,
+      "supported_protocols": [
+        "rabbitmq",
+        "websocket",
+        "http",
+        "http2"
+      ],
+      "default_protocol": "rabbitmq",
+      "protocol_preferences": [
+        "websocket",
+        "rabbitmq",
+        "http2",
+        "http"
+      ],
+      "message_to_event_mapping": true,
+      "event_to_message_mapping": true
+    },
+    "adaptive_behavior": {
+      "enabled": true,
+      "learning_rate": 0.1,
+      "pattern_detection": true,
+      "behavior_analysis_interval": 300,
+      "adaptation_threshold": 0.8,
+      "metrics": [
+        "response_time",
+        "success_rate",
+        "protocol_usage",
+        "communication_patterns"
+      ]
+    },
+    "event_correlation": {
+      "enabled": true,
+      "correlation_window": 3600,
+      "pattern_threshold": 5,
+      "auto_correlation": true,
+      "correlation_algorithms": [
+        "temporal",
+        "causal",
+        "semantic"
+      ]
+    },
+    "monitoring": {
+      "enable_metrics": true,
+      "metrics_interval": 60,
+      "health_check_interval": 30,
+      "performance_tracking": true,
+      "event_tracking": true,
+      "task_tracking": true,
+      "behavior_tracking": true
+    },
+    "storage": {
+      "event_store_path": "data/events",
+      "persistent_events": true,
+      "snapshot_enabled": true,
+      "snapshot_interval": 3600,
+      "compression": false,
+      "encryption": false
+    },
+    "async_settings": {
+      "event_queue_size": 1000,
+      "processing_workers": 4,
+      "batch_processing": false,
+      "batch_size": 10,
+      "processing_timeout": 30.0,
+      "retry_failed_events": true,
+      "max_retry_attempts": 3
+    },
+    "pub_sub_settings": {
+      "subscription_management": true,
+      "dynamic_subscriptions": true,
+      "subscription_filters": true,
+      "priority_queues": true,
+      "dead_letter_queue": "orion.dlq.events",
+      "message_ttl": 3600
+    },
+    "security": {
+      "event_validation": true,
+      "message_encryption": false,
+      "access_control": false,
+      "audit_logging": true,
+      "rate_limiting": {
+        "enabled": false,
+        "events_per_minute": 1000,
+        "messages_per_minute": 500
+      }
+    },
+    "error_handling": {
+      "retry_attempts": 3,
+      "retry_delay": 1.0,
+      "exponential_backoff": true,
+      "max_retry_delay": 30.0,
+      "circuit_breaker": true,
+      "fallback_protocols": true,
+      "error_events": true,
+      "error_correlation": true
+    },
+    "performance": {
+      "async_processing": true,
+      "concurrent_handlers": 10,
+      "event_batching": false,
+      "lazy_loading": true,
+      "memory_optimization": true,
+      "gc_optimization": true
+    },
+    "debugging": {
+      "event_tracing": true,
+      "message_tracing": true,
+      "correlation_tracing": true,
+      "performance_profiling": false,
+      "debug_events": false,
+      "verbose_logging": false
+    },
+    "integration": {
+      "agent_core_integration": true,
+      "multi_protocol_integration": true,
+      "dynamic_loader_integration": true,
+      "api_management_integration": true,
+      "monitoring_integration": true
+    },
+    "features": {
+      "event_sourcing": true,
+      "cqrs_pattern": false,
+      "saga_pattern": false,
+      "event_replay": true,
+      "time_travel_debugging": false,
+      "event_versioning": true,
+      "schema_evolution": false
+    },
+    "experimental": {
+      "ai_driven_correlation": false,
+      "predictive_behavior": false,
+      "auto_optimization": false,
+      "machine_learning": false,
+      "neural_adaptation": false
+    }
+  }
+}

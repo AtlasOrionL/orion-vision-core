@@ -1,0 +1,2 @@
+2025-06-01 20:09:18,015 - orion.agent.orchestration_test - INFO - {"timestamp": "2025-06-01T20:09:18.015221", "level": "INFO", "agent_id": "orchestration_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 20:09:18,015 - orion.agent.orchestration_test - INFO - {"timestamp": "2025-06-01T20:09:18.015327", "level": "INFO", "agent_id": "orchestration_test", "message": "Orchestration Manager initialized", "context": {}}

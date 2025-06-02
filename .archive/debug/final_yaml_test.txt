@@ -1,0 +1,5 @@
+✅ YAML SYNTAX: VALID
+✅ Docker Compose dosyası başarıyla parse edildi
+✅ Services: 2 servis
+✅ Networks: 1 network
+✅ Volumes: 1 volume

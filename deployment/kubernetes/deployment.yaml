@@ -1,0 +1,282 @@
+# Orion Vision Core - Kubernetes Deployment
+# Sprint 4.3 - Production Deployment & Advanced Monitoring
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orion-core
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: core
+    app.kubernetes.io/part-of: orion-platform
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+      app.kubernetes.io/component: core
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: orion-vision-core
+        app.kubernetes.io/component: core
+        app.kubernetes.io/part-of: orion-platform
+        app.kubernetes.io/version: "1.0.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: orion-service-account
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: orion-core
+        image: orion-vision-core:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http-api
+          containerPort: 8000
+          protocol: TCP
+        - name: discovery
+          containerPort: 8001
+          protocol: TCP
+        - name: orchestration
+          containerPort: 8002
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        - name: health
+          containerPort: 9091
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: orion-config
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http-api
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http-api
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http-api
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        volumeMounts:
+        - name: orion-data
+          mountPath: /app/data
+        - name: orion-logs
+          mountPath: /app/logs
+        - name: orion-config-volume
+          mountPath: /app/config
+        - name: logging-config
+          mountPath: /app/config/logging.conf
+          subPath: logging.conf
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: orion-data
+        persistentVolumeClaim:
+          claimName: orion-data-pvc
+      - name: orion-logs
+        persistentVolumeClaim:
+          claimName: orion-logs-pvc
+      - name: orion-config-volume
+        configMap:
+          name: orion-agent-configs
+      - name: logging-config
+        configMap:
+          name: orion-logging-config
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - orion-vision-core
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orion-redis
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: cache
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/component: cache
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/component: cache
+        app.kubernetes.io/part-of: orion-platform
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - name: redis
+          containerPort: 6379
+          protocol: TCP
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        command:
+        - redis-server
+        - --appendonly
+        - "yes"
+        - --maxmemory
+        - "256mb"
+        - --maxmemory-policy
+        - "allkeys-lru"
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-data-pvc
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: orion-service-account
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: service-account
+    app.kubernetes.io/part-of: orion-platform
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: orion-cluster-role
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/part-of: orion-platform
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "endpoints"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["pods", "nodes"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: orion-cluster-role-binding
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/part-of: orion-platform
+subjects:
+- kind: ServiceAccount
+  name: orion-service-account
+  namespace: orion-system
+roleRef:
+  kind: ClusterRole
+  name: orion-cluster-role
+  apiGroup: rbac.authorization.k8s.io

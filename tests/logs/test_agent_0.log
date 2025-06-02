@@ -1,0 +1,24 @@
+2025-06-01 14:09:28,052 - Agent.test_agent_0 - INFO - info:123 - Agent initialized: test_agent_0 (test)
+2025-06-01 14:09:28,052 - Agent.test_agent_0 - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-01 14:09:28,053 - Agent.test_agent_0 - INFO - info:123 - Stopping agent: test_agent_0
+2025-06-01 14:09:28,053 - Agent.test_agent_0 - INFO - info:123 - Agent stopped successfully: test_agent_0
+2025-06-01 14:09:28,053 - Agent.test_agent_0 - INFO - info:123 - Agent initialized: test_agent_0 (test)
+2025-06-01 14:09:28,053 - Agent.test_agent_0 - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-01 14:09:28,054 - Agent.test_agent_0 - INFO - info:123 - Stopping agent: test_agent_0
+2025-06-01 14:09:28,054 - Agent.test_agent_0 - INFO - info:123 - Agent stopped successfully: test_agent_0
+2025-06-01 14:09:28,054 - Agent.test_agent_0 - INFO - info:123 - Agent initialized: test_agent_0 (test)
+2025-06-01 14:09:28,054 - Agent.test_agent_0 - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-01 14:09:28,054 - Agent.test_agent_0 - INFO - info:123 - Agent initialized: test_agent_0 (test)
+2025-06-01 14:09:28,054 - Agent.test_agent_0 - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-01 14:09:28,055 - Agent.test_agent_0 - INFO - info:123 - Starting agent: test_agent_0
+2025-06-01 14:09:28,055 - Agent.test_agent_0 - INFO - info:123 - Agent started successfully: test_agent_0
+2025-06-01 14:09:28,055 - Agent.test_agent_0 - INFO - info:123 - Stopping agent: test_agent_0
+2025-06-01 14:09:28,155 - Agent.test_agent_0 - INFO - info:123 - Agent stopped successfully: test_agent_0
+2025-06-01 14:09:28,156 - Agent.test_agent_0 - WARNING - warning:127 - Agent already stopped or stopping: AgentStatus.STOPPED
+2025-06-01 14:09:28,156 - Agent.test_agent_0 - INFO - info:123 - Agent initialized: test_agent_0 (test)
+2025-06-01 14:09:28,156 - Agent.test_agent_0 - ERROR - error:131 - Registry registration error: attempted relative import with no known parent package
+2025-06-01 14:09:28,157 - Agent.test_agent_0 - INFO - info:123 - Starting agent: test_agent_0
+2025-06-01 14:09:28,157 - Agent.test_agent_0 - INFO - info:123 - Agent started successfully: test_agent_0
+2025-06-01 14:09:28,157 - Agent.test_agent_0 - INFO - info:123 - Stopping agent: test_agent_0
+2025-06-01 14:09:28,257 - Agent.test_agent_0 - INFO - info:123 - Agent stopped successfully: test_agent_0
+2025-06-01 14:09:28,257 - Agent.test_agent_0 - WARNING - warning:127 - Agent already stopped or stopping: AgentStatus.STOPPED

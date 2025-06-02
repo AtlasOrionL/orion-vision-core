@@ -1,0 +1,189 @@
+# Orion Vision Core - Kubernetes Ingress
+# Sprint 4.3 - Production Deployment & Advanced Monitoring
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orion-core-ingress
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: orion-platform
+  annotations:
+    # NGINX Ingress Controller annotations
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    
+    # Rate limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    
+    # Load balancing
+    nginx.ingress.kubernetes.io/load-balance: "round_robin"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$remote_addr"
+    
+    # Timeouts
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    
+    # Buffer sizes
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    
+    # Health checks
+    nginx.ingress.kubernetes.io/health-check-path: "/health"
+    nginx.ingress.kubernetes.io/health-check-interval: "30s"
+    
+    # TLS
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    
+    # Monitoring
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "10254"
+    prometheus.io/path: "/metrics"
+spec:
+  tls:
+  - hosts:
+    - orion-api.company.com
+    - orion-discovery.company.com
+    - orion-orchestration.company.com
+    secretName: orion-tls-secret
+  rules:
+  - host: orion-api.company.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 8000
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 8000
+      - path: /health
+        pathType: Exact
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 8000
+      - path: /metrics
+        pathType: Exact
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 9090
+  - host: orion-discovery.company.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 8001
+      - path: /discovery
+        pathType: Prefix
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 8001
+  - host: orion-orchestration.company.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 8002
+      - path: /orchestration
+        pathType: Prefix
+        backend:
+          service:
+            name: orion-core-service
+            port:
+              number: 8002
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: orion-network-policy
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: network-policy
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: orion-vision-core
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: orion-system
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 8001
+    - protocol: TCP
+      port: 8002
+    - protocol: TCP
+      port: 9090
+    - protocol: TCP
+      port: 9091
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: orion-system
+    ports:
+    - protocol: TCP
+      port: 6379  # Redis
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: TCP
+      port: 53   # DNS
+    - protocol: UDP
+      port: 53   # DNS
+  - to: []  # Allow all outbound traffic for external APIs
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443

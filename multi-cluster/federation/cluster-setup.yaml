@@ -1,0 +1,513 @@
+# Orion Vision Core - Multi-Cluster Service Mesh Federation
+# Sprint 5.2.1 - Multi-Cluster Federation Setup
+
+# Multi-Cluster Federation Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: multi-cluster-config
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: multi-cluster-federation
+    app.kubernetes.io/component: configuration
+data:
+  federation.yaml: |
+    # Multi-cluster federation configuration
+    clusters:
+      primary:
+        name: "orion-primary"
+        region: "us-west-1"
+        zone: "us-west-1a"
+        network: "network1"
+        endpoint: "https://primary.orion-cluster.local"
+        role: "primary"
+      remote:
+        name: "orion-remote"
+        region: "us-east-1" 
+        zone: "us-east-1a"
+        network: "network2"
+        endpoint: "https://remote.orion-cluster.local"
+        role: "remote"
+    
+    federation:
+      trust_domain: "cluster.local"
+      mesh_id: "orion-mesh"
+      cluster_discovery: true
+      cross_network_gateways: true
+      locality_load_balancing: true
+      failover_enabled: true
+
+---
+# Cluster Role for Multi-Cluster Access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: istio-multi-cluster-reader
+  labels:
+    app.kubernetes.io/name: istio-multi-cluster
+    app.kubernetes.io/component: rbac
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "pods", "services", "endpoints", "namespaces"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["discovery.k8s.io"]
+  resources: ["endpointslices"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.istio.io"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["security.istio.io"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+
+---
+# Service Account for Multi-Cluster
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-multi-cluster-reader
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: istio-multi-cluster
+    app.kubernetes.io/component: service-account
+
+---
+# Cluster Role Binding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: istio-multi-cluster-reader
+  labels:
+    app.kubernetes.io/name: istio-multi-cluster
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: istio-multi-cluster-reader
+subjects:
+- kind: ServiceAccount
+  name: istio-multi-cluster-reader
+  namespace: istio-system
+
+---
+# Secret for Remote Cluster Access
+apiVersion: v1
+kind: Secret
+metadata:
+  name: istio-remote-secret-orion-remote
+  namespace: istio-system
+  labels:
+    istio/cluster: orion-remote
+    app.kubernetes.io/name: istio-multi-cluster
+    app.kubernetes.io/component: secret
+  annotations:
+    networking.istio.io/cluster: orion-remote
+type: Opaque
+data:
+  # This will be populated with the remote cluster's kubeconfig
+  # Use: kubectl create secret generic istio-remote-secret-orion-remote \
+  #      --from-file=orion-remote=/path/to/remote/kubeconfig \
+  #      -n istio-system
+  orion-remote: ""
+
+---
+# Multi-Cluster Network Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: multi-cluster-network-config
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: multi-cluster-network
+    app.kubernetes.io/component: configuration
+data:
+  networks.yaml: |
+    networks:
+      network1:
+        endpoints:
+        - fromRegistry: orion-primary
+        gateways:
+        - registryServiceName: istio-eastwestgateway.istio-system.svc.cluster.local
+          port: 15443
+      network2:
+        endpoints:
+        - fromRegistry: orion-remote
+        gateways:
+        - registryServiceName: istio-eastwestgateway.istio-system.svc.cluster.local
+          port: 15443
+
+---
+# Cross-Cluster Service Discovery
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: cross-cluster-orion-services
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: cross-cluster-services
+    app.kubernetes.io/component: service-discovery
+spec:
+  hosts:
+  - orion-core.orion-system.global
+  - orion-discovery.orion-system.global
+  - orion-orchestration.orion-system.global
+  location: MESH_EXTERNAL
+  ports:
+  - number: 8000
+    name: http-orion-core
+    protocol: HTTP
+  - number: 8001
+    name: http-orion-discovery
+    protocol: HTTP
+  - number: 8002
+    name: http-orion-orchestration
+    protocol: HTTP
+  resolution: DNS
+  addresses:
+  - 240.0.0.1 # Virtual IP for cross-cluster services
+  endpoints:
+  - address: orion-core.orion-system.svc.cluster.local
+    network: network1
+    ports:
+      http-orion-core: 8000
+  - address: orion-discovery.orion-system.svc.cluster.local
+    network: network1
+    ports:
+      http-orion-discovery: 8001
+  - address: orion-orchestration.orion-system.svc.cluster.local
+    network: network1
+    ports:
+      http-orion-orchestration: 8002
+
+---
+# Destination Rule for Cross-Cluster Load Balancing
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: cross-cluster-orion-services-dr
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: cross-cluster-destination-rule
+    app.kubernetes.io/component: traffic-management
+spec:
+  host: "*.orion-system.global"
+  trafficPolicy:
+    loadBalancer:
+      localityLbSetting:
+        enabled: true
+        distribute:
+        - from: "region1/zone1/*"
+          to:
+            "region1/zone1/*": 80
+            "region2/zone1/*": 20
+        - from: "region2/zone1/*"
+          to:
+            "region2/zone1/*": 80
+            "region1/zone1/*": 20
+        failover:
+        - from: region1
+          to: region2
+        - from: region2
+          to: region1
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+        maxRequestsPerConnection: 10
+    circuitBreaker:
+      consecutiveErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+  portLevelSettings:
+  - port:
+      number: 8000
+    loadBalancer:
+      consistentHash:
+        httpHeaderName: "x-user-id"
+
+---
+# Virtual Service for Cross-Cluster Routing
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: cross-cluster-orion-routing
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: cross-cluster-routing
+    app.kubernetes.io/component: traffic-management
+spec:
+  hosts:
+  - orion-core.orion-system.global
+  - orion-discovery.orion-system.global
+  - orion-orchestration.orion-system.global
+  gateways:
+  - mesh
+  - istio-system/cross-cluster-gateway
+  http:
+  - match:
+    - headers:
+        cluster-preference:
+          exact: "primary"
+    route:
+    - destination:
+        host: orion-core.orion-system.global
+      weight: 100
+    fault:
+      delay:
+        percentage:
+          value: 0.1
+        fixedDelay: 5s
+  - match:
+    - headers:
+        cluster-preference:
+          exact: "remote"
+    route:
+    - destination:
+        host: orion-core.orion-system.global
+      weight: 100
+  - route:
+    - destination:
+        host: orion-core.orion-system.global
+      weight: 70
+    - destination:
+        host: orion-core.orion-system.global
+      weight: 30
+    mirror:
+      host: orion-core.orion-system.global
+    mirrorPercentage:
+      value: 10.0
+
+---
+# Cross-Cluster Gateway
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: cross-cluster-gateway
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: cross-cluster-gateway
+    app.kubernetes.io/component: networking
+spec:
+  selector:
+    istio: eastwestgateway
+  servers:
+  - port:
+      number: 15443
+      name: tls
+      protocol: TLS
+    tls:
+      mode: ISTIO_MUTUAL
+    hosts:
+    - "*.orion-system.global"
+    - "*.istio-system.global"
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*.orion-system.global"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: ISTIO_MUTUAL
+    hosts:
+    - "*.orion-system.global"
+
+---
+# East-West Gateway for Cross-Cluster Communication
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-eastwestgateway
+  namespace: istio-system
+  labels:
+    istio: eastwestgateway
+    app.kubernetes.io/name: istio-eastwestgateway
+    app.kubernetes.io/component: gateway
+spec:
+  type: LoadBalancer
+  selector:
+    istio: eastwestgateway
+  ports:
+  - port: 15021
+    targetPort: 15021
+    name: status-port
+    protocol: TCP
+  - port: 15443
+    targetPort: 15443
+    name: tls
+    protocol: TCP
+
+---
+# East-West Gateway Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-eastwestgateway
+  namespace: istio-system
+  labels:
+    istio: eastwestgateway
+    app.kubernetes.io/name: istio-eastwestgateway
+    app.kubernetes.io/component: gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      istio: eastwestgateway
+  template:
+    metadata:
+      labels:
+        istio: eastwestgateway
+        app.kubernetes.io/name: istio-eastwestgateway
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: istio-eastwestgateway-service-account
+      containers:
+      - name: istio-proxy
+        image: docker.io/istio/proxyv2:1.19.3
+        ports:
+        - containerPort: 15021
+          protocol: TCP
+        - containerPort: 15443
+          protocol: TCP
+        args:
+        - proxy
+        - router
+        - --domain
+        - $(POD_NAMESPACE).svc.cluster.local
+        - --proxyLogLevel=warning
+        - --proxyComponentLogLevel=misc:error
+        - --log_output_level=default:info
+        env:
+        - name: JWT_POLICY
+          value: third-party-jwt
+        - name: PILOT_CERT_PROVIDER
+          value: istiod
+        - name: CA_ADDR
+          value: istiod.istio-system.svc:15012
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        - name: SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        - name: ISTIO_META_WORKLOAD_NAME
+          value: istio-eastwestgateway
+        - name: ISTIO_META_OWNER
+          value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/istio-eastwestgateway
+        - name: ISTIO_META_MESH_ID
+          value: orion-mesh
+        - name: TRUST_DOMAIN
+          value: cluster.local
+        - name: ISTIO_META_UNPRIVILEGED_POD
+          value: "true"
+        - name: ISTIO_META_CLUSTER_ID
+          value: orion-primary
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 1337
+          runAsNonRoot: true
+          runAsUser: 1337
+        volumeMounts:
+        - name: workload-socket
+          mountPath: /var/run/secrets/workload-spiffe-uds
+        - name: credential-socket
+          mountPath: /var/run/secrets/credential-uds
+        - name: workload-certs
+          mountPath: /var/run/secrets/workload-spiffe-credentials
+        - name: istio-envoy
+          mountPath: /etc/istio/proxy
+        - name: config-volume
+          mountPath: /etc/istio/config
+        - name: istiod-ca-cert
+          mountPath: /var/run/secrets/istio
+        - name: istio-token
+          mountPath: /var/run/secrets/tokens
+          readOnly: true
+        - name: podinfo
+          mountPath: /etc/istio/pod
+      volumes:
+      - emptyDir: {}
+        name: workload-socket
+      - emptyDir: {}
+        name: credential-socket
+      - emptyDir: {}
+        name: workload-certs
+      - emptyDir:
+          medium: Memory
+        name: istio-envoy
+      - name: config-volume
+        configMap:
+          name: istio
+          optional: true
+      - name: istiod-ca-cert
+        configMap:
+          name: istio-ca-root-cert
+      - name: istio-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: istio-token
+              expirationSeconds: 43200
+              audience: istio-ca
+      - name: podinfo
+        downwardAPI:
+          items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+
+---
+# East-West Gateway Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-eastwestgateway-service-account
+  namespace: istio-system
+  labels:
+    istio: eastwestgateway
+    app.kubernetes.io/name: istio-eastwestgateway
+    app.kubernetes.io/component: service-account

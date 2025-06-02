@@ -1,0 +1,41 @@
+# Source files
+src/**
+.vscode/**
+
+# Development files
+.gitignore
+.git
+.github
+.eslintrc.json
+tsconfig.json
+create-icon.js
+
+# Tests
+test/**
+**/test/**
+**/*.test.js
+**/*.spec.js
+test-extension.js
+
+# Node modules (except runtime dependencies)
+node_modules/**
+!node_modules/axios/**
+!node_modules/ws/**
+!node_modules/node-fetch/**
+
+# Build artifacts
+**/*.map
+**/*.ts
+**/*.tsbuildinfo
+.npmrc
+.npmignore
+
+# Misc
+.DS_Store
+thumbs.db
+*.vsix
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+

@@ -1,0 +1,281 @@
+{
+  "agent_id": "learning_agent_dynamic_001",
+  "agent_name": "Dynamic Learning Agent",
+  "agent_type": "learning_agent",
+  "priority": 10,
+  "auto_start": false,
+  "max_retries": 5,
+  "retry_delay": 2.0,
+  "heartbeat_interval": 30.0,
+  "timeout": 300.0,
+  "capabilities": [
+    "machine_learning",
+    "pattern_recognition",
+    "adaptive_behavior",
+    "reinforcement_learning",
+    "knowledge_management",
+    "recommendation_system",
+    "experience_learning",
+    "behavioral_adaptation",
+    "supervised_learning",
+    "unsupervised_learning",
+    "neural_networks",
+    "decision_trees"
+  ],
+  "dependencies": [],
+  "config_file": "config/agents/learning_agent_dynamic.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Advanced learning agent with ML, pattern recognition and adaptive behavior",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "module_info": {
+      "module_name": "learning_agent",
+      "module_path": "agents/dynamic/learning_agent.py",
+      "class_name": "LearningAgent"
+    },
+    "learning_settings": {
+      "learning_enabled": true,
+      "learning_rate": 0.1,
+      "discount_factor": 0.9,
+      "exploration_rate": 0.15,
+      "curiosity_level": 0.7,
+      "adaptation_threshold": 0.8,
+      "adaptation_strategy": "gradual",
+      "pattern_detection": true,
+      "knowledge_persistence": true,
+      "model_auto_training": true
+    },
+    "machine_learning": {
+      "supervised_learning": {
+        "enabled": true,
+        "algorithms": [
+          "random_forest",
+          "decision_tree",
+          "svm",
+          "neural_network"
+        ],
+        "auto_training": true,
+        "training_threshold": 50,
+        "validation_split": 0.2,
+        "cross_validation": true
+      },
+      "unsupervised_learning": {
+        "enabled": true,
+        "algorithms": [
+          "kmeans",
+          "dbscan",
+          "hierarchical",
+          "pca"
+        ],
+        "auto_clustering": true,
+        "cluster_count": 5,
+        "dimensionality_reduction": true
+      },
+      "reinforcement_learning": {
+        "enabled": true,
+        "algorithm": "q_learning",
+        "learning_rate": 0.1,
+        "discount_factor": 0.9,
+        "exploration_rate": 0.15,
+        "exploration_decay": 0.995,
+        "min_exploration": 0.01,
+        "experience_replay": true,
+        "replay_buffer_size": 10000
+      },
+      "neural_networks": {
+        "enabled": false,
+        "framework": "tensorflow",
+        "architecture": "feedforward",
+        "hidden_layers": [64, 32],
+        "activation": "relu",
+        "optimizer": "adam",
+        "learning_rate": 0.001
+      }
+    },
+    "pattern_recognition": {
+      "enabled": true,
+      "min_pattern_frequency": 3,
+      "pattern_similarity_threshold": 0.8,
+      "temporal_window": 3600,
+      "sequence_analysis": true,
+      "temporal_analysis": true,
+      "periodic_detection": true,
+      "anomaly_detection": true,
+      "feature_extraction": {
+        "numeric_features": true,
+        "categorical_features": true,
+        "temporal_features": true,
+        "sequence_features": true
+      }
+    },
+    "knowledge_base": {
+      "enabled": true,
+      "storage_type": "sqlite",
+      "storage_path": "data/knowledge",
+      "cache_enabled": true,
+      "cache_size": 1000,
+      "persistence": true,
+      "backup_enabled": true,
+      "backup_interval": 3600,
+      "compression": false,
+      "encryption": false,
+      "knowledge_categories": [
+        "general",
+        "experience",
+        "patterns",
+        "models",
+        "performance",
+        "behavior"
+      ]
+    },
+    "adaptive_behavior": {
+      "enabled": true,
+      "adaptation_strategies": [
+        "immediate",
+        "gradual",
+        "threshold_based",
+        "time_based",
+        "performance_based"
+      ],
+      "default_strategy": "gradual",
+      "adaptation_frequency": 300,
+      "performance_window": 100,
+      "trend_analysis": true,
+      "behavior_modification": {
+        "exploration_adjustment": true,
+        "learning_rate_adjustment": true,
+        "strategy_switching": true,
+        "parameter_optimization": true
+      }
+    },
+    "recommendation_system": {
+      "enabled": true,
+      "recommendation_types": [
+        "pattern_based",
+        "ml_prediction",
+        "rl_action",
+        "knowledge_based"
+      ],
+      "confidence_threshold": 0.5,
+      "max_recommendations": 5,
+      "context_awareness": true,
+      "personalization": true,
+      "feedback_learning": true
+    },
+    "performance_tracking": {
+      "enabled": true,
+      "metrics": [
+        "success_rate",
+        "response_time",
+        "learning_efficiency",
+        "adaptation_frequency",
+        "pattern_discovery_rate",
+        "model_accuracy",
+        "recommendation_quality"
+      ],
+      "history_size": 1000,
+      "real_time_monitoring": true,
+      "performance_alerts": true,
+      "trend_analysis": true,
+      "benchmarking": true
+    },
+    "task_management": {
+      "max_active_tasks": 20,
+      "task_timeout": 300,
+      "auto_cleanup": true,
+      "task_history_size": 100,
+      "learning_integration": true,
+      "task_types": [
+        "learning_task",
+        "training_task",
+        "analysis_task",
+        "adaptation_task",
+        "exploration_task"
+      ],
+      "priority_learning": true,
+      "task_recommendation": true
+    },
+    "communication": {
+      "learning_from_messages": true,
+      "message_pattern_analysis": true,
+      "communication_adaptation": true,
+      "response_optimization": true,
+      "context_learning": true,
+      "sender_profiling": true
+    },
+    "exploration": {
+      "enabled": true,
+      "exploration_rate": 0.1,
+      "exploration_decay": 0.995,
+      "min_exploration": 0.01,
+      "curiosity_driven": true,
+      "novelty_detection": true,
+      "exploration_strategies": [
+        "random",
+        "epsilon_greedy",
+        "upper_confidence_bound",
+        "thompson_sampling"
+      ],
+      "default_strategy": "epsilon_greedy"
+    },
+    "model_management": {
+      "auto_save": true,
+      "save_interval": 1800,
+      "model_versioning": true,
+      "model_validation": true,
+      "model_selection": true,
+      "ensemble_methods": false,
+      "model_compression": false,
+      "model_deployment": true
+    },
+    "data_management": {
+      "data_collection": true,
+      "data_preprocessing": true,
+      "feature_engineering": true,
+      "data_validation": true,
+      "data_augmentation": false,
+      "data_privacy": true,
+      "data_retention": {
+        "learning_data": 30,
+        "model_data": 90,
+        "performance_data": 60
+      }
+    },
+    "security": {
+      "model_security": true,
+      "data_encryption": false,
+      "access_control": false,
+      "audit_logging": true,
+      "privacy_protection": true,
+      "secure_learning": true
+    },
+    "integration": {
+      "agent_core_integration": true,
+      "event_driven_integration": true,
+      "multi_protocol_integration": true,
+      "api_integration": true,
+      "external_ml_services": false,
+      "cloud_integration": false
+    },
+    "debugging": {
+      "learning_tracing": true,
+      "model_debugging": true,
+      "performance_profiling": false,
+      "verbose_logging": false,
+      "debug_mode": false,
+      "learning_visualization": false
+    },
+    "experimental": {
+      "advanced_algorithms": false,
+      "quantum_learning": false,
+      "federated_learning": false,
+      "transfer_learning": false,
+      "meta_learning": false,
+      "continual_learning": true,
+      "few_shot_learning": false
+    }
+  }
+}

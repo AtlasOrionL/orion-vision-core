@@ -1,0 +1,5 @@
+2025-06-01 18:03:22,343 - orion.agent.plugin_test - INFO - {"timestamp": "2025-06-01T18:03:22.343591", "level": "INFO", "agent_id": "plugin_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 18:03:22,343 - orion.agent.plugin_test - INFO - {"timestamp": "2025-06-01T18:03:22.343689", "level": "INFO", "agent_id": "plugin_test", "message": "Plugin Manager initialized", "context": {}}
+2025-06-01 18:03:22,343 - orion.agent.plugin_test - INFO - {"timestamp": "2025-06-01T18:03:22.343750", "level": "INFO", "agent_id": "plugin_test", "message": "Plugin directory added", "context": {"directory": "/tmp/test_plugins"}}
+2025-06-01 18:03:22,343 - orion.agent.plugin_test - WARNING - {"timestamp": "2025-06-01T18:03:22.343827", "level": "WARNING", "agent_id": "plugin_test", "message": "Plugin directory not found", "context": {"directory": "/tmp/test_plugins"}}
+2025-06-01 18:03:22,343 - orion.agent.plugin_test - INFO - {"timestamp": "2025-06-01T18:03:22.343888", "level": "INFO", "agent_id": "plugin_test", "message": "Plugin discovery completed", "context": {"discovered_count": 0, "total_discovered": 0}}

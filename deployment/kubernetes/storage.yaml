@@ -1,0 +1,260 @@
+# Orion Vision Core - Kubernetes Storage
+# Sprint 4.3 - Production Deployment & Advanced Monitoring
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: orion-fast-ssd
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: orion-platform
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+  iops: "3000"
+  throughput: "125"
+  encrypted: "true"
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: orion-data-pvc
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: data-storage
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: orion-fast-ssd
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: orion-logs-pvc
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: logs-storage
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: orion-fast-ssd
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data-pvc
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: cache-storage
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: orion-fast-ssd
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: orion-shared-logs-pv
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: shared-logs
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: orion-fast-ssd
+  nfs:
+    server: nfs-server.company.com
+    path: /shared/orion/logs
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+    - rsize=1048576
+    - wsize=1048576
+    - timeo=600
+    - retrans=2
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: orion-shared-logs-pvc
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: shared-logs-claim
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: orion-fast-ssd
+  volumeName: orion-shared-logs-pv
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orion-backup-script
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: backup
+    app.kubernetes.io/part-of: orion-platform
+data:
+  backup.sh: |
+    #!/bin/bash
+    # Orion Vision Core - Backup Script
+    
+    set -e
+    
+    BACKUP_DIR="/backup"
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    BACKUP_NAME="orion_backup_${TIMESTAMP}"
+    
+    echo "Starting backup: $BACKUP_NAME"
+    
+    # Create backup directory
+    mkdir -p "$BACKUP_DIR/$BACKUP_NAME"
+    
+    # Backup database
+    if [ -f "/app/data/orion.db" ]; then
+        echo "Backing up database..."
+        cp "/app/data/orion.db" "$BACKUP_DIR/$BACKUP_NAME/orion.db"
+    fi
+    
+    # Backup configuration
+    if [ -d "/app/config" ]; then
+        echo "Backing up configuration..."
+        cp -r "/app/config" "$BACKUP_DIR/$BACKUP_NAME/"
+    fi
+    
+    # Backup logs (last 7 days)
+    if [ -d "/app/logs" ]; then
+        echo "Backing up recent logs..."
+        find "/app/logs" -name "*.log" -mtime -7 -exec cp {} "$BACKUP_DIR/$BACKUP_NAME/" \;
+    fi
+    
+    # Create archive
+    echo "Creating archive..."
+    cd "$BACKUP_DIR"
+    tar -czf "${BACKUP_NAME}.tar.gz" "$BACKUP_NAME"
+    rm -rf "$BACKUP_NAME"
+    
+    # Cleanup old backups (keep last 30)
+    echo "Cleaning up old backups..."
+    ls -t orion_backup_*.tar.gz | tail -n +31 | xargs -r rm
+    
+    echo "Backup completed: ${BACKUP_NAME}.tar.gz"
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: orion-backup-cronjob
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: backup-job
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: orion-vision-core
+            app.kubernetes.io/component: backup-job
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: backup
+            image: alpine:latest
+            command:
+            - /bin/sh
+            - /scripts/backup.sh
+            volumeMounts:
+            - name: orion-data
+              mountPath: /app/data
+              readOnly: true
+            - name: orion-logs
+              mountPath: /app/logs
+              readOnly: true
+            - name: orion-config-volume
+              mountPath: /app/config
+              readOnly: true
+            - name: backup-script
+              mountPath: /scripts
+            - name: backup-storage
+              mountPath: /backup
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "50m"
+              limits:
+                memory: "128Mi"
+                cpu: "100m"
+          volumes:
+          - name: orion-data
+            persistentVolumeClaim:
+              claimName: orion-data-pvc
+          - name: orion-logs
+            persistentVolumeClaim:
+              claimName: orion-logs-pvc
+          - name: orion-config-volume
+            configMap:
+              name: orion-agent-configs
+          - name: backup-script
+            configMap:
+              name: orion-backup-script
+              defaultMode: 0755
+          - name: backup-storage
+            persistentVolumeClaim:
+              claimName: orion-backup-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: orion-backup-pvc
+  namespace: orion-system
+  labels:
+    app.kubernetes.io/name: orion-vision-core
+    app.kubernetes.io/component: backup-storage
+    app.kubernetes.io/part-of: orion-platform
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: orion-fast-ssd
+  resources:
+    requests:
+      storage: 50Gi

@@ -1,0 +1,54 @@
+{
+  "agent_id": "calculator_agent_dynamic_001",
+  "agent_name": "Dynamic Calculator Agent",
+  "agent_type": "calculator_agent",
+  "priority": 6,
+  "auto_start": false,
+  "max_retries": 3,
+  "retry_delay": 1.5,
+  "heartbeat_interval": 20.0,
+  "timeout": 180.0,
+  "capabilities": [
+    "mathematical_calculations",
+    "basic_arithmetic",
+    "advanced_math",
+    "calculation_history",
+    "dynamic_loading"
+  ],
+  "dependencies": [],
+  "config_file": "config/agents/calculator_agent_dynamic.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Dynamically loaded calculator agent for mathematical operations",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "module_info": {
+      "module_name": "calculator_agent",
+      "module_path": "agents/dynamic/calculator_agent.py",
+      "class_name": "CalculatorAgent"
+    },
+    "calculator_settings": {
+      "supported_operations": [
+        "add", "subtract", "multiply", "divide",
+        "power", "sqrt", "sin", "cos", "tan",
+        "log", "factorial"
+      ],
+      "max_history_size": 100,
+      "precision": 10,
+      "angle_unit": "degrees"
+    },
+    "performance_settings": {
+      "work_interval": 3.0,
+      "max_calculations_per_cycle": 5,
+      "enable_random_calculations": true
+    },
+    "monitoring": {
+      "enable_metrics": true,
+      "metrics_interval": 60,
+      "health_check_interval": 30,
+      "track_calculation_performance": true
+    }
+  }
+}

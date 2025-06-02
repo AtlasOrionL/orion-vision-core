@@ -1,0 +1,6 @@
+2025-06-01 17:47:58,438 - orion.agent.cache_test - INFO - {"timestamp": "2025-06-01T17:47:58.438673", "level": "INFO", "agent_id": "cache_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 17:47:58,438 - orion.agent.cache_test - INFO - {"timestamp": "2025-06-01T17:47:58.438785", "level": "INFO", "agent_id": "cache_test", "message": "Cache Manager initialized", "context": {}}
+2025-06-01 17:47:58,438 - orion.agent.cache_test - INFO - {"timestamp": "2025-06-01T17:47:58.438975", "level": "INFO", "agent_id": "cache_test", "message": "Cache warmer registered", "context": {"key": "warm_key"}}
+2025-06-01 19:51:51,099 - orion.agent.cache_test - INFO - {"timestamp": "2025-06-01T19:51:51.099679", "level": "INFO", "agent_id": "cache_test", "message": "Metrics Collector initialized", "context": {}}
+2025-06-01 19:51:51,099 - orion.agent.cache_test - INFO - {"timestamp": "2025-06-01T19:51:51.099930", "level": "INFO", "agent_id": "cache_test", "message": "Cache Manager initialized", "context": {}}
+2025-06-01 19:51:51,100 - orion.agent.cache_test - INFO - {"timestamp": "2025-06-01T19:51:51.100007", "level": "INFO", "agent_id": "cache_test", "message": "Cache created", "context": {"cache_id": "test_cache", "cache_name": "Test Cache", "strategy": "lru", "level": "l1_memory", "max_size_mb": 10.0, "max_entries": 100}}

@@ -1,0 +1,42 @@
+{
+  "agent_id": "simple_agent_001",
+  "agent_name": "Simple Test Agent",
+  "agent_type": "simple_agent",
+  "priority": 5,
+  "auto_start": true,
+  "max_retries": 3,
+  "retry_delay": 2.0,
+  "heartbeat_interval": 15.0,
+  "timeout": 120.0,
+  "capabilities": [
+    "simple_processing",
+    "task_counting",
+    "random_work",
+    "status_reporting"
+  ],
+  "dependencies": [],
+  "config_file": "config/agents/simple_agent_config.json",
+  "log_level": "INFO",
+  "metadata": {
+    "description": "Simple agent for testing and demonstration",
+    "version": "1.0.0",
+    "author": "Orion Development Team",
+    "created": "2025-05-29",
+    "environment": "development",
+    "work_settings": {
+      "work_interval": 2.0,
+      "max_tasks": 20,
+      "task_types": [
+        "processing",
+        "analyzing", 
+        "computing",
+        "calculating"
+      ]
+    },
+    "monitoring": {
+      "enable_metrics": true,
+      "metrics_interval": 60,
+      "health_check_interval": 30
+    }
+  }
+}

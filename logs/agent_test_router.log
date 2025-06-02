@@ -1,0 +1,3 @@
+2025-06-01 16:33:23,937 - orion.agent.test_router - INFO - {"timestamp": "2025-06-01T16:33:23.937343", "level": "INFO", "agent_id": "test_router", "message": "Message Router initialized", "context": {}}
+2025-06-01 16:33:23,937 - orion.agent.test_router - INFO - {"timestamp": "2025-06-01T16:33:23.937444", "level": "INFO", "agent_id": "test_router", "message": "Routing strategy changed", "context": {"strategy": "round_robin"}}
+2025-06-01 16:33:23,937 - orion.agent.test_router - INFO - {"timestamp": "2025-06-01T16:33:23.937503", "level": "INFO", "agent_id": "test_router", "message": "Message route added", "context": {"route_id": "test_route_001", "source_protocol": "http", "target_protocol": "websocket", "source_address": "agent_001", "target_address": "agent_002"}}
