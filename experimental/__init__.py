@@ -17,7 +17,8 @@ __status__ = "Experimental"
 
 # Experimental modules
 __all__ = [
-    "quantum_consciousness"
+    "quantum_consciousness",
+    "gaming_ai"
 ]
 
 # Safety warning

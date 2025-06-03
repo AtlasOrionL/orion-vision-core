@@ -1,0 +1,105 @@
+{
+  "gaming_ai_config": {
+    "version": "0.1.0",
+    "experimental": true,
+    "description": "Gaming AI Configuration for Orion Vision Core"
+  },
+  
+  "vision_settings": {
+    "capture_fps": 30,
+    "capture_region": null,
+    "detection_threshold": 0.7,
+    "ocr_language": "eng",
+    "ocr_config": "--oem 3 --psm 6",
+    "enable_object_detection": true,
+    "enable_ocr": true,
+    "enable_color_detection": true
+  },
+  
+  "control_settings": {
+    "mouse_precision": "high",
+    "keyboard_delay": 50,
+    "action_delay": 0.05,
+    "max_actions_per_second": 20,
+    "safety_mode": true,
+    "human_like_behavior": true,
+    "random_offset_range": 3
+  },
+  
+  "ai_settings": {
+    "assistance_level": 0.3,
+    "control_mode": "assistance",
+    "enable_quantum_decisions": true,
+    "quantum_randomness": 0.2,
+    "strategy_exploration": true,
+    "learning_enabled": true,
+    "adaptation_rate": 0.1
+  },
+  
+  "safety_settings": {
+    "rate_limiting": true,
+    "human_verification_interval": 300,
+    "anti_detection_enabled": true,
+    "respect_game_tos": true,
+    "ethical_gaming_mode": true,
+    "max_session_duration": 7200
+  },
+  
+  "game_specific": {
+    "strategy_games": {
+      "focus_areas": ["resource_management", "unit_control", "map_analysis"],
+      "decision_speed": "medium",
+      "multi_tasking": true
+    },
+    "action_games": {
+      "focus_areas": ["reaction_time", "aim_assistance", "movement"],
+      "decision_speed": "fast",
+      "precision_mode": true
+    },
+    "rpg_games": {
+      "focus_areas": ["character_progression", "quest_optimization", "inventory"],
+      "decision_speed": "slow",
+      "exploration_mode": true
+    }
+  },
+  
+  "performance_settings": {
+    "gpu_acceleration": true,
+    "memory_limit_mb": 1024,
+    "cpu_threads": 4,
+    "optimization_level": "balanced",
+    "debug_mode": false
+  },
+  
+  "ui_settings": {
+    "show_suggestions": true,
+    "suggestion_overlay": true,
+    "confidence_display": true,
+    "performance_metrics": true,
+    "quantum_status": true
+  },
+  
+  "logging_settings": {
+    "log_level": "INFO",
+    "log_actions": true,
+    "log_decisions": true,
+    "log_performance": true,
+    "log_file": "gaming_ai.log"
+  },
+  
+  "experimental_features": {
+    "quantum_consciousness": true,
+    "advanced_pattern_recognition": true,
+    "predictive_analysis": true,
+    "multi_game_learning": false,
+    "neural_adaptation": false
+  },
+  
+  "compliance": {
+    "respect_anti_cheat": true,
+    "fair_play_mode": true,
+    "transparency_required": true,
+    "user_consent_required": true,
+    "data_privacy": true
+  }
+}

@@ -27,6 +27,7 @@ Orion Vision Core is a cutting-edge multi-agent AI framework designed for enterp
 - **⚛️ Quantum Computing**: Post-quantum cryptography and quantum key distribution
 - **🔒 Advanced Security**: Multi-layer security with threat detection and response
 - **🔬 Experimental Features**: Quantum consciousness and advanced AI research
+- **🎮 Gaming AI**: Hybrid human-AI control for gaming applications
 
 ## 📊 Sprint Progress
 
@@ -147,7 +148,8 @@ orion_vision_core/
 │   ├── autonomous/            # Autonomous security systems
 │   └── quantum/               # Quantum computing security
 ├── experimental/              # Experimental features
-│   └── quantum_consciousness/ # Quantum AI research
+│   ├── quantum_consciousness/ # Quantum AI research
+│   └── gaming_ai/             # Gaming AI with hybrid control
 ├── service-mesh/              # Istio configuration
 ├── multi-cluster/             # Multi-cluster federation
 ├── threat-detection/          # ML-based threat detection

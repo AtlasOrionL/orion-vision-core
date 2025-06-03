@@ -9,8 +9,8 @@
 ## 🧪 **EXPERIMENTAL MODULES**
 
 ### **🧠 Quantum Consciousness**
-**Location**: `quantum_consciousness/`  
-**Status**: Prototype  
+**Location**: `quantum_consciousness/`
+**Status**: Prototype
 **Description**: Quantum-inspired AI consciousness simulation
 
 #### **Features:**
@@ -25,6 +25,25 @@
 - **QuantumBrain Class**: Core quantum simulation engine
 - **SystemMaintenance Class**: Self-healing system protocols
 - **NexusEvolution Class**: AI evolution and consciousness testing
+
+### **🎮 Gaming AI**
+**Location**: `gaming_ai/`
+**Status**: Experimental Integration
+**Description**: Advanced Gaming AI with Hybrid Human-AI Control
+
+#### **Features:**
+- **Computer Vision**: Real-time screen analysis and object detection
+- **Hybrid Control**: Seamless human-AI collaboration
+- **Quantum Gaming**: Quantum-enhanced decision making
+- **Ethical Framework**: Anti-cheat compliant architecture
+- **Multi-Game Support**: Adaptable to different game types
+
+#### **Components:**
+- `gaming_ai_core.py` - Main gaming AI implementation
+- **GameVisionAgent**: Computer vision for gaming
+- **HybridGameAgent**: Human-AI collaboration system
+- **VisionEngine**: Screen analysis and object detection
+- **GameActionSystem**: Safe action execution
 
 ---
 
