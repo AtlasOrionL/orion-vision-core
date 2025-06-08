@@ -1,0 +1,336 @@
+2025-06-03 17:26:58,545 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:26:58,549 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:26:58,549 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:26:58,549 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:26:58,549 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:26:58,549 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:26:58,550 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:26:58,550 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:26:58,550 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:26:58,550 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:26:58,550 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:26:58,550 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:26:58,550 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:26:58,550 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.get_optimization_summary
+2025-06-03 17:26:58,550 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:26:58,550 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:26:58,550 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:26:58,550 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:26:58,550 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:26:58,550 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:26:58,550 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:26:58,550 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:26:58,550 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:26:58,550 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:26:58,550 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:26:58,551 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:26:58,551 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:26:58,551 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.start_monitoring
+2025-06-03 17:26:58,551 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 17:26:58,551 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.apply_optimizations
+2025-06-03 17:26:58,551 - GameOptimizations - INFO - ✅ Optimization applied: valorant_input_lag
+2025-06-03 17:26:58,551 - GameOptimizations - INFO - ✅ Optimization applied: valorant_accuracy
+2025-06-03 17:26:58,651 - GameOptimizations - INFO - 🎮 2 optimizations applied for valorant
+2025-06-03 17:26:59,652 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:26:59,652 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.start_coordination
+2025-06-03 17:26:59,652 - AgentCommunication - INFO - 🔄 Communication started
+2025-06-03 17:26:59,652 - StrategyCoordination - INFO - 🔄 Strategy coordination started
+2025-06-03 17:26:59,653 - MultiAgentCoordinator - INFO - 🚀 Multi-agent coordination started
+2025-06-03 17:26:59,653 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.register_agent
+2025-06-03 17:26:59,653 - AgentCommunication - INFO - ✅ Agent registered: test_agent_1 (demo)
+2025-06-03 17:26:59,653 - MultiAgentCoordinator - INFO - ✅ Agent registered: test_agent_1 (demo)
+2025-06-03 17:26:59,653 - UnifiedGamingAI - INFO - 🔗 Processing request: team_behaviors.execute_behavior
+2025-06-03 17:26:59,653 - TeamBehaviors - INFO - 👥 Team behavior created: coordinated_attack for demo_team
+2025-06-03 17:26:59,653 - TeamBehaviors - WARNING - ⚠️ Team action conditions not met: sync_attack_1748964419653
+2025-06-03 17:26:59,653 - TeamBehaviors - INFO - 👥 Team behavior executed: coordinated_attack (✅)
+2025-06-03 17:26:59,653 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.stop_monitoring
+2025-06-03 17:27:00,052 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 17:27:00,053 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:27:00,053 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:27:00,053 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:27:00,053 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:27:00,053 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:27:00,054 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:27:00,054 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:27:00,054 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:27:00,054 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:27:00,054 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:27:00,054 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:27:00,054 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:27:00,054 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:27:00,054 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.get_gaming_advice
+2025-06-03 17:27:00,057 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.analyze_performance
+2025-06-03 17:27:00,058 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.suggest_optimizations
+2025-06-03 17:27:00,059 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:27:00,060 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:27:00,060 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:27:00,060 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:27:00,060 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:27:00,060 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:27:00,060 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:27:00,060 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:27:00,060 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:27:00,060 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:27:00,060 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:27:00,060 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:27:00,060 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:27:00,060 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:27:00,060 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:27:00,060 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:27:00,060 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:27:00,061 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:27:00,061 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:27:00,061 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:27:00,061 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:27:00,061 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:27:00,061 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:27:00,061 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:27:00,061 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:27:00,061 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:27:00,061 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:27:00,061 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.detect_game
+2025-06-03 17:27:00,061 - GameOptimizations - INFO - 🎮 Game detected: valorant
+2025-06-03 17:27:00,061 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.start_monitoring
+2025-06-03 17:27:00,061 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 17:27:00,061 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.get_comprehensive_optimizations
+2025-06-03 17:27:00,061 - ValorantOptimizer - INFO - 🏆 Competitive optimizations applied
+2025-06-03 17:27:00,061 - GameOptimizations - INFO - 🎮 Comprehensive optimizations applied for valorant
+2025-06-03 17:27:00,061 - UnifiedGamingAI - ERROR - ❌ Ollama insights query failed: Object of type ValorantMetrics is not JSON serializable
+2025-06-03 17:27:00,061 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.start_coordination
+2025-06-03 17:27:00,062 - AgentCommunication - INFO - 🔄 Communication started
+2025-06-03 17:27:00,062 - StrategyCoordination - INFO - 🔄 Strategy coordination started
+2025-06-03 17:27:00,062 - MultiAgentCoordinator - INFO - 🚀 Multi-agent coordination started
+2025-06-03 17:27:00,062 - UnifiedGamingAI - INFO - 🔗 Processing request: team_behaviors.execute_behavior
+2025-06-03 17:27:00,062 - TeamBehaviors - INFO - 👥 Team behavior created: coordinated_attack for demo_team
+2025-06-03 17:27:00,062 - TeamBehaviors - WARNING - ⚠️ Team action conditions not met: sync_attack_1748964420062
+2025-06-03 17:27:00,062 - TeamBehaviors - INFO - 👥 Team behavior executed: coordinated_attack (✅)
+2025-06-03 17:27:00,062 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:27:00,063 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.get_gaming_advice
+2025-06-03 17:27:00,064 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.stop_monitoring
+2025-06-03 17:27:00,562 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 17:42:04,025 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:42:04,029 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:42:04,029 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:42:04,029 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:42:04,029 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:42:04,029 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:42:04,029 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:42:04,029 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:42:04,029 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:42:04,029 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:42:04,029 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:42:04,029 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:42:04,029 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:42:04,029 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.get_optimization_summary
+2025-06-03 17:42:04,030 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:42:04,030 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:42:04,030 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:42:04,030 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:42:04,030 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:42:04,030 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:42:04,030 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:42:04,030 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:42:04,030 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:42:04,030 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:42:04,030 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:42:04,030 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:42:04,030 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:42:04,030 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.start_monitoring
+2025-06-03 17:42:04,030 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 17:42:04,030 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.apply_optimizations
+2025-06-03 17:42:04,030 - GameOptimizations - INFO - ✅ Optimization applied: valorant_fps_boost
+2025-06-03 17:42:04,031 - GameOptimizations - INFO - ✅ Optimization applied: valorant_input_lag
+2025-06-03 17:42:04,131 - GameOptimizations - INFO - 🎮 2 optimizations applied for valorant
+2025-06-03 17:42:05,132 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:42:05,132 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.start_coordination
+2025-06-03 17:42:05,132 - AgentCommunication - INFO - 🔄 Communication started
+2025-06-03 17:42:05,133 - StrategyCoordination - INFO - 🔄 Strategy coordination started
+2025-06-03 17:42:05,133 - MultiAgentCoordinator - INFO - 🚀 Multi-agent coordination started
+2025-06-03 17:42:05,133 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.register_agent
+2025-06-03 17:42:05,133 - AgentCommunication - INFO - ✅ Agent registered: test_agent_1 (demo)
+2025-06-03 17:42:05,133 - MultiAgentCoordinator - INFO - ✅ Agent registered: test_agent_1 (demo)
+2025-06-03 17:42:05,133 - UnifiedGamingAI - INFO - 🔗 Processing request: team_behaviors.execute_behavior
+2025-06-03 17:42:05,133 - TeamBehaviors - INFO - 👥 Team behavior created: coordinated_attack for demo_team
+2025-06-03 17:42:05,133 - TeamBehaviors - WARNING - ⚠️ Team action conditions not met: sync_attack_1748965325133
+2025-06-03 17:42:05,133 - TeamBehaviors - INFO - 👥 Team behavior executed: coordinated_attack (✅)
+2025-06-03 17:42:05,133 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.stop_monitoring
+2025-06-03 17:42:05,532 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 17:42:05,532 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:42:05,532 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:42:05,532 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:42:05,532 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:42:05,533 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:42:05,534 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:42:05,534 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:42:05,534 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:42:05,534 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:42:05,534 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:42:05,534 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:42:05,534 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:42:05,534 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:42:05,534 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.get_gaming_advice
+2025-06-03 17:42:05,536 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.analyze_performance
+2025-06-03 17:42:05,538 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.suggest_optimizations
+2025-06-03 17:42:05,539 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:42:05,540 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:42:05,540 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:42:05,540 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:42:05,540 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:42:05,540 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:42:05,540 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:42:05,540 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:42:05,540 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:42:05,540 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:42:05,540 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:42:05,540 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:42:05,540 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:42:05,540 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:42:05,541 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:42:05,541 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:42:05,541 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:42:05,541 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:42:05,541 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:42:05,541 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:42:05,541 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:42:05,541 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:42:05,541 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:42:05,541 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:42:05,541 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:42:05,541 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:42:05,541 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:42:05,541 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.detect_game
+2025-06-03 17:42:05,541 - GameOptimizations - INFO - 🎮 Game detected: valorant
+2025-06-03 17:42:05,541 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.start_monitoring
+2025-06-03 17:42:05,542 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 17:42:05,542 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.get_comprehensive_optimizations
+2025-06-03 17:42:05,542 - GameOptimizations - INFO - ✅ Optimization applied: valorant_accuracy
+2025-06-03 17:42:05,642 - GameOptimizations - INFO - 🎮 1 optimizations applied for valorant
+2025-06-03 17:42:05,642 - ValorantOptimizer - INFO - 🏆 Competitive optimizations applied
+2025-06-03 17:42:05,642 - GameOptimizations - INFO - 🎮 Comprehensive optimizations applied for valorant
+2025-06-03 17:42:05,642 - UnifiedGamingAI - ERROR - ❌ Ollama insights query failed: Object of type ValorantMetrics is not JSON serializable
+2025-06-03 17:42:05,642 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.start_coordination
+2025-06-03 17:42:05,642 - AgentCommunication - INFO - 🔄 Communication started
+2025-06-03 17:42:05,643 - StrategyCoordination - INFO - 🔄 Strategy coordination started
+2025-06-03 17:42:05,643 - MultiAgentCoordinator - INFO - 🚀 Multi-agent coordination started
+2025-06-03 17:42:05,643 - UnifiedGamingAI - INFO - 🔗 Processing request: team_behaviors.execute_behavior
+2025-06-03 17:42:05,643 - TeamBehaviors - INFO - 👥 Team behavior created: coordinated_attack for demo_team
+2025-06-03 17:42:05,643 - TeamBehaviors - WARNING - ⚠️ Team action conditions not met: sync_attack_1748965325643
+2025-06-03 17:42:05,643 - TeamBehaviors - INFO - 👥 Team behavior executed: coordinated_attack (✅)
+2025-06-03 17:42:05,643 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:42:05,645 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.get_gaming_advice
+2025-06-03 17:42:05,646 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.stop_monitoring
+2025-06-03 17:42:06,042 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 17:45:18,425 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:45:18,429 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:45:18,429 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:45:18,429 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:45:18,429 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:45:18,429 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:45:18,429 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:45:18,429 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:45:18,429 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:45:18,429 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:45:18,429 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:45:18,429 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:45:18,429 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:45:18,430 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.get_optimization_summary
+2025-06-03 17:45:18,430 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:45:18,430 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:45:18,430 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:45:18,430 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:45:18,430 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:45:18,430 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:45:18,430 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:45:18,430 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:45:18,430 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:45:18,430 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:45:18,430 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:45:18,430 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:45:18,430 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:45:18,430 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.start_monitoring
+2025-06-03 17:45:18,431 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 17:45:18,431 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.apply_optimizations
+2025-06-03 17:45:18,431 - GameOptimizations - INFO - ✅ Optimization applied: valorant_fps_boost
+2025-06-03 17:45:18,431 - GameOptimizations - INFO - ✅ Optimization applied: valorant_input_lag
+2025-06-03 17:45:18,431 - GameOptimizations - INFO - ✅ Optimization applied: valorant_accuracy
+2025-06-03 17:45:18,531 - GameOptimizations - INFO - 🎮 3 optimizations applied for valorant
+2025-06-03 17:45:19,532 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:45:19,532 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.start_coordination
+2025-06-03 17:45:19,532 - AgentCommunication - INFO - 🔄 Communication started
+2025-06-03 17:45:19,532 - StrategyCoordination - INFO - 🔄 Strategy coordination started
+2025-06-03 17:45:19,533 - MultiAgentCoordinator - INFO - 🚀 Multi-agent coordination started
+2025-06-03 17:45:19,533 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.register_agent
+2025-06-03 17:45:19,533 - AgentCommunication - INFO - ✅ Agent registered: test_agent_1 (demo)
+2025-06-03 17:45:19,533 - MultiAgentCoordinator - INFO - ✅ Agent registered: test_agent_1 (demo)
+2025-06-03 17:45:19,533 - UnifiedGamingAI - INFO - 🔗 Processing request: team_behaviors.execute_behavior
+2025-06-03 17:45:19,533 - TeamBehaviors - INFO - 👥 Team behavior created: coordinated_attack for demo_team
+2025-06-03 17:45:19,533 - TeamBehaviors - WARNING - ⚠️ Team action conditions not met: sync_attack_1748965519533
+2025-06-03 17:45:19,533 - TeamBehaviors - INFO - 👥 Team behavior executed: coordinated_attack (✅)
+2025-06-03 17:45:19,533 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.stop_monitoring
+2025-06-03 17:45:19,932 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 17:45:19,932 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:45:19,932 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:45:19,932 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:45:19,932 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:45:19,932 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:45:19,933 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:45:19,933 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:45:19,933 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:45:19,934 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:45:19,934 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:45:19,934 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:45:19,934 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:45:19,934 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:45:19,934 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.get_gaming_advice
+2025-06-03 17:45:19,936 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.analyze_performance
+2025-06-03 17:45:19,937 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.suggest_optimizations
+2025-06-03 17:45:19,938 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:45:19,939 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:45:19,939 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:45:19,939 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:45:19,939 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:45:19,940 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:45:19,940 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:45:19,940 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:45:19,940 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:45:19,940 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:45:19,940 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:45:19,940 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:45:19,940 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:45:19,940 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:45:19,940 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 17:45:19,940 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 17:45:19,940 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 17:45:19,940 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 17:45:19,940 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 17:45:19,940 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 17:45:19,940 - AgentCommunication - INFO - 🤝 Agent Communication initialized (max agents: 8)
+2025-06-03 17:45:19,941 - StrategyCoordination - INFO - 🎯 Strategy Coordination initialized
+2025-06-03 17:45:19,941 - ConflictResolution - INFO - ⚖️ Conflict Resolution System initialized
+2025-06-03 17:45:19,941 - MultiAgentCoordinator - INFO - 🤝 Multi-Agent Coordinator initialized (max agents: 8)
+2025-06-03 17:45:19,941 - TeamBehaviors - INFO - 👥 Team Behaviors initialized
+2025-06-03 17:45:19,941 - UnifiedGamingAI - INFO - ✅ All Gaming AI modules initialized
+2025-06-03 17:45:19,941 - UnifiedGamingAI - INFO - 🔗 Unified Gaming AI API initialized
+2025-06-03 17:45:19,941 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.detect_game
+2025-06-03 17:45:19,941 - GameOptimizations - INFO - 🎮 Game detected: valorant
+2025-06-03 17:45:19,941 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.start_monitoring
+2025-06-03 17:45:19,941 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 17:45:19,941 - UnifiedGamingAI - INFO - 🔗 Processing request: game_optimization.get_comprehensive_optimizations
+2025-06-03 17:45:19,941 - GameOptimizations - INFO - ✅ Optimization applied: valorant_fps_boost
+2025-06-03 17:45:19,941 - GameOptimizations - INFO - ✅ Optimization applied: valorant_input_lag
+2025-06-03 17:45:19,942 - GameOptimizations - INFO - ✅ Optimization applied: valorant_accuracy
+2025-06-03 17:45:20,042 - GameOptimizations - INFO - 🎮 3 optimizations applied for valorant
+2025-06-03 17:45:20,042 - ValorantOptimizer - INFO - 🏆 Competitive optimizations applied
+2025-06-03 17:45:20,042 - GameOptimizations - INFO - 🎮 Comprehensive optimizations applied for valorant
+2025-06-03 17:45:20,044 - UnifiedGamingAI - INFO - 🔗 Processing request: multi_agent_coordination.start_coordination
+2025-06-03 17:45:20,044 - AgentCommunication - INFO - 🔄 Communication started
+2025-06-03 17:45:20,044 - StrategyCoordination - INFO - 🔄 Strategy coordination started
+2025-06-03 17:45:20,044 - MultiAgentCoordinator - INFO - 🚀 Multi-agent coordination started
+2025-06-03 17:45:20,044 - UnifiedGamingAI - INFO - 🔗 Processing request: team_behaviors.execute_behavior
+2025-06-03 17:45:20,044 - TeamBehaviors - INFO - 👥 Team behavior created: coordinated_attack for demo_team
+2025-06-03 17:45:20,044 - TeamBehaviors - WARNING - ⚠️ Team action conditions not met: sync_attack_1748965520044
+2025-06-03 17:45:20,045 - TeamBehaviors - INFO - 👥 Team behavior executed: coordinated_attack (✅)
+2025-06-03 17:45:20,045 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.get_current_performance
+2025-06-03 17:45:20,046 - UnifiedGamingAI - INFO - 🔗 Processing request: ai_assistance.get_gaming_advice
+2025-06-03 17:45:20,047 - UnifiedGamingAI - INFO - 🔗 Processing request: performance_monitoring.stop_monitoring
+2025-06-03 17:45:20,442 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped

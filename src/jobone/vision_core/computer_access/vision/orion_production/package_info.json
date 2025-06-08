@@ -1,0 +1,9 @@
+{
+  "package_name": "orion-vision-core",
+  "version": "1.0.0",
+  "description": "Orion Vision Core - Production Package + Music",
+  "files_included": 4,
+  "music_support": true,
+  "deployment_ready": true,
+  "package_date": "2025-06-05T16:32:52.259945"
+}

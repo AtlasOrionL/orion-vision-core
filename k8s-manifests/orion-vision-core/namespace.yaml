@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: orion-vision-core
+    name: orion-vision-core
+  name: orion-vision-core

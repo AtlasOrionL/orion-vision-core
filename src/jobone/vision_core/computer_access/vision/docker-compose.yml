@@ -1,0 +1,59 @@
+# 🔄 Hibrit Docker Compose
+version: '3.8'
+
+services:
+  # Development container
+  orion-dev:
+    build: 
+      context: .
+      dockerfile: docker/development/Dockerfile
+    container_name: orion-q01-dev
+    environment:
+      - DISPLAY=:99
+      - PYTHONPATH=/app/src
+      - ORION_MODE=development
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./shared:/app/shared
+      - ./native:/app/native
+    ports:
+      - "5900:5900"  # VNC
+      - "8888:8888"  # Jupyter
+    networks:
+      - orion-hybrid
+    stdin_open: true
+    tty: true
+
+  # Testing container
+  orion-test:
+    build:
+      context: .
+      dockerfile: docker/testing/Dockerfile
+    container_name: orion-q01-test
+    environment:
+      - PYTHONPATH=/app/src
+      - ORION_MODE=testing
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./shared/results:/app/results
+    networks:
+      - orion-hybrid
+    depends_on:
+      - orion-dev
+
+  # Bridge service
+  orion-bridge:
+    image: alpine:latest
+    container_name: orion-bridge
+    command: tail -f /dev/null
+    volumes:
+      - ./shared:/shared
+      - ./bridge:/bridge
+    networks:
+      - orion-hybrid
+
+networks:
+  orion-hybrid:
+    driver: bridge

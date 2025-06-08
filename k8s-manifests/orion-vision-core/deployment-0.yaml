@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    app: orion-quantum-core
+    component: quantum-foundation
+    version: v1.0.0
+  name: orion-quantum-core
+  namespace: orion-vision-core
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: orion-quantum-core
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: orion-quantum-core
+        component: quantum-foundation
+        version: v1.0.0
+    spec:
+      containers:
+      - env:
+        - name: QUANTUM_MODE
+          value: production
+        - name: PLANCK_CONSTANT
+          value: '1.0'
+        - name: CONSERVATION_TOLERANCE
+          value: '0.001'
+        - name: LEARNING_RATE
+          value: '0.1'
+        image: orion/quantum-core:v1.0.0
+        livenessProbe:
+          httpGet:
+            path: /alive
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: orion-quantum-core
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: quantum
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+      volumes: []

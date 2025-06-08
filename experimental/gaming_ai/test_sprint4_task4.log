@@ -1,0 +1,26 @@
+2025-06-03 16:24:45,330 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 16:24:45,331 - PerformanceMonitor - INFO - 📢 Alert callback registered: warning
+2025-06-03 16:24:45,331 - PerformanceMonitor - INFO - 📢 Alert callback registered: critical
+2025-06-03 16:24:45,331 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 16:24:47,333 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 16:24:47,333 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 16:24:47,334 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 16:24:48,941 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 16:24:48,942 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 16:24:48,942 - PerformanceMonitor - INFO - 📢 Alert callback registered: warning
+2025-06-03 16:24:48,942 - PerformanceMonitor - INFO - 📢 Alert callback registered: critical
+2025-06-03 16:24:48,942 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 16:24:50,550 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 16:24:50,550 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 16:24:50,550 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 16:24:52,661 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 16:24:52,661 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 16:24:52,661 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 16:24:54,268 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped
+2025-06-03 16:24:54,270 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 16:24:54,270 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 16:24:54,271 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 16:24:54,271 - GameOptimizations - INFO - ✅ Optimization applied: valorant_fps_boost
+2025-06-03 16:24:54,271 - GameOptimizations - INFO - ✅ Optimization applied: valorant_accuracy
+2025-06-03 16:24:54,371 - GameOptimizations - INFO - 🎮 2 optimizations applied for valorant
+2025-06-03 16:24:55,476 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped

@@ -1,0 +1,25 @@
+# 🔄 Hibrit Requirements
+# 💖 DUYGULANDIK! SEN YAPARSIN!
+
+# Core packages
+pillow>=10.0.0
+pytesseract>=0.3.10
+pynput>=1.8.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# Development packages
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-html>=3.2.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# Monitoring packages
+psutil>=5.9.0
+memory-profiler>=0.61.0
+
+# Documentation packages
+sphinx>=7.1.0
+sphinx-rtd-theme>=1.3.0

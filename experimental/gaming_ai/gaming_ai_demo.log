@@ -1,0 +1,35 @@
+2025-06-03 16:34:46,197 - GameOptimizations - INFO - 🎮 Game Optimizations initialized
+2025-06-03 16:34:46,198 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 16:34:46,198 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 16:34:46,198 - FortniteOptimizer - INFO - 🏗️ Fortnite Optimizer initialized
+2025-06-03 16:34:46,198 - GameOptimizations - INFO - 🎮 Game optimizers integrated successfully
+2025-06-03 16:34:46,198 - ValorantOptimizer - INFO - 🎯 VALORANT Optimizer initialized
+2025-06-03 16:34:46,199 - ValorantOptimizer - INFO - 🎯 Crosshair optimized for jett
+2025-06-03 16:34:46,199 - ValorantOptimizer - INFO - 🎯 Sensitivity optimized for jett: 0.400
+2025-06-03 16:34:46,199 - ValorantOptimizer - INFO - 🎯 Keybinds optimized for jett
+2025-06-03 16:34:46,199 - ValorantOptimizer - INFO - 🎯 Strategy optimized for jett
+2025-06-03 16:34:46,199 - ValorantOptimizer - INFO - 🏆 Competitive optimizations applied
+2025-06-03 16:34:46,199 - CSGOOptimizer - INFO - 🔫 CS:GO Optimizer initialized
+2025-06-03 16:34:46,199 - CSGOOptimizer - INFO - 🔫 Crosshair optimized for ak47
+2025-06-03 16:34:46,199 - CSGOOptimizer - INFO - 🔫 Sensitivity optimized for ak47: 2.00
+2025-06-03 16:34:46,199 - CSGOOptimizer - INFO - 🏆 CS:GO competitive optimizations applied
+2025-06-03 16:34:46,199 - GameOptimizations - INFO - ✅ Optimization applied: valorant_fps_boost
+2025-06-03 16:34:46,200 - GameOptimizations - INFO - ✅ Optimization applied: valorant_input_lag
+2025-06-03 16:34:46,200 - GameOptimizations - INFO - ✅ Optimization applied: valorant_accuracy
+2025-06-03 16:34:46,300 - GameOptimizations - INFO - 🎮 3 optimizations applied for valorant
+2025-06-03 16:34:46,300 - ValorantOptimizer - INFO - 🏆 Competitive optimizations applied
+2025-06-03 16:34:46,300 - GameOptimizations - INFO - 🎮 Comprehensive optimizations applied for valorant
+2025-06-03 16:34:46,300 - GameOptimizations - INFO - ✅ Optimization applied: csgo_fps_max
+2025-06-03 16:34:46,300 - GameOptimizations - INFO - ✅ Optimization applied: csgo_prefire
+2025-06-03 16:34:46,400 - GameOptimizations - INFO - 🎮 2 optimizations applied for csgo
+2025-06-03 16:34:46,401 - CSGOOptimizer - INFO - 🏆 CS:GO competitive optimizations applied
+2025-06-03 16:34:46,401 - GameOptimizations - INFO - 🎮 Comprehensive optimizations applied for csgo
+2025-06-03 16:34:46,401 - GameOptimizations - INFO - ✅ Optimization applied: fortnite_edit_speed
+2025-06-03 16:34:46,501 - GameOptimizations - INFO - 🎮 1 optimizations applied for fortnite
+2025-06-03 16:34:46,501 - FortniteOptimizer - INFO - 🏆 Fortnite competitive optimizations applied
+2025-06-03 16:34:46,501 - GameOptimizations - INFO - 🎮 Comprehensive optimizations applied for fortnite
+2025-06-03 16:34:46,505 - PerformanceMonitor - INFO - 📊 Performance Monitor initialized
+2025-06-03 16:34:46,505 - PerformanceMonitor - INFO - 📢 Alert callback registered: warning
+2025-06-03 16:34:46,505 - PerformanceMonitor - INFO - 📢 Alert callback registered: critical
+2025-06-03 16:34:46,505 - PerformanceMonitor - INFO - 🔄 Performance monitoring started
+2025-06-03 16:34:48,509 - PerformanceMonitor - INFO - 🛑 Performance monitoring stopped

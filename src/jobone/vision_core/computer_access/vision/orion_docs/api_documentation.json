@@ -1,0 +1,45 @@
+{
+  "title": "Orion Vision Core API",
+  "version": "2.0.0",
+  "description": "Harika API Documentation for Orion Vision Core",
+  "generated_at": "2025-06-05T19:39:19.772622",
+  "endpoints": {
+    "/api/status": {
+      "method": "GET",
+      "endpoint": "/api/status",
+      "description": "Get current Orion system status\n\nReturns:\n    Dict containing system status information",
+      "parameters": [],
+      "return_type": "typing.Dict[str, typing.Any]",
+      "function": "get_orion_status"
+    },
+    "/api/process": {
+      "method": "POST",
+      "endpoint": "/api/process",
+      "description": "Process user input through Orion system\n\nArgs:\n    user_input: The user's input text\n    context: Optional context information\n\nReturns:\n    Processing result dictionary",
+      "parameters": [
+        {
+          "name": "user_input",
+          "type": "<class 'str'>",
+          "required": true,
+          "default": null
+        },
+        {
+          "name": "context",
+          "type": "typing.Optional[typing.Dict]",
+          "required": false,
+          "default": "None"
+        }
+      ],
+      "return_type": "typing.Dict[str, typing.Any]",
+      "function": "process_user_input"
+    },
+    "/api/metrics": {
+      "method": "GET",
+      "endpoint": "/api/metrics",
+      "description": "Get system performance metrics\n\nReturns:\n    Dictionary of performance metrics",
+      "parameters": [],
+      "return_type": "typing.Dict[str, float]",
+      "function": "get_performance_metrics"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    app: orion-api-gateway
+    component: gateway
+    version: v1.0.0
+  name: orion-api-gateway
+  namespace: orion-vision-core
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: orion-api-gateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: orion-api-gateway
+        component: gateway
+        version: v1.0.0
+    spec:
+      containers:
+      - env:
+        - name: GATEWAY_MODE
+          value: production
+        - name: RATE_LIMIT
+          value: '1000'
+        - name: AUTH_ENABLED
+          value: 'true'
+        image: orion/api-gateway:v1.0.0
+        livenessProbe:
+          httpGet:
+            path: /alive
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: orion-api-gateway
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      volumes: []

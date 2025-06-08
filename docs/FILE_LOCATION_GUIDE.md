@@ -1,9 +1,9 @@
 # 📍 Orion Vision Core - Dosya Lokasyon Rehberi
 
-**📅 Son Güncelleme**: 2025-06-01
+**📅 Son Güncelleme**: 2025-12-XX
 **🎯 Amaç**: Gelecekte aynı dosyaları tekrar oluşturmamak için kesin lokasyon rehberi
 **⚠️ Önemli**: Yeni dosya oluşturmadan önce bu rehberi kontrol edin!
-**🚀 Sprint 9.1.1.1**: Core Framework Optimization & Modularization Active
+**🚀 Q-Tasks Status**: Q01 ✅ Q02 ✅ Q03 ✅ Q04 ✅ COMPLETED - Q05 Ready to Start
 
 ## 📁 REPORTS & ARCHIVE STRUCTURE
 
@@ -70,6 +70,39 @@ Bu dosyalar **ZATEN MEVCUT**. Yeni dosya oluşturmadan önce bu lokasyonları ko
 ✅ src/jobone/vision_core/agents/speech_agent.py           # Speech recognition
 ✅ src/jobone/vision_core/agents/voice_agent.py            # Voice synthesis
 ✅ src/jobone/vision_core/agents/mouse_control.py          # Mouse/keyboard
+```
+
+### Q-Tasks Implementation Files (Q01-Q04 COMPLETED)
+```
+✅ src/jobone/vision_core/computer_access/vision/q01_compatibility_wrapper.py  # Q01 Temel Duyusal Girdi
+✅ src/jobone/vision_core/computer_access/vision/q02_environment_sensor.py     # Q02 Çevre Sensörü
+✅ src/jobone/vision_core/computer_access/vision/q02_target_selector.py        # Q02 Hedef Seçici
+✅ src/jobone/vision_core/computer_access/vision/q02_task_coordinator.py       # Q02 Görev Koordinatörü
+✅ src/jobone/vision_core/computer_access/vision/q02_adaptive_learning.py      # Q02 Adaptif Öğrenme
+✅ src/jobone/vision_core/computer_access/vision/q02_quantum_seed_integration.py # Q02 Kuantum Seed
+✅ src/jobone/vision_core/computer_access/vision/q03_task_decomposition.py     # Q03 Görev Ayrıştırma
+✅ src/jobone/vision_core/computer_access/vision/q03_contextual_understanding.py # Q03 Bağlamsal Anlama
+✅ src/jobone/vision_core/computer_access/vision/q03_task_flow_manager.py      # Q03 Görev Akış Yöneticisi
+✅ src/jobone/vision_core/computer_access/vision/q03_action_verification.py    # Q03 Eylem Doğrulama
+✅ src/jobone/vision_core/computer_access/vision/q03_error_recovery.py         # Q03 Hata Kurtarma
+✅ src/jobone/vision_core/computer_access/vision/q03_final_integration.py      # Q03 Final Entegrasyon
+✅ src/jobone/vision_core/computer_access/vision/q03_integration_test.py       # Q03 Entegrasyon Test
+✅ src/jobone/vision_core/computer_access/vision/q03_dans_test.py              # Q03 Dans Test
+✅ src/jobone/vision_core/computer_access/vision/q04_base_classes.py           # Q04 Temel Sınıflar
+✅ src/jobone/vision_core/computer_access/vision/q04_foundation_setup.py       # Q04 Temel Kurulum
+✅ src/jobone/vision_core/computer_access/vision/q04_hybrid_start.py           # Q04 Hibrit Başlangıç
+✅ src/jobone/vision_core/computer_access/vision/q04_core_development.py       # Q04 Çekirdek Geliştirme
+✅ src/jobone/vision_core/computer_access/vision/q04_integration_testing.py    # Q04 Entegrasyon Test
+✅ src/jobone/vision_core/computer_access/vision/q04_production_deployment.py  # Q04 Production Deployment
+```
+
+### Q04 Advanced AI Modules (COMPLETED)
+```
+✅ src/jobone/vision_core/computer_access/vision/q04_advanced_ai/              # Q04 Gelişmiş AI Klasörü
+✅ src/jobone/vision_core/computer_access/vision/q04_multi_model/              # Q04 Çoklu Model Klasörü
+✅ src/jobone/vision_core/computer_access/vision/q04_reasoning_engine/         # Q04 Akıl Yürütme Motoru
+✅ src/jobone/vision_core/computer_access/vision/q04_autonomous_learning/      # Q04 Otonom Öğrenme
+✅ src/jobone/vision_core/computer_access/vision/q04_self_optimization/        # Q04 Kendini Optimize Etme
 ```
 
 ### Services

@@ -50,5 +50,6 @@
     "python.formatting.provider": "black",
     "python.linting.flake8Enabled": false,
     "python.linting.mypyEnabled": false,
-    "python.envFile": "${workspaceFolder}/.env"
+    "python.envFile": "${workspaceFolder}/.env",
+    "git.ignoreLimitWarning": true
 }

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    app: orion-vision-processor
+    component: computer-access
+    version: v1.0.0
+  name: orion-vision-processor
+  namespace: orion-vision-core
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: orion-vision-processor
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: orion-vision-processor
+        component: computer-access
+        version: v1.0.0
+    spec:
+      containers:
+      - env:
+        - name: VISION_MODE
+          value: production
+        - name: SCREEN_RESOLUTION
+          value: 1920x1080
+        - name: OCR_ENGINE
+          value: tesseract
+        - name: AI_MODEL
+          value: phi3:mini
+        image: orion/vision-processor:v1.0.0
+        livenessProbe:
+          httpGet:
+            path: /alive
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: orion-vision-processor
+        ports:
+        - containerPort: 8081
+          name: http
+          protocol: TCP
+        - containerPort: 9091
+          name: vision
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 2Gi
+          requests:
+            cpu: 300m
+            memory: 512Mi
+      volumes: []

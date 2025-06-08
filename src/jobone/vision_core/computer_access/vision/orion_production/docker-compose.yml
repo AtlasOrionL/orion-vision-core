@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  orion-core:
+    build: .
+    container_name: orion-production
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - ORION_ENV=production
+      - ORION_MUSIC=enabled
+    volumes:
+      - ./orion_production/data:/app/orion/data
+      - ./orion_production/logs:/app/orion/logs
+    restart: unless-stopped
+    
+  orion-music:
+    image: alpine:latest
+    container_name: orion-music-player
+    command: sh -c "echo '🎵 Orion Music Player Ready!' && sleep infinity"
+    restart: unless-stopped
